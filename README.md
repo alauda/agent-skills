@@ -81,7 +81,3 @@ See [AGENTS.md](AGENTS.md) for best practices on developing new skills:
 - Outsource complex logic to MCP
 - Linear workflows
 - Example-driven learning
-
-## License
-
-MIT
