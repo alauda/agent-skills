@@ -1,246 +1,69 @@
-# 语言风格指南
-
-## 核心原则
-
-### 1. 客观陈述，口吻友好
-
-**正例**:
-- 确保集群配置正确。否则，可能导致服务部署失败。
-
-**反例**:
-- 你必须保证集群配置正确。否则后果自负。
-
-### 2. 避免口语化
-
-**禁止使用的词语**:
-- 不准、搞定、就可以了、做完就行等
-
-**正例**:
-- 创建 Deployment 和 Service。
-
-**反例**:
-- 把 Deployment 和 Service 创建好就可以了。
-
-### 3. 避免行话
-
-**正例**: Pod 资源耗尽
-**反例**: Pod 打满了
-
-### 4. 避免成语和俗语
-
-## 用户视角
-
-### 为目标用户写作
-
-1. **明确用户群体**:
-   - 运维工程师
-   - 开发工程师
-   - 命名空间管理员
-   - 平台管理员
-
-2. **考虑技能水平**:
-   - 小白用户：提供详细背景和解释
-   - K8s 初学者：提供 K8s 概念说明
-   - 资深 DevOps 工程师：直接提供操作指导
-
-3. **按用户认知习惯呈现信息**
-
-### 面向用户场景和任务
-
-1. **标题体现任务目标**:
-   - 好：部署高可用数据库集群
-   - 差：数据库功能介绍
-
-2. **提供 Step-by-Step 指导**:
-   ```markdown
-   1. 创建命名空间
-   2. 部署 StatefulSet
-   3. 创建 Service
-   4. 验证服务可用性
-   ```
-
-3. **提供任务全流程支撑信息**:
-   - 背景信息
-   - 前提条件
-   - 准备动作
-   - 操作步骤
-   - 验证方法
-   - 常见问题
-   - 错误预防
-
-## 完整性
-
-1. **避免任务场景缺失**: 写作前通过用户与任务分析明确场景
-
-2. **使用模板保证完整性**:
-   - 遵循结构化、模块化模板
-   - 必选节点禁止删除
-   - 可选节点根据实际情况保留或删除
-
-## 具体性
-
-### 使用具体描述
-
-**正例**: 在部署过程中，容器启动失败并返回 CrashLoopBackOff 错误。
-**反例**: 部署失败了。
-
-### 使用具体数字
-
-**正例**:
-- 镜像大小超过 2GB
-- 等待约 3 分钟完成初始化
-- 响应时间降低 50%
-
-**反例**:
-- 镜像太大了
-- 等待一会儿
-- 性能提升很多
-
-## 简洁性
-
-1. **使用主谓结构、主谓宾结构**
-
-2. **避免长连句**: 同一句话中逗号数不超过 5 个
-
-3. **禁止双重否定**
-
-4. **言简意赅**:
-
-**正例**:
-- Service 不支持 UDP 协议。
-
-**反例**:
-- Service 目前来说是不支持 UDP 协议的。
-
-## 清晰性
-
-1. **代词指代清晰**
-
-2. **参数配置、架构原理描述清晰**:
-
-**正例**:
-```markdown
-当 replicas 设置为 0 时：
-- Pod 会被全部终止
-- Service 依然保持运行
-```
-
-**反例**:
-```markdown
-replicas 为 0 的话 Pod 就会没有了但是 Service 还在
-```
-
-3. **避免歧义词汇**:
-
-**正例**: 删除所有运行中的容器
-**反例**: 清理容器
-
-## 一致性
-
-1. **用词一致**: 术语、缩略语全文一致
-
-2. **结构一致**: 相同文档保持结构一致
-
-3. **句式一致**: 统一使用祈使句描述动作
-
-4. **格式一致**: 代码块、文件路径等格式保持一致
-
-## 专业性
-
-### 使用准确技术术语
-
-**正例**:
-- 扩展 Deployment 的副本数到 3 个
-- 配置 Pod 的资源请求和限制
-
-**反例**:
-- 加大服务的数量
-- 设置 Pod 的大小
-
-### 使用标准说法
-
-**正例**:
-- 使用 Ingress Controller 暴露服务
-- 配置 HorizontalPodAutoscaler 进行自动扩缩容
-
-**反例**:
-- 使用网关把服务开放出去
-- 设置自动伸缩让系统自己调整
-
-## 可操作性
-
-### 提供明确可执行步骤
-
-**正例**:
-```markdown
-1. 创建 namespace
-2. 部署 Deployment
-3. 创建 Service
-```
-
-**反例**:
-```markdown
-部署好相关的组件
-```
-
-### 说明前提条件和预期结果
-
-**正例**:
-```markdown
-前提条件:
-- 已安装 kubectl
-- 已配置集群访问凭证
-
-预期结果:
-- Pod 状态变为 Running
-- 服务可通过域名访问
-```
-
-**反例**:
-```markdown
-确保环境准备好后再操作
-```
-
-## 安全性
-
-**强调安全注意事项**:
-
-**正例**:
-```markdown
-:::danger
-删除 namespace 会清除其中的所有资源，请谨慎操作。
-:::
-```
-
-**反例**:
-```markdown
-删掉 namespace 即可
-```
-
-## 可维护性
-
-**说明长期维护注意事项**:
-
-**正例**:
-```markdown
-建议将配置保存在 ConfigMap 中便于后续修改，而不是硬编码在 Pod 定义中。
-```
-
-**反例**:
-```markdown
-直接改 Pod 的配置
-```
-
-## 兼容性
-
-**说明版本兼容性**:
-
-**正例**:
-```markdown
-此功能要求 Kubernetes 1.20 及以上版本。
-```
-
-**反例**:
-```markdown
-新版本才能用
-```
+# Language Style Specification
+
+To ensure documentation is professional, objective, and easy to translate, all contributors must follow these language style guidelines.
+
+## Core Principles
+
+### 1. Objective and Professional
+- Use a neutral tone. Avoid emotional language, marketing fluff, or slang.
+- **Good**: "Ensure the cluster configuration is correct; otherwise, service deployment may fail."
+- **Bad**: "You must make sure your cluster is right, or else you're on your own."
+
+### 2. User-Centric Perspective
+- **Target Audience**: Explicitly identify if the document is for DevOps Engineers, Developers, or Namespace Admins. Provide support information tailored to their skill levels (e.g., K8s beginners vs. senior DevOps).
+- **Scenario-Oriented**: Write for real-world tasks, not just product features.
+- **Flowcharts**: For complex task flows (e.g., multi-cluster deployment), provide a flowchart or overview table before the steps.
+
+### 3. Conciseness and Clarity
+- Use simple, direct sentences (Subject-Verb-Object). Avoid long, nested clauses (no more than 5 commas per sentence).
+- **No Double Negatives**: Always use positive assertions for clarity.
+- **Active Voice**: "The system creates a backup" is better than "A backup is created."
+
+### 4. Precision
+- Use specific descriptions instead of abstract ones.
+- **Good**: "The container failed to start and returned a `CrashLoopBackOff` error."
+- **Bad**: "The deployment failed."
+- **Quantifiable Data**: Use exact numbers instead of "many," "large," or "a while."
+- **Good**: "Image size exceeds 2 GB" or "Wait approximately 3 minutes."
+- **Bad**: "The image is too large" or "Wait a while."
+
+### 5. Consistency
+- Maintain consistent terminology and sentence structures (e.g., use imperative sentences for all steps).
+
+## Wording Standards
+
+### Actionable Steps
+- Start instructions with an imperative verb.
+- **Good**: "Expand the Deployment replica count to 3."
+- **Bad**: "Increase the number of services."
+
+### UI Elements
+- Bold UI elements such as button names, menu items, and field labels.
+- **Format**: **[Button Name]** or **[Menu Item]**.
+
+### Technical Terms
+- Use professional terms and industry-standard language.
+- **Good**: "Expose the service using an Ingress Controller."
+- **Bad**: "Use a gateway to open the service to the outside."
+
+## Maintainability and Compatibility
+
+- **Best Practices**: Include long-term maintenance tips.
+- **Good**: "Store configurations in a **ConfigMap** for easy modification rather than hardcoding them in the Pod definition."
+- **Compatibility**: Clearly state version requirements and dependencies.
+- **Good**: "This feature requires Kubernetes v1.20 or higher."
+
+## Prohibited Expressions (Bad Cases)
+
+| Category | Avoid Using | Use Instead |
+| :--- | :--- | :--- |
+| **Colloquialism** | "Basically," "Essentially," "Just," "Done" | (Remove or be specific) |
+| **Slang/Jargon** | "Maxed out," "Under the hood" | "Resource exhausted," "Technical implementation" |
+| **Ambiguity** | "Etc.," "And so on," "Things like that" | (Be exhaustive or provide categories) |
+| **Outdated Terms** | "Master," "Slave" | "Control plane," "Worker" |
+| **Subjectivity** | "Obviously," "Of course," "Clearly" | (Present the evidence/facts) |
+
+## Accessibility and Inclusivity
+
+- Avoid gendered pronouns (he/she); use "they" or "you."
+- Ensure descriptions are non-discriminatory and neutral.

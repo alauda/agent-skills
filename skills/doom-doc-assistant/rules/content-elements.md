@@ -1,256 +1,103 @@
-# 内容元素规范
+# Content Element Specification
 
-## 列表
+This document defines the standards for using various Markdown and MDX elements in product documentation.
 
-### 使用原则
+## Lists
 
-1. **存在顺序关系**: 使用有序列表
-2. **无顺序关系**: 使用无序列表
-3. **只有一个列表项**: 合并到正文
+### Usage Principles
+1. **Sequential Relationship**: Use ordered lists (1, 2, 3...).
+2. **Non-Sequential Relationship**: Use unordered lists (-).
+3. **Single Item**: Integrate it into the main paragraph.
 
-### 格式规范
+### Guidelines
+- Use standard Markdown markers (no custom characters).
+- **Consistent Punctuation**: Ensure all list items in a single list use the same punctuation at the end (either none, or all use periods).
+- **Quantity**: Limit lists to 2-9 items.
+- **Introduction**: Provide an introductory sentence before the list to provide context.
+- **Nesting**: Do not exceed three levels of nesting.
 
-- 使用 Markdown 标准列表标记
-- 列表项结尾标点统一（都不加或都用句号）
-- 列表项数量：2-9 项为宜
-- 列表前增加引导性说明
-- 列表层级不超过三级
+## Tables
 
-### 示例
+### Guidelines
+- Must have at least two columns and one row. If you have only two rows and one column, consider transposing it.
+- Left-align by default.
+- **Consistency**: Maintain consistent data types and formats (and punctuation) within the same column.
+- Use concise headers.
+- **No Blanks**: Use "-" for empty cells; avoid leaving them blank.
+- **No Duplicates**: Avoid using "Same as above" (同上). Merge cells if necessary, or repeat the info if required for readability.
+- **Readability**: Split overly complex tables into multiple smaller ones.
 
-**有序列表**:
-```markdown
-按照以下步骤部署应用：
+## Information Indicators (Directives)
 
-1. 创建命名空间
-2. 部署 Deployment
-3. 创建 Service
-```
+### Four Types
 
-**无序列表**:
-```markdown
-前提条件包括：
+| Type | Purpose | Typical Scenario |
+| :--- | :--- | :--- |
+| **Tip** | Supplementary info; can be ignored. | Optimization or shortcut suggestions. |
+| **Info/Note** | Additional explanation. | Version compatibility, parameter basis. |
+| **Warning** | Matters requiring attention. | Potential latency or performance impact. |
+| **Danger** | Major risks. | Potential data loss or cluster crash. |
 
-- 已安装 kubectl
-- 已配置集群访问凭证
-- 拥有管理员权限
-```
+### Syntax Options
 
-## 表格
-
-### 格式规范
-
-- 至少一行两列
-- 默认左对齐
-- 同列信息表达方式一致
-- 表头简练概括列内容
-- 空单元格使用 "-" 占位
-- 表格前增加说明文字
-
-### 示例
-
-```markdown
-下表列出了支持的 Service 类型：
-
-| **类型** | **描述** | **使用场景** |
-|---------|---------|-------------|
-| ClusterIP | 虚拟 IP | 集群内部访问 |
-| NodePort | 主机端口 | 外部测试访问 |
-| LoadBalancer | 负载均衡器 | 生产环境外部访问 |
-```
-
-## 信息标识符
-
-### 四种类型
-
-| 类型 | 用途 | 典型场景 |
-|-----|------|---------|
-| **提示 (tip)** | 增强信息，忽视不影响使用 | 性能优化建议、快速部署建议 |
-| **说明 (info/note)** | 补充说明 | 版本兼容性、配置参数依据 |
-| **注意 (warning)** | 必须注意的事项 | 可能导致服务延迟、影响性能 |
-| **警告 (danger)** | 重大风险 | 可能导致数据丢失、集群崩溃 |
-
-### 使用方式
-
-**方式一：::: 语法**
+**Option 1: ::: Syntax (Preferred for simplicity)**
 ```markdown
 :::tip
-性能优化建议：使用资源限制避免资源争抢。
-:::
-
-:::warning
-注意：删除资源前请备份重要数据。
-:::
-
-:::danger
-警告：删除 namespace 会清除所有资源，不可恢复！
+Tip: Use resource limits to avoid contention.
 :::
 ```
 
-**方式二：Directive 组件**
+**Option 2: Directive Component (For structured content)**
 ```mdx
-<Directive type="tip" title="性能优化">
-使用资源限制避免资源争抢。
-</Directive>
-
-<Directive type="warning" title="注意">
-删除资源前请备份重要数据。
-</Directive>
-
-<Directive type="danger" title="警告">
-删除 namespace 会清除所有资源，不可恢复！
+<Directive type="tip" title="Optimization">
+Use resource limits to avoid contention.
 </Directive>
 ```
 
-### 使用规范
+### Constraints
+- Keep directive content concise (usually within one paragraph).
+- **Exclusions**: Do not include tables or complex images inside a directive (icons are acceptable).
+- Place Warnings and Dangers *before* the relevant text or step.
+- **Strict Limit**: Do not exceed 3-4 directives per document (excluding details).
 
-- 提示内容不宜过长，建议在一个段落内
-- 注意及警告放在正文或步骤之前
-- 禁止滥用标识符
+## Links
 
-## 链接
+### Guidelines
+- Use descriptive link text (avoid "Click here" or "Read more").
+- Limit link descriptions to 15 characters.
+- Use relative paths for internal documents: `[Guide](./deployment.mdx)`.
+- Use the `ExternalSiteLink` component for cross-site or external links.
+- **Language**: English documents must point to English pages; do not link to Chinese pages from English documentation.
 
-### 链接类型
+## Code Blocks
 
-1. **站内文档**: 使用相对路径
-   ```markdown
-   [部署指南](./deployment.mdx)
-   ```
+### Formatting
+- Specify the language (e.g., ` ```yaml `).
+- Use `title` for file names: ` ```yaml title="deployment.yaml" `.
+- **Context**: Provide context before the code block (e.g., "On the **Control Plane**, use **kubectl** to run:").
+- **Variables**: Use `<>` to mark placeholders/variables: `kubectl apply -f <filename.yaml>`.
+- **Expected Output**: Provide sample output after important commands.
+- **Comments**: Add comments to complex code snippets.
+- **Omission**: Use `#...` to indicate omitted lines in YAML or long config files.
 
-2. **章节锚点**:
-   ```markdown
-   ## 部署流程 {#deploy_flow}
+## Units and Symbols
 
-   参见[部署流程](./deployment.mdx#deploy_flow)
-   ```
+- Keep a space between the value and the unit (e.g., `100 m`, `24 Gi`, `38 Mi`).
+- Follow international standards for capitalization.
 
-3. **跨站点链接**: 使用 ExternalSiteLink
-   ```mdx
-   <ExternalSiteLink name="devops" href="/overview/arch.html" children="DevOps 架构" />
-   ```
+## Sensitive Information (Prohibited)
 
-4. **外部网站**: 优先使用英文链接
+The following information is strictly prohibited:
+1. **Internal Branding**: ACP, Alauda, or company-specific internal terms.
+2. **Discriminatory Terms**: Avoid biased or offensive language.
+3. **Third-Party Info**: Do not include non-essential company names, logos, or products.
+4. **PII**: Avoid ID numbers, phone numbers, home addresses, or bank accounts.
+5. **Intellectual Property**: No unauthorized code, fonts, or images.
+6. **Confidentiality**: No internal project codes, testing environment URLs, or commercial secrets (financials, contracts).
+7. **Political/Religious**: No sensitive political, religious, or racial content.
 
-### 链接规范
-
-- 链接说明有意义，避免"点击这里"
-- 链接描述不超过 15 个字符
-- 定期检查链接有效性
-- 重要信息不只用链接提供
-
-## 代码与注释
-
-### 行内代码
-
-**使用场景**: 短命令、代码片段
-
-```markdown
-使用 `kubectl get pods` 查看 Pod 状态。
-```
-
-**注意**: 行内代码标记与正文之间保留空格
-
-### 代码块
-
-**使用场景**: 长命令、多行代码、配置文件
-
-````markdown
-```yaml title="deployment.yaml"
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-spec:
-  replicas: 3
-```
-````
-
-### 代码规范
-
-1. **代码需正确格式化**（缩进、空格、换行）
-2. **说明执行环境**:
-   ```markdown
-   在**管理集群**上使用 **kubectl** 执行以下命令：
-   ```
-3. **变量标记**: 使用 `<>` 标记变量
-   ```markdown
-   kubectl apply -f <deployment-file.yaml>
-   ```
-4. **添加注释**: 为复杂代码添加注释
-5. **提供回显信息**: 命令执行后显示预期输出
-
-## 术语及缩略语
-
-### 使用规范
-
-1. **禁止自行创造缩略语**
-2. **缩略语首次出现给出全称**:
-   ```markdown
-   使用 BGP（Border Gateway Protocol，边界网关协议）协议。
-   ```
-3. **术语与术语表保持一致**
-4. **全文术语一致**
-
-### 查询术语
-
-术语已内置在 `rules/terminology-guide.md` 中，请直接查阅该文件获取标准翻译和 badCases。
-
-## 单位符号
-
-- 数值与单位符号保留一个空格
-- 单位大小写严格遵守国际规范
-
-**正例**:
-- 100 m
-- 24 Gi
-- 38 Mi
-
-**反例**:
-- 100m
-- 24gi
-- 38MI
-
-## 标点符号
-
-### 中文文档
-
-主要使用：逗号（，）、顿号（、）、冒号（：）、分号（；）、句号（。）
-
-避免使用：感叹号（！）、问号（？）
-
-### 英文文档
-
-使用英文标点符号
-
-### 一致性
-
-表格、有序列表、无序列表结尾标点要一致
-
-## 转义字符
-
-### URL 编码
-
-图片和链接 URL 中的空格使用 `%20` 编码
-
-### HTML 转义
-
-在 HTML 中嵌入 Markdown 时转义：`<` → `&lt;`，`>` → `&gt;`
-
-## 敏感信息
-
-### 禁止出现的内容
-
-1. 公司特定信息（ACP、Alauda、灵雀云等）
-2. 冒犯性和种族歧视词语
-3. 非必须的第三方公司信息
-4. 个人身份信息
-5. 未授权的知识产权内容
-6. 政治相关敏感信息
-
-### 词汇替换
-
-| 禁用词汇 | 替换词汇 |
-|---------|---------|
+| Prohibited | Replacement |
+| :--- | :--- |
 | master nodes | control plane nodes |
 | slave nodes | worker nodes |
 | blacklist | deny list |
