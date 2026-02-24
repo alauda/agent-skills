@@ -147,7 +147,32 @@ Doom 框架文档中的术语分为三类：
 | Text-to-Image | 图像生成 | Text-to-Image（文本到图像）是指利用人工智能技术，根据输入的文本描述自动生成相应图像的过程 |
 | Training | 训练 | Training 是指利用人工智能技术，根据输入数据对模型进行训练 |
 
-### 术语使用注意事项
+## 快速查询表 (Quick Reference)
+
+以下为核心高频术语对照：
+
+### 集群与角色 (Cluster & Role)
+- **global cluster** → global 集群
+- **workload cluster** → 业务集群
+- **control plane** → 控制平面
+- **node** → 节点
+- **administrator** → 管理员
+- **developer** → 开发人员
+
+### 应用与网络 (App & Network)
+- **Application** → 原生应用
+- **OAM Application** → OAM 应用
+- **Helm Chart App** → 模版应用
+- **Dual-stack Network** → 双栈网络
+- **Single-stack Network** → 单栈网络
+- **subnet** → 子网
+
+### 服务类型 (Service Types)
+- **ClusterIP** → 虚拟 IP
+- **NodePort** → 主机端口
+- **LoadBalancer** → 负载均衡器
+
+## 术语使用注意事项
 
 1. **禁止自行创造缩略语**
 2. **缩略语首次出现给出全称**:
