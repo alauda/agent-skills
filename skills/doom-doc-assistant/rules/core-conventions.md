@@ -186,6 +186,37 @@ reference:
 
 详见 `rules/metadata-rules.md`
 
+## Document Types & Strategic Objectives
+
+Every document must align with a specific type and objective to ensure clarity and professional standards.
+
+### HowTo Documents (Scenario-Oriented)
+- **Objective**: Solve specific problems in real-world scenarios.
+- **Characteristics**: 
+    - **Scenario-Oriented**: Provides end-to-end solutions.
+    - **High Practicality**: Answers "How do I achieve X?" with actionable steps.
+    - **Reproducibility**: Users should be able to replicate results by following the guide.
+- **Structure**: Title (Verb-first) -> Introduction -> Scenarios -> Prerequisites -> Steps (using `<Steps />`) -> Verification.
+
+### Function Guides (Feature-Oriented)
+- **Objective**: Systematically explain what a feature is and how it works.
+- **Characteristics**:
+    - **Concept-Oriented**: Explains the "What" and "Why" behind a feature.
+    - **CLI-First**: Prioritize command-line instructions over UI screenshots.
+    - **Systematic**: Focuses on the principles, configuration items, and technical advantages.
+- **Difference from HowTo**: Function guides answer "What is it?", while HowTo guides answer "How to do it?".
+
+### Concept Documents (Theory-Oriented)
+- **Objective**: Introduce core concepts, parameters, and background theories.
+- **Characteristics**:
+    - **Detailed Definition**: Clear definitions of technical terms and architectural components.
+    - **Consolidation**: Simple concepts can be grouped into one document; complex ones deserve their own.
+- **Usage**: Use for in-depth "Understanding XXX" articles.
+
+### Troubleshooting Documents (Solution-Oriented)
+- **Objective**: Identify, diagnose, and resolve common issues.
+- **Structure**: Problem Description -> Root Cause Analysis -> Solution/Workaround.
+
 ## shared 目录约定
 
 `shared` 目录用于存放：

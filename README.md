@@ -73,11 +73,16 @@ Each skill contains:
 
 ## Development
 
-See [AGENTS.md](AGENTS.md) for best practices on developing new skills:
+This project follows the **Agentic Mindset**—writing declarative, modular instructions that empower AI agents to use their native tools.
 
-- Declarative over imperative
-- Modular knowledge base
-- Leverage native tools
-- Outsource complex logic to MCP
-- Linear workflows
-- Example-driven learning
+See [AGENTS.md](AGENTS.md) for the **Supreme Guiding Directive** on developing new skills:
+- **Declarative over Imperative**: Trust the AI's reasoning.
+- **Modular Knowledge**: Keep instructions lean by using the `rules/` directory.
+- **Leverage Native Tools**: Encourage the use of `grep`, `ls`, and `read_file`.
+- **Example-Driven (RAG)**: Use real-world code examples as the primary learning source.
+
+## Project Context for AI Assistants
+
+This repository includes pre-configured context files to help AI assistants (like Gemini CLI or Claude Code) quickly understand the project standards:
+- [AGENTS.md](AGENTS.md): The core development manual (read this first).
+- [GEMINI.md](GEMINI.md) / [CLAUDE.md](CLAUDE.md): Entry points for specific AI agents.

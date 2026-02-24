@@ -1,40 +1,48 @@
 ---
-title: 安装文档模版
 weight: 10
+author: "your-email@domain.com"
+category: "installation"
+queries:
+  - install [module]
+  - [module] installation guide
 ---
 
 {/* reference-start#installation_template */}
 
-:::tip
+# Installing [Module Name]
 
-If this module requires a separate installation process, you should provide installation documentation. Otherwise, this section can be omitted.
+{/* Introduction: Briefly describe what is being installed. */}
+## Introduction
 
-Installation documentation should cover the installation process, configuration options, and uninstallation procedures. If the content is extensive, consider organizing it as a directory with multiple documents covering different aspects.
+[Overview of the installation process and its scope.]
 
-For reference, you can view an [installation example](https://product-doc-guide.alauda.cn/template/installation/example.html).
+## Prerequisites
 
-:::
+Before starting the installation, ensure the following requirements are met:
 
-# Install
+- [Hardware/Software Requirement]
+- [Network Requirement]
+- [Permission Requirement]
 
-## Installing XXX
+## Installation Steps
 
-Describe the prerequisites needed for installing this component.
+<Steps>
+  ### [Step 1: Preparation]
+  [Download packages or prepare environment.]
 
-### Installing XXX in web console
+  ### [Step 2: Execution]
+  [Run the installation commands.]
 
-Outline the process for installing the component through the web console interface.
+  ```bash
+  [Install Command]
+  ```
 
-### Installing XXX using CLI
+  ### [Step 3: Configuration]
+  [Initial setup or configuration.]
+</Steps>
 
-Explain the steps for installing the component using the command line interface.
+## Post-Installation Verification
 
-## Uninstalling XXX
-
-Detail the uninstallation process. Typically, this involves first removing component instances, then deleting the Operator, and finally removing the associated CRDs.
-
-## Custom Configuration
-
-Describe the configuration options that can be customized during the installation process.
+[Steps to confirm the installation was successful.]
 
 {/* reference-end */}
