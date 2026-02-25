@@ -62,8 +62,9 @@ Read the document specified by the user to understand its content and structure.
 
 #### 0.3 Other Compliance Checks (As Needed)
 
-**Load Rules as Needed**: Explicitly execute `cat` to read corresponding rules from `rules/` (e.g., `terminology-guide.md`, `language-style.md`).
+**Load Rules as Needed**: Explicitly execute `cat` to read corresponding rules from `rules/` (e.g., `common-pitfalls.md`, `terminology-guide.md`, `language-style.md`).
 
+- [ ] **Common Pitfalls**: Check against `rules/common-pitfalls.md` for period spacing, terminology consistency, ambiguous recommendations, table data errors.
 - [ ] **Terminology Consistency**: Check term usage against `rules/terminology-guide.md`.
 - [ ] **Link Correctness**: Verify internal links, anchor links, and external link components.
 - [ ] **Language Style**: Check tone and wording against `rules/language-style.md`.
@@ -166,6 +167,7 @@ Load the template based on the determined document type (path relative to `SKILL
 - **rules/content-elements.md** (Lists, tables, links, code blocks, conciseness)
 - **rules/markdown-formatting.md** (Markdown syntax rules, line breaks, bold syntax)
 - **rules/core-conventions.md** (Naming, static resources, RAG optimization)
+- **rules/common-pitfalls.md** (Avoid common issues: period spacing, terminology consistency, ambiguous recommendations)
 
 **Load As Needed**:
 - **rules/mdx-components.md** (Doom components)
@@ -202,6 +204,7 @@ After generation, perform the following checks:
 - [ ] **Bold Syntax**: Used `**bold**` instead of `<b>` tags (except in MDX JSX props)
 - [ ] **Line Breaks**: Used `<br />` only in table cells or where empty lines are impossible
 - [ ] **Paragraph Spacing**: Used empty lines to separate paragraphs in normal text
+- [ ] **Period Spacing**: No `word.Word` patterns (missing space after period)
 - [ ] **No Redundant HTML**: No HTML tags where Markdown syntax works
 - [ ] **Code Formatting**: Proper use of backticks for parameters, features, and technical terms
 - [ ] **Frontmatter**: Complete metadata (weight, author, category, queries)
@@ -211,7 +214,9 @@ After generation, perform the following checks:
 - [ ] **No Implementation Details**: Removed unnecessary internal details users don't need
 - [ ] **Information Layering**: Content follows Recommendation → Reason → Note structure
 - [ ] **Single Source**: Each piece of information appears only once in the most appropriate location
-- [ ] **Consistent Terminology**: Terms used consistently throughout
+- [ ] **Consistent Terminology**: Feature names use consistent capitalization throughout (e.g., `Self-built VIP` not `Self-Built VIP`)
+- [ ] **Recommendation Scope**: All recommendations specify applicable conditions (e.g., "When using X, ...")
+- [ ] **Exception Proximity**: Exception notes immediately follow related recommendations
 - [ ] **Directive Count**: `:::` directives do not exceed 3-4 per document
 
 #### Structure Check
@@ -219,6 +224,10 @@ After generation, perform the following checks:
 - [ ] **Important Notes Stand Out**: Critical information has proper spacing and emphasis
 - [ ] **Lists Have Context**: Lists are introduced with explanatory text
 - [ ] **Tables Are Readable**: Complex tables are split or well-structured
+
+#### Data Check
+- [ ] **Table Data Logical**: Version numbers and values in tables follow expected patterns (no copy-paste errors)
+- [ ] **No Stale Versions**: Unnecessary version numbers omitted from prose
 
 #### Language Check
 - [ ] **Objective Tone**: No marketing fluff or emotional language
