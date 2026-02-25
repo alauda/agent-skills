@@ -31,6 +31,18 @@ Automatically generate product documentation that complies with the Doom framewo
 - **Example-Driven**: Leverages real codebase search for context-aware generation.
 - **Multi-Stage Validation**: Checks for format, content, links, and language style.
 
+**Agent Compatibility (Empirical)**
+
+Based on hands-on usage with various AI coding agents:
+
+| Agent | Experience | Notes |
+|-------|-----------|-------|
+| **Claude Code** | ⭐ Best | Optimal integration and output quality |
+| **OpenCode** | ⭐⭐ Good | Works well, but 2-3x slower than Claude Code for similar tasks |
+| **Gemini CLI** | ⭐ Poor | Not recommended for this skill |
+
+> **Note**: These observations are based on current usage as of 2026-02-25. Other agents have not been tested. If you have experience with different agents, please feel free to update this README via PR.
+
 ## Installation
 
 ```bash
