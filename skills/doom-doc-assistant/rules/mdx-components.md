@@ -25,11 +25,23 @@ Used for highlighting important information (Tips, Warnings, etc.).
 - `type`: `tip`, `info`, `warning`, or `danger`.
 - `title`: The header text.
 
+### Constraints
+- **Do not** use `:::` syntax (Option 1 from `content-elements.md`) inside JSX components like `<TabItem>`, `<Tabs>`, `<Overview>`, `<Steps>`, or deep list indentations. The markdown parser will fail.
+- You **must** use the `<Directive />` component in these scenarios instead.
 ## `<Steps />`
 
 ### Usage
-**Mandatory** for HowTo guides and procedural instructions.
+**Mandatory** for HowTo guides and procedural instructions. It visualizes standard Markdown headings (`###`) as numbered steps.
 
+```mdx
+<Steps>
+### Step 1
+Content for step 1
+
+### Step 2
+Content for step 2
+</Steps>
+```
 ## `<ExternalSiteLink />`
 
 ### Usage
@@ -48,10 +60,22 @@ Used in entry documents for independent documentation sub-sites to generate jump
 ### Parameters
 - `name`: The unique identifier of the sub-site (as registered in `sites.yaml`).
 
-## `<Tabs />` and `<TabItem />`
+## `<Tabs />` and `<Tab />`
 
 ### Usage
 Used to display content in tabs (e.g., switching between CLI and Web UI instructions).
+
+```mdx
+<Tabs>
+  <Tab label="Tab 1">
+  Tab 1 content
+  </Tab>
+
+  <Tab label="Tab 2">
+  Tab 2 content
+  </Tab>
+</Tabs>
+```
 
 ### Constraint
 Tabs must include descriptive text alongside code blocks to ensure RAG accessibility.

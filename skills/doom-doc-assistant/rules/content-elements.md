@@ -29,25 +29,27 @@ This document defines the standards for using various Markdown and MDX elements 
 
 ## Information Indicators (Directives)
 
-### Four Types
+### Six Types
 
-| Type | Purpose | Typical Scenario |
-| :--- | :--- | :--- |
-| **Tip** | Supplementary info; can be ignored. | Optimization or shortcut suggestions. |
-| **Info/Note** | Additional explanation. | Version compatibility, parameter basis. |
-| **Warning** | Matters requiring attention. | Potential latency or performance impact. |
-| **Danger** | Major risks. | Potential data loss or cluster crash. |
+| Type | Color | Purpose | Typical Scenario |
+| :--- | :--- | :--- | :--- |
+| **NOTE** | Gray | Supplementary or non-critical info. | Background context. |
+| **TIP** | Green | Practical advice or optimization. | Shortcuts or efficiency tips. |
+| **INFO** | Blue | Neutral, important info. | Version compatibility, parameter basis. |
+| **WARNING**| Yellow| Potential risks, proceed with caution. | Potential latency or performance impact. |
+| **DANGER** | Red | Severe risks, irreversible consequences. | Potential data loss or cluster crash. |
+| **DETAILS**| N/A | Collapsible detailed information. | Long logs or secondary deep-dive content. |
 
 ### Syntax Options
 
-**Option 1: ::: Syntax (Preferred for simplicity)**
+**Option 1: ::: Syntax (Preferred for standard Markdown)**
 ```markdown
 :::tip
 Tip: Use resource limits to avoid contention.
 :::
 ```
 
-**Option 2: Directive Component (For structured content)**
+**Option 2: Directive Component (Mandatory inside JSX/MDX components)**
 ```mdx
 <Directive type="tip" title="Optimization">
 Use resource limits to avoid contention.
@@ -58,7 +60,14 @@ Use resource limits to avoid contention.
 - Keep directive content concise (usually within one paragraph).
 - **Exclusions**: Do not include tables or complex images inside a directive (icons are acceptable).
 - Place Warnings and Dangers *before* the relevant text or step.
-- **Strict Limit**: Do not exceed 3-4 directives per document (excluding details).
+- **Strict Limit**: Do not exceed 3-4 directives per document (excluding details). If you exceed this limit, fallback to inline bolding (e.g., `**Note:**`).
+- **Syntax Boundaries**: `:::` and `<Directive />` render identical styles. However, **`:::` syntax fails inside JSX components** (like `<Tabs>`, `<TabItem>`, or other custom components) and deep list indentations. **You MUST use `<Directive />`** whenever you are placing a directive inside any JSX tag or complex nested list.
+
+### Fallback Notes (e.g., `**Note:**`)
+When falling back from a Directive to inline text (`**Note:**`) due to limits:
+1. **Paragraph Spacing**: You **must** insert a completely blank line before `**Note:**` if it follows a list item. Without the blank line, it will render inline with the list instead of starting a new block.
+2. **Indentation and Wrapping**: If the note spans multiple sentences, either keep them on the same line immediately following `**Note:** `, or ensure the subsequent lines are structurally separated (e.g., as another list item) so they don't break the document's hierarchy.
+
 
 ## Links
 
@@ -68,6 +77,15 @@ Use resource limits to avoid contention.
 - Use relative paths for internal documents: `[Guide](./deployment.mdx)`.
 - Use the `ExternalSiteLink` component for cross-site or external links.
 - **Language**: English documents must point to English pages; do not link to Chinese pages from English documentation.
+## Custom Anchors
+
+You can assign a custom anchor ID to headings using `\{#custom_id}` syntax. This ensures cross-links remain reliable even if the heading text changes.
+
+```mdx
+## Hello World \{#custom_id}
+
+[Link to Hello World](./page.mdx#custom_id)
+```
 
 ## Code Blocks
 
@@ -80,6 +98,28 @@ Use resource limits to avoid contention.
 - **Comments**: Add comments to complex code snippets.
 - **Omission**: Use `#...` to indicate omitted lines in YAML or long config files.
 
+### Highlighting Lines
+You can highlight specific lines in a code block by appending `{line_ranges}` to the code fence:
+````mdx
+```js {1,3-5}
+console.log('Hello World');
+```
+````
+
+### Code Callouts
+Use the `<Callouts>` component to annotate specific code lines visually. Append `[!code callout]` (or `[\!code callout]` if inside MDX examples to escape it) in the code comments, and provide a `<Callouts>` component immediately after the block.
+````mdx
+```sh
+Memory overhead ≈ (requested memory) \
+    + 218 MiB \  # [\!code callout]
+    + (additional)  # [\!code callout]
+```
+
+<Callouts>
+1. Required for the `virt-launcher` pod.
+2. Additional memory overhead.
+</Callouts>
+````
 ## Units and Symbols
 
 - Keep a space between the value and the unit (e.g., `100 m`, `24 Gi`, `38 Mi`).

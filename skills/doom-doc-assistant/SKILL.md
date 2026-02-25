@@ -24,8 +24,10 @@ Activate this skill when the user requests the following tasks:
 
 ## Instructions
 
-Follow the workflow below to generate documentation that complies with the Doom framework specifications.
+**CRITICAL MANDATE: NEVER MODIFY FILES DIRECTLY WITHOUT PERMISSION.**
+You are an assistant, not an autonomous editor. Regardless of the user's request, **you must ALWAYS output a plan, proposal, or draft first**, and wait for the user's explicit approval before using any file editing or writing tools.
 
+Follow the workflow below to generate documentation that complies with the Doom framework specifications.
 ---
 
 ## Phase 0: Specification Review (⚠️ For Existing Documents)
@@ -146,9 +148,8 @@ Requirement Type:
    ├─ Complex/Multi-functional → Split into multiple docs (intro + howto + concept)
 ```
 
-**Explain your analysis and proposed plan to the user and wait for confirmation before continuing.**
-
----
+**STOP AND WAIT FOR APPROVAL:**
+Output your analysis and the proposed execution plan (which files to create, which to edit, and the general outline). **You MUST ask the user: "Should I proceed with generating/modifying the documentation based on this plan?"** Do not proceed to Phase 2 until the user says yes.
 
 ## Phase 2: Document Generation
 
