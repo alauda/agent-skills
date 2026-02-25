@@ -163,13 +163,15 @@ Load the template based on the determined document type (path relative to `SKILL
 **Before generating content, you MUST explicitly read the following rules**:
 - **rules/metadata-rules.md** (Frontmatter rules)
 - **rules/language-style.md** (Tone and style)
-- **rules/content-elements.md** (Lists, tables, links, code blocks)
+- **rules/content-elements.md** (Lists, tables, links, code blocks, conciseness)
+- **rules/markdown-formatting.md** (Markdown syntax rules, line breaks, bold syntax)
 - **rules/core-conventions.md** (Naming, static resources, RAG optimization)
 
 **Load As Needed**:
 - **rules/mdx-components.md** (Doom components)
 - **rules/terminology-guide.md** (Standardized translations)
 - **rules/terminology-consistency.md** (K8s/OpenShift official standards)
+- **rules/best-practices.md** (Common patterns for reuse)
 
 ### Step 6: Example-Driven Learning (RAG)
 **Crucial**: Do not memorize all component parameters. Use `grep` to retrieve real-world use cases and mimic them.
@@ -191,13 +193,39 @@ Generate the complete document, ensuring:
 - **Structural Completeness**: Follow the template without removing mandatory nodes.
 - **Correct Component Usage**: Use `<Overview />`, `<Term />`, `<Directive />`, and `<Steps />` properly.
 - **Directive Control**: Ensure `:::` directives do not exceed 3-4 per document.
+- **Pattern Reuse**: When appropriate, reuse patterns from `rules/best-practices.md` for consistency.
 
 ### Step 9: Self-Verification
-After generation, perform:
-- [ ] **Format Check**: Frontmatter, title levels, MDX syntax.
-- [ ] **Content Check**: Consistent terminology, directive count control, actionable steps.
-- [ ] **Link Check**: Correct relative paths, anchor formats, and `ExternalSiteLink` usage.
-- [ ] **Language Check**: Objective tone, context provided, no slang.
+After generation, perform the following checks:
+
+#### Format Check
+- [ ] **Bold Syntax**: Used `**bold**` instead of `<b>` tags (except in MDX JSX props)
+- [ ] **Line Breaks**: Used `<br />` only in table cells or where empty lines are impossible
+- [ ] **Paragraph Spacing**: Used empty lines to separate paragraphs in normal text
+- [ ] **No Redundant HTML**: No HTML tags where Markdown syntax works
+- [ ] **Code Formatting**: Proper use of backticks for parameters, features, and technical terms
+- [ ] **Frontmatter**: Complete metadata (weight, author, category, queries)
+
+#### Content Check
+- [ ] **No Redundancy**: Removed "if you need to..." when context is clear
+- [ ] **No Implementation Details**: Removed unnecessary internal details users don't need
+- [ ] **Information Layering**: Content follows Recommendation → Reason → Note structure
+- [ ] **Single Source**: Each piece of information appears only once in the most appropriate location
+- [ ] **Consistent Terminology**: Terms used consistently throughout
+- [ ] **Directive Count**: `:::` directives do not exceed 3-4 per document
+
+#### Structure Check
+- [ ] **Related Information Grouped**: Related content is grouped together
+- [ ] **Important Notes Stand Out**: Critical information has proper spacing and emphasis
+- [ ] **Lists Have Context**: Lists are introduced with explanatory text
+- [ ] **Tables Are Readable**: Complex tables are split or well-structured
+
+#### Language Check
+- [ ] **Objective Tone**: No marketing fluff or emotional language
+- [ ] **Active Voice**: "The system creates" not "A creation is made by..."
+- [ ] **Direct Instructions**: "Enter the value" not "You should enter the value"
+- [ ] **No Double Negatives**: Positive assertions for clarity
+- [ ] **No Filler Words**: Removed "basically", "essentially", etc.
 
 ---
 

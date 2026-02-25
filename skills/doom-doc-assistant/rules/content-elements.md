@@ -142,3 +142,52 @@ The following information is strictly prohibited:
 | slave nodes | worker nodes |
 | blacklist | deny list |
 | whitelist | allow list |
+
+## Content Conciseness
+
+### Redundancy Elimination
+
+**Principle**: Remove information that provides no value to users. Keep only core operational steps and essential context.
+
+| Redundancy Type | Example | Why Remove |
+|---------------|---------|------------|
+| Redundant premise | "If you need to access through a domain name..." | Table row already states this is for domain access |
+| Implementation details | "The installer will automatically deploy keepalived" | Users only need to know enable/disable |
+| Repeated recommendations | Same tip mentioned multiple times | Say it once in the most appropriate location |
+| Obvious context | "Please ensure that..." when step already implies it | Trust user intelligence |
+
+### Information Layering
+
+**Principle**: Organize information in clear layers: Recommendation → Reason → Note. Don't mix them together.
+
+**Structure**:
+```
+[Recommendation: What to do]
+    ↓
+[Reason: Why it's recommended]
+    ↓
+[Note: Important limitations or exceptions]
+```
+
+**Good Example**:
+```markdown
+**Recommendation**: Using a domain name for the Cluster Endpoint is recommended.
+If the VIP needs to be changed after cluster installation, using a domain name allows for easy DNS record updates without impacting cluster operations.
+
+**Note**: `Self-Built VIP` does not support domain name configuration.
+```
+
+**Bad Example** (everything mixed):
+```markdown
+You should use a domain name for the Cluster Endpoint because if the VIP needs to be changed... also note that Self-Built VIP doesn't support domains so consider that when...
+```
+
+### Conciseness Guidelines
+
+| Guideline | Example |
+|-----------|---------|
+| One idea per sentence | "Enter the domain name. If unavailable, enter the VIP." |
+| Remove filler words | "Basically" → (remove), "In order to" → "To" |
+| Use active voice | "The system creates" instead of "A creation is made by the system" |
+| Be direct | "Enter the value" instead of "You should enter the value" |
+| Trust context | Don't repeat what's already in the table heading |
