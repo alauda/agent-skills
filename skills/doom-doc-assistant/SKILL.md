@@ -134,6 +134,45 @@ Search the target repository's structure to evaluate if adjustments are needed:
 4. **Determine Structural Adjustments**: Decide whether to create new files, split complex files, or merge related ones.
 
 ### Step 3: Decide Execution Plan (⚠️ Critical)
+
+**⚠️ CRITICAL: Directory Structure Integrity Verification**
+
+**Before formulating your plan, you MUST verify directory structure integrity**:
+
+**Load Rules**: Use your Read tool to examine `rules/core-conventions.md` and read the "Directory `index.mdx`" section.
+
+**The Critical Rule**:
+
+> **Every directory that contains `.mdx` files OR has subdirectories MUST have an `index.mdx` file.**
+
+**Verification Steps**:
+
+1. **Use your file exploration tools** (Glob, ls, or grep) to traverse the target documentation directory.
+2. **Check each directory**: If it contains `.mdx` files or has subdirectories, verify an `index.mdx` file exists.
+3. **Report any missing `index.mdx` files** with their full paths.
+
+2. **For any directory structure changes you plan**, verify parent directories have `index.mdx`
+
+**Common Mistakes to Avoid**:
+
+❌ **WRONG**: Creating subdirectories without ensuring parent has `index.mdx`
+```
+docs/en/apis/providers/huawei-dcs/     ← Created with index.mdx ✅
+docs/en/apis/providers/huawei-cloud-stack/  ← Created with index.mdx ✅
+docs/en/apis/providers/  ← FORGOT to create index.mdx ❌
+```
+
+✅ **CORRECT**: Ensure parent has `index.mdx` BEFORE or TOGETHER with subdirectories
+```
+docs/en/apis/providers/index.mdx    ← Create this FIRST or together
+docs/en/apis/providers/huawei-dcs/index.mdx
+docs/en/apis/providers/huawei-cloud-stack/index.mdx
+```
+
+**Include directory structure verification in your execution plan output.**
+
+---
+
 Formulate an execution plan based on complexity and existing status:
 
 #### 3.1 Modify vs. Create Decision Tree
@@ -224,6 +263,7 @@ After generation, perform the following checks:
 - [ ] **Important Notes Stand Out**: Critical information has proper spacing and emphasis
 - [ ] **Lists Have Context**: Lists are introduced with explanatory text
 - [ ] **Tables Are Readable**: Complex tables are split or well-structured
+- [ ] **Directory Integrity**: Every directory with `.mdx` files or subdirectories has `index.mdx`
 
 #### Data Check
 - [ ] **Table Data Logical**: Version numbers and values in tables follow expected patterns (no copy-paste errors)
