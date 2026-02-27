@@ -28,55 +28,182 @@ Activate this skill when the user requests the following tasks:
 You are an assistant, not an autonomous editor. Regardless of the user's request, **you must ALWAYS output a plan, proposal, or draft first**, and wait for the user's explicit approval before using any file editing or writing tools.
 
 Follow the workflow below to generate documentation that complies with the Doom framework specifications.
+
 ---
 
-## Phase 0: Specification Review (⚠️ For Existing Documents)
+## Phase 0: Intake & Diagnosis
 
-**Trigger Scenarios**: Execute this phase first when the user requests:
-- Evaluation, review, or audit of existing documents.
-- Handling documentation improvement suggestions from third parties (e.g., CodeRabbit AI).
-- Any task involving **checking existing documentation** for compliance.
+Before any analysis or execution, establish a clear picture of the task and the current state of the documentation. **Do not skip this phase.**
 
-**Note**: If the user explicitly asks to "directly modify" or "optimize," perform this review check *after* the modification is complete.
+### 0.1 Collect Task Information
 
-### Execution Steps
+If the user has not provided the following, ask before proceeding:
+- What is the feature or requirement to document? (PRD, requirement description, or verbal summary)
+- What is the target documentation repository path?
 
-#### 0.1 Read the Target Document
-Read the document specified by the user to understand its content and structure.
+**⚠️ STOP**: Do not assume or infer the repository path from previous context. Ask explicitly if not provided.
 
-#### 0.2 Directive Count Check (Mandatory)
+### 0.2 Explore Existing Documentation
+
+Proactively search the repository for documents related to the requirement. Do not rely on the user's description alone.
+
+```bash
+grep -r "keyword1" /path/to/docs/ --include="*.mdx" -l
+grep -r "keyword2" /path/to/docs/ --include="*.mdx" -l
+```
+
+**Cross-verify with multiple keywords** to avoid keyword traps. For example, if the requirement is "Application Backup," search for `backup application`, `backup policy`, and `PVC backup` — not just `velero`.
+
+For each document found:
+1. Read it to verify it is functionally related to the requirement.
+2. Assess its quality: structure, metadata completeness, and compliance with Doom conventions.
+
+### 0.3 Output Diagnosis Report and Wait for User Decision
+
+**You MUST output the diagnosis results** in the following format, then stop and wait:
+
+```markdown
+## 🔍 Diagnosis Report
+
+**Requirement**: [User's description]
+
+**Related Documents Found**:
+| Document | Relevance | Quality Assessment |
+|----------|-----------|--------------------|
+| ...      | High/Med/Low | Structurally sound / Needs restructuring / Poor quality |
+
+**Recommended Path**:
+- Path A / Path B / Path C (see below)
+
+**Reasoning**: [Why this path is recommended based on the findings]
+
+---
+
+Please confirm the above findings, or let me know of any related documents I may have missed.
+After your confirmation, tell me which path you'd like to take.
+```
+
+**Branching Paths — the user decides:**
+
+- **Path A: Existing docs are in good shape → Create new document directly**
+  Proceed to Phase 1 to plan the new document's location, type, and outline.
+
+- **Path B: Existing docs need restructuring → Restructure first, then write**
+  Proceed to Phase 1 to plan the restructuring, then Phase 2 to plan the new document.
+
+- **Path C: Existing docs need restructuring, but skip it this time → Create new document only**
+  Proceed to Phase 1 to plan the new document only. Output the following reminder before continuing:
+
+  ```
+  ⚠️ Technical Debt Notice:
+  [Brief description of the structural issues identified, without file paths.]
+  Recommend tracking this in Jira for a future iteration.
+  ```
+
+---
+
+## Phase 1: Planning
+
+### 1.1 Verify Directory Structure Integrity
+
+**Before formulating any plan, you MUST verify directory structure integrity.**
+
+**Load Rules**: Read `rules/core-conventions.md` and refer to the "Directory `index.mdx`" section.
+
+**The Critical Rule**:
+
+> **Every directory that contains `.mdx` files OR has subdirectories MUST have an `index.mdx` file.**
+
+**Verification Steps**:
+1. Use file exploration tools (Glob, `ls`, or `grep`) to traverse the target documentation directory.
+2. Check each directory: if it contains `.mdx` files or has subdirectories, verify an `index.mdx` file exists.
+3. Check any directories you plan to create or modify.
+4. Report any missing `index.mdx` files in your plan output.
+
+**Common Mistake to Avoid**:
+
+❌ **WRONG**: Creating subdirectories without ensuring the parent has `index.mdx`
+```
+docs/en/apis/providers/huawei-dcs/          ← Created with index.mdx ✅
+docs/en/apis/providers/huawei-cloud-stack/  ← Created with index.mdx ✅
+docs/en/apis/providers/                     ← FORGOT to create index.mdx ❌
+```
+
+✅ **CORRECT**: Ensure parent has `index.mdx` BEFORE or TOGETHER with subdirectories
+```
+docs/en/apis/providers/index.mdx                    ← Create this FIRST
+docs/en/apis/providers/huawei-dcs/index.mdx
+docs/en/apis/providers/huawei-cloud-stack/index.mdx
+```
+
+### 1.2 Determine Document Type
+
+Select the appropriate document type based on the requirement:
+
+```text
+Requirement Type:
+├─ UI Form Field Enhancement / Parameter Added → Modify Existing Document
+├─ New Functional Capability → Create New Document
+│  ├─ Feature Introduction      → function doc
+│  ├─ Scenario-based Guide      → howto doc
+│  └─ Conceptual Explanation    → concept doc
+└─ Scope Assessment:
+   ├─ Simple / Single Function       → Single HowTo or Function doc
+   └─ Complex / Multi-functional     → Split into multiple docs (intro + howto + concept)
+```
+
+### 1.3 Output Execution Plan and Wait for Approval
+
+Output a complete execution plan covering:
+- Which files to create, modify, restructure, or merge, and why.
+- The proposed location and document type for any new documents.
+- A high-level outline of each document to be created.
+- Any `index.mdx` files that need to be created to maintain directory integrity.
+
+**STOP AND WAIT FOR APPROVAL.**
+
+You MUST ask: *"Should I proceed with generating/modifying the documentation based on this plan?"*
+
+Do not proceed to Phase 2 until the user explicitly confirms.
+
+---
+
+## Phase 2: Execution
+
+### 2.1 Restructure Existing Documents (Path B only)
+
+If the user chose Path B, execute the restructuring plan approved in Phase 1 before writing any new content.
+
+For each document being restructured, perform a Specification Review:
 
 **Load Rules First**: Execute `cat rules/mdx-components.md` to read directive constraints.
 
-```markdown
-**Core Constraint**: In a single document, the total number of `:::` directives should not exceed 3-4 (excluding `:::details`).
+**Directive Count Check (Mandatory)**:
+
+```
+Core Constraint: In a single document, the total number of `:::` directives
+should not exceed 3-4 (excluding :::details).
 ```
 
-**Check Steps**:
-1. Count all `:::` directives in the document (excluding `:::details`).
-2. List the type, location, and content summary of each directive.
-3. If the count exceeds 3-4, analyze which ones can be streamlined based on priority:
-   - Priority: DANGER > WARNING > TIP > INFO > NOTE.
-   - Retain high-priority directives (data safety, severe risks, etc.).
-   - Identify low-priority directives that can be converted to plain text.
+1. Count all `:::` directives (excluding `:::details`).
+2. List the type, location, and content summary of each.
+3. If the count exceeds 3-4, streamline based on priority: DANGER > WARNING > TIP > INFO > NOTE.
 
-#### 0.3 Other Compliance Checks (As Needed)
+**Other Compliance Checks (As Needed)**:
 
-**Load Rules as Needed**: Explicitly execute `cat` to read corresponding rules from `rules/` (e.g., `common-pitfalls.md`, `terminology-guide.md`, `language-style.md`).
+Load rules explicitly with `cat` before checking:
 
-- [ ] **Common Pitfalls**: Check against `rules/common-pitfalls.md` for period spacing, terminology consistency, ambiguous recommendations, table data errors.
-- [ ] **Terminology Consistency**: Check term usage against `rules/terminology-guide.md`.
+- [ ] **Common Pitfalls**: Check `rules/common-pitfalls.md` — period spacing, terminology consistency, ambiguous recommendations, table data errors.
+- [ ] **Terminology Consistency**: Check against `rules/terminology-guide.md`.
 - [ ] **Link Correctness**: Verify internal links, anchor links, and external link components.
-- [ ] **Language Style**: Check tone and wording against `rules/language-style.md`.
+- [ ] **Language Style**: Check against `rules/language-style.md`.
 - [ ] **Frontmatter Completeness**: Verify weight, author, category, queries, etc.
 - [ ] **MDX Component Usage**: Check syntax against `rules/mdx-components.md`.
 
-#### 0.4 Output Review Report and Wait for Confirmation
-
-**You MUST output the review results** in the following format:
+**Output the review report** before making any changes:
 
 ```markdown
-## 🔍 Documentation Review Report
+## 🔍 Specification Review Report
 
 ### `:::` Directive Check
 - **Current Count**: X
@@ -86,7 +213,7 @@ Read the document specified by the user to understand its content and structure.
 [If exceeded, list details]
 | Line | Type | Summary | Priority | Recommendation |
 |------|------|---------|----------|----------------|
-| ... | ... | ... | ... | ... |
+| ...  | ...  | ...     | ...      | ...            |
 
 ### Other Checks
 - [ ] Terminology Consistency: ✅ / ❌ [Specific issue]
@@ -96,120 +223,26 @@ Read the document specified by the user to understand its content and structure.
 - [ ] MDX Component: ✅ / ❌ [Specific issue]
 
 ## 💡 Recommendations
-
-[List specific modification suggestions if compliance issues are found]
+[List specific modification suggestions]
 
 ---
-
-**Should I modify the document according to the above suggestions? Please confirm.**
+Should I apply the above changes? Please confirm.
 ```
 
 **Branching Logic**:
-- **User Confirms**: Proceed to modify the document.
-- **User Rejects/Partial Adoption**: Respect the user's decision and proceed with explanations.
-- **User Provides New Feedback**: Return to step 0.1 for re-analysis.
+- **User Confirms**: Apply the changes.
+- **User Rejects / Partial Adoption**: Respect the decision and proceed accordingly.
+- **User Provides New Feedback**: Return to 2.1 for re-analysis.
 
----
+### 2.2 Load the Corresponding Template
 
-## Phase -1: Quick Intake Check
-
-Before starting any analysis, verify the following are clear:
-- What is the deliverable? (new doc / review existing doc / architecture analysis)
-- Is there a source document or PRD to work from, or should content be inferred from code/feature description?
-
-If either is ambiguous, ask the user to clarify before proceeding.
-
----
-
-## Phase 1: Architecture Analysis
-
-### Step 1: Read Requirement Documents
-Understand the functional requirements or original documents:
-1. Extract core information from requirements or PRDs.
-2. Identify scope (simple vs. complex multi-functional).
-3. Clarify the target audience (DevOps, Developers, Admins, etc.).
-
-### Step 2: Analyze Existing Document Structure (⚠️ Critical)
-Search the target repository's structure to evaluate if adjustments are needed:
-
-1. **Cross-Verify with Multiple Keywords** (to avoid keyword traps):
-   ```bash
-   grep -r "keyword1" /path/to/docs/ --include="*.mdx" -l
-   grep -r "keyword2" /path/to/docs/ --include="*.mdx" -l
-   ```
-   **Example**: If the requirement is "Application Backup," search for `backup application`, `backup policy`, and `PVC backup`. Avoid concluding based on a single keyword like `velero`.
-
-2. **Verify Functional Alignment**: Read found documents to ensure the functional domain matches the requirements.
-3. **Assess Document Quality**: Check for compliance with naming, metadata, and structure.
-4. **Determine Structural Adjustments**: Decide whether to create new files, split complex files, or merge related ones.
-
-### Step 3: Decide Execution Plan (⚠️ Critical)
-
-**⚠️ CRITICAL: Directory Structure Integrity Verification**
-
-**Before formulating your plan, you MUST verify directory structure integrity**:
-
-**Load Rules**: Use your Read tool to examine `rules/core-conventions.md` and read the "Directory `index.mdx`" section.
-
-**The Critical Rule**:
-
-> **Every directory that contains `.mdx` files OR has subdirectories MUST have an `index.mdx` file.**
-
-**Verification Steps**:
-
-1. **Use your file exploration tools** (Glob, ls, or grep) to traverse the target documentation directory.
-2. **Check each directory**: If it contains `.mdx` files or has subdirectories, verify an `index.mdx` file exists.
-3. **Report any missing `index.mdx` files** with their full paths.
-
-2. **For any directory structure changes you plan**, verify parent directories have `index.mdx`
-
-**Common Mistakes to Avoid**:
-
-❌ **WRONG**: Creating subdirectories without ensuring parent has `index.mdx`
-```
-docs/en/apis/providers/huawei-dcs/     ← Created with index.mdx ✅
-docs/en/apis/providers/huawei-cloud-stack/  ← Created with index.mdx ✅
-docs/en/apis/providers/  ← FORGOT to create index.mdx ❌
-```
-
-✅ **CORRECT**: Ensure parent has `index.mdx` BEFORE or TOGETHER with subdirectories
-```
-docs/en/apis/providers/index.mdx    ← Create this FIRST or together
-docs/en/apis/providers/huawei-dcs/index.mdx
-docs/en/apis/providers/huawei-cloud-stack/index.mdx
-```
-
-**Include directory structure verification in your execution plan output.**
-
----
-
-Formulate an execution plan based on complexity and existing status:
-
-#### 3.1 Modify vs. Create Decision Tree
-```text
-Requirement Type:
-├─ UI Form Field Enhancement / Parameter Added → Modify Existing Document
-├─ New Functional Capability → Create New Document
-│  ├─ Feature Intro → function doc
-│  ├─ Scenario-based Guide → howto doc
-│  └─ Conceptual Explanation → concept doc
-└─ Scope Assessment:
-   ├─ Simple/Single Function → Single HowTo or Function doc
-   ├─ Complex/Multi-functional → Split into multiple docs (intro + howto + concept)
-```
-
-**STOP AND WAIT FOR APPROVAL:**
-Output your analysis and the proposed execution plan (which files to create, which to edit, and the general outline). **You MUST ask the user: "Should I proceed with generating/modifying the documentation based on this plan?"** Do not proceed to Phase 2 until the user says yes.
-
-## Phase 2: Document Generation
-
-### Step 4: Load the Corresponding Template
-Load the template based on the determined document type (path relative to `SKILL.md`):
+Load the template based on the document type confirmed in Phase 1 (path relative to `SKILL.md`):
 - `templates/howto-template.mdx`
 - `templates/function-template.mdx`
 - (etc.)
 
-### Step 5: Explicitly Load Core Specifications
+### 2.3 Explicitly Load Core Specifications
+
 **Before generating content, you MUST explicitly read the following rules**:
 - **rules/metadata-rules.md** (Frontmatter rules)
 - **rules/language-style.md** (Tone and style)
@@ -224,21 +257,28 @@ Load the template based on the determined document type (path relative to `SKILL
 - **rules/terminology-consistency.md** (K8s/OpenShift official standards)
 - **rules/best-practices.md** (Common patterns for reuse)
 
-### Step 6: Example-Driven Learning (RAG)
-**Crucial**: Do not memorize all component parameters. Use `grep` to retrieve real-world use cases and mimic them.
-1. **⚠️ STOP**: Ask the user for the current documentation repository path before proceeding. Do not assume or infer the path from previous context.
-2. **Search for examples** in the specified path: `grep -r "<Tabs" <path> --include="*.mdx" -A 5`.
-3. If neither the repository path nor authorization is provided, **do not attempt to use MDX components** whose exact syntax is uncertain. Use plain Markdown alternatives and note this limitation in your output.
+### 2.4 Example-Driven Learning (RAG)
+
+**Crucial**: Do not rely on memorized component parameters. Use `grep` to retrieve real-world use cases and mimic them.
+
+1. **⚠️ STOP**: Ask the user for the documentation repository path if not already confirmed in Phase 0. Do not assume or infer it.
+2. **Search for examples** in the specified path:
+   ```bash
+   grep -r "<Tabs" <path> --include="*.mdx" -A 5
+   ```
+3. If the user provides neither a repository path nor authorization to access a reference repository, **do not use MDX components** whose exact syntax is uncertain. Use plain Markdown alternatives and note this limitation in your output.
 
 **Trust Hierarchy**:
 1. 🥇 **Highest**: Real use cases in the user's repository.
-2. 🥈 **Medium**: Open-source reference repositories (with authorization).
+2. 🥈 **Medium**: Open-source reference repositories (with user authorization).
 3. 🥉 **Lowest**: Built-in rule documents in this skill.
 
-### Step 7: Terminology Retrieval
+### 2.5 Terminology Retrieval
+
 Adhere to `rules/terminology-consistency.md`: **Avoid inventing new terms**. Prioritize Kubernetes and OpenShift official standards. Use `rules/terminology-guide.md` for standardized translations and to avoid "bad cases."
 
-### Step 8: Document Generation
+### 2.6 Generate Document
+
 Generate the complete document, ensuring:
 - **Metadata Integrity**: Correct `weight`, `author`, `category`, and `queries`.
 - **Structural Completeness**: Follow the template without removing mandatory nodes.
@@ -246,7 +286,8 @@ Generate the complete document, ensuring:
 - **Directive Control**: Ensure `:::` directives do not exceed 3-4 per document.
 - **Pattern Reuse**: When appropriate, reuse patterns from `rules/best-practices.md` for consistency.
 
-### Step 9: Self-Verification
+### 2.7 Self-Verification
+
 After generation, perform the following checks:
 
 #### Format Check
@@ -303,11 +344,12 @@ After generation, perform the following checks:
 After generation, output in the following format:
 
 ```markdown
-## 📋 Documentation Analysis Results
+## 📋 Documentation Summary
 
 **Requirement Type**: [Simple/Complex]
 **Recommended Doc Type**: [howto/concept/function/etc.]
-**Execution Plan**: [Create/Modify/Split/Merge]
+**Execution Path**: [A / B / C]
+**Actions Taken**: [Create/Modify/Restructure/Merge — with brief description]
 
 ## 📄 Generated Document
 
