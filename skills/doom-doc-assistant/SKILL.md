@@ -154,11 +154,38 @@ Requirement Type:
 
 ### 1.3 Output Execution Plan and Wait for Approval
 
-Output a complete execution plan covering:
-- Which files to create, modify, restructure, or merge, and why.
-- The proposed location and document type for any new documents.
-- A high-level outline of each document to be created.
-- Any `index.mdx` files that need to be created to maintain directory integrity.
+Output a complete execution plan in the following format:
+
+```markdown
+## 📋 Execution Plan
+
+### Files to Create
+| File | Type | Weight | Author | Category | Purpose |
+|------|------|--------|--------|----------|---------|
+| docs/en/xxx/yyy.mdx | howto | 10 | dev@alauda.io | howto | Guide for... |
+
+### Files to Modify
+| File | Changes |
+|------|---------|
+| docs/en/xxx/index.mdx | Add link to new document |
+
+### Directory Structure
+```
+docs/en/xxx/
+├── index.mdx (weight: 50)
+├── platform-a.mdx (weight: 10)
+├── platform-b.mdx (weight: 20)
+└── platform-c.mdx (weight: 30)
+```
+
+### Document Outlines
+[High-level outline for each new document]
+
+### index.mdx Files to Create
+[Any index.mdx needed for directory integrity]
+```
+
+**⚠️ IMPORTANT**: Once approved, this plan becomes the **source of truth** for Phase 2 execution. All generated files MUST match the planned structure exactly, including weight values.
 
 **STOP AND WAIT FOR APPROVAL.**
 
@@ -289,6 +316,22 @@ Generate the complete document, ensuring:
 ### 2.7 Self-Verification
 
 After generation, perform the following checks:
+
+#### Plan Consistency Check (⚠️ CRITICAL)
+
+**Before any other checks, verify that all generated/modified files match the approved plan from Phase 1.**
+
+- [ ] **All planned files were created** — Compare actual files created vs. "Files to Create" table
+- [ ] **Weight values match exactly** — Each file's weight must match the approved plan
+- [ ] **File paths match exactly** — No deviation from planned directory structure
+- [ ] **Metadata fields match** — author, category match the approved plan
+- [ ] **No unplanned files** — No extra files created beyond the plan
+
+**If any inconsistency is found:**
+1. Stop and report the discrepancy
+2. Ask user whether to:
+   - Proceed with correction (fix the inconsistency)
+   - Revise the plan (if the change was intentional)
 
 #### Format Check
 - [ ] **Bold Syntax**: Used `**bold**` instead of `<b>` tags (except in MDX JSX props)
