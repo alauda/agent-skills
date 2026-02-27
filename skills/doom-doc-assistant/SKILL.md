@@ -111,6 +111,16 @@ Read the document specified by the user to understand its content and structure.
 
 ---
 
+## Phase -1: Quick Intake Check
+
+Before starting any analysis, verify the following are clear:
+- What is the deliverable? (new doc / review existing doc / architecture analysis)
+- Is there a source document or PRD to work from, or should content be inferred from code/feature description?
+
+If either is ambiguous, ask the user to clarify before proceeding.
+
+---
+
 ## Phase 1: Architecture Analysis
 
 ### Step 1: Read Requirement Documents
@@ -216,9 +226,9 @@ Load the template based on the determined document type (path relative to `SKILL
 
 ### Step 6: Example-Driven Learning (RAG)
 **Crucial**: Do not memorize all component parameters. Use `grep` to retrieve real-world use cases and mimic them.
-1. **Ask the user** for the current documentation repository path.
+1. **⚠️ STOP**: Ask the user for the current documentation repository path before proceeding. Do not assume or infer the path from previous context.
 2. **Search for examples** in the specified path: `grep -r "<Tabs" <path> --include="*.mdx" -A 5`.
-3. If no examples are found, ask for permission to check open-source reference repositories (e.g., `alauda/acp-docs`).
+3. If neither the repository path nor authorization is provided, **do not attempt to use MDX components** whose exact syntax is uncertain. Use plain Markdown alternatives and note this limitation in your output.
 
 **Trust Hierarchy**:
 1. 🥇 **Highest**: Real use cases in the user's repository.
