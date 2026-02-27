@@ -29,6 +29,13 @@ You are an assistant, not an autonomous editor. Regardless of the user's request
 
 Follow the workflow below to generate documentation that complies with the Doom framework specifications.
 
+**General Workflow Principle**:
+Each phase requires user approval before proceeding to the next. If the user provides feedback or corrections at any phase:
+1. Re-process the current phase with the feedback incorporated
+2. Re-output the report/plan for that phase
+3. Wait for user approval again
+4. Do NOT proceed to the next phase until the user explicitly confirms
+
 ---
 
 ## Phase 0: Intake & Diagnosis
@@ -72,6 +79,13 @@ For each document found:
 |----------|-----------|--------------------|
 | ...      | High/Med/Low | Structurally sound / Needs restructuring / Poor quality |
 
+**Source Material Coverage**:
+Analyze what content is available vs missing in the provided source material.
+| Content Area | Available | Missing | Notes |
+|--------------|-----------|---------|-------|
+| [e.g., Installation] | ✅ / ❌ | | If missing, note how it will be handled |
+| [e.g., Cluster Creation] | ✅ / ❌ | | |
+
 **Recommended Path**:
 - Path A / Path B / Path C (see below)
 
@@ -82,6 +96,12 @@ For each document found:
 Please confirm the above findings, or let me know of any related documents I may have missed.
 After your confirmation, tell me which path you'd like to take.
 ```
+
+**⚠️ CRITICAL**: When source material is incomplete, explicitly identify gaps and propose how to handle them (e.g., reference existing patterns, mark as placeholder, ask user for additional information). This sets clear expectations before proceeding.
+
+**Feedback Loop**:
+- **User confirms findings**: Proceed to the user's chosen path
+- **User provides feedback/corrections**: Re-process Phase 0 with the feedback and re-output the diagnosis report. Do NOT proceed to Phase 1 until the user confirms.
 
 **Branching Paths — the user decides:**
 
@@ -160,11 +180,13 @@ Output a complete execution plan in the following format:
 ## 📋 Execution Plan
 
 ### Files to Create
+**IMPORTANT**: Only list NEW files that do NOT exist in the repository.
 | File | Type | Weight | Author | Category | Purpose |
 |------|------|--------|--------|----------|---------|
 | docs/en/xxx/yyy.mdx | howto | 10 | dev@alauda.io | howto | Guide for... |
 
 ### Files to Modify
+**IMPORTANT**: List EXISTING files (including placeholders like "Coming Soon") that will have their content replaced.
 | File | Changes |
 |------|---------|
 | docs/en/xxx/index.mdx | Add link to new document |
@@ -192,6 +214,10 @@ docs/en/xxx/
 You MUST ask: *"Should I proceed with generating/modifying the documentation based on this plan?"*
 
 Do not proceed to Phase 2 until the user explicitly confirms.
+
+**Feedback Loop**:
+- **User approves**: Proceed to Phase 2 execution
+- **User provides feedback/corrections**: Re-process Phase 1 with the feedback and re-output the execution plan. Do NOT proceed to Phase 2 until the user approves the revised plan.
 
 ---
 
