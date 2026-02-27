@@ -9,7 +9,7 @@ Every `.mdx` document must contain standardized Frontmatter metadata to ensure p
 | **title** | Recommended | Document title. If omitted, the first H1 heading will be used. |
 | **weight** | **Mandatory** | Navigation sorting weight (integer). Lower values appear first. |
 | **author** | **Mandatory** | The author's email or identifier. |
-| **category** | **Mandatory** | Document type (howto, concept, function, intro, etc.). |
+| **category** | **Mandatory** | Document category (index, introduction, feature, releasenote, architecture, concept, quickstart, howto, troubleshooting, permissions, api). |
 | **queries** | **Mandatory** | RAG search optimization keywords/phrases. |
 
 ## Configuration Example

@@ -77,20 +77,20 @@ AI agents use specific segmentation logic to retrieve information:
 
 ## Document Types & Strategic Objectives
 
-Every document must align with a specific type and objective.
+Every document must align with a specific type and objective. These document types map to the `category` field in frontmatter metadata.
 
-### HowTo Documents (Scenario-Oriented)
+### HowTo Documents (category: `howto`)
 - **Objective**: Solve specific problems in real-world scenarios.
 - **Structure**: Title (Verb-first) -> Introduction -> Scenarios -> Prerequisites -> Steps (using `<Steps />`) -> Verification.
 
-### Function Guides (Feature-Oriented)
+### Function Guides (category: `feature` or `introduction`)
 - **Objective**: Explain what a feature is and how it works.
 - **CLI-First**: Prioritize CLI instructions.
 
-### Concept Documents (Theory-Oriented)
+### Concept Documents (category: `concept`)
 - **Objective**: Introduce core concepts and background theories.
 
-### Troubleshooting Documents (Solution-Oriented)
+### Troubleshooting Documents (category: `troubleshooting`)
 - **Objective**: Diagnose and resolve common issues.
 
 ## `shared` Directory Convention

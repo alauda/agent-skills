@@ -156,21 +156,43 @@ docs/en/apis/providers/huawei-dcs/index.mdx
 docs/en/apis/providers/huawei-cloud-stack/index.mdx
 ```
 
-### 1.2 Determine Document Type
+### 1.2 Determine Action and Category
 
-Select the appropriate document type based on the requirement:
+**Step 1: Determine Action (Create vs Modify)**
 
 ```text
 Requirement Type:
 ├─ UI Form Field Enhancement / Parameter Added → Modify Existing Document
 ├─ New Functional Capability → Create New Document
-│  ├─ Feature Introduction      → function doc
-│  ├─ Scenario-based Guide      → howto doc
-│  └─ Conceptual Explanation    → concept doc
 └─ Scope Assessment:
-   ├─ Simple / Single Function       → Single HowTo or Function doc
-   └─ Complex / Multi-functional     → Split into multiple docs (intro + howto + concept)
+   ├─ Simple / Single Function       → Single Document
+   └─ Complex / Multi-functional     → Split into Multiple Documents
 ```
+
+**Step 2: Select Category**
+
+Choose the appropriate category for frontatter metadata:
+
+| Category | Usage | Example |
+|----------|-------|---------|
+| `index` | Directory/index pages | Overview pages that link to other documents |
+| `introduction` | Product/service introduction | High-level introduction to a feature or service |
+| `feature` | Feature documentation | Detailed feature descriptions and capabilities |
+| `releasenote` | Release notes | Version updates and changelogs |
+| `architecture` | Architecture documentation | System design and architecture explanations |
+| `concept` | Core concepts | Conceptual explanations of technologies or patterns |
+| `quickstart` | Quick start guides | Getting started tutorials |
+| `howto` | How-to guides | Step-by-step procedural guides |
+| `troubleshooting` | Troubleshooting guides | Problem diagnosis and resolution |
+| `permissions` | Permission documentation | Authorization and permission explanations |
+| `api` | API reference | API documentation and resource references |
+
+**Category Selection Guidelines**:
+- **Step-by-step procedures** → `howto`
+- **Feature overviews and capabilities** → `feature` or `introduction`
+- **API/CRD reference** → `api`
+- **Technical concepts** → `concept`
+- **Architecture explanations** → `architecture`
 
 ### 1.3 Output Execution Plan and Wait for Approval
 
@@ -181,9 +203,9 @@ Output a complete execution plan in the following format:
 
 ### Files to Create
 **IMPORTANT**: Only list NEW files that do NOT exist in the repository.
-| File | Type | Weight | Author | Category | Purpose |
-|------|------|--------|--------|----------|---------|
-| docs/en/xxx/yyy.mdx | howto | 10 | dev@alauda.io | howto | Guide for... |
+| File | Weight | Author | Category | Purpose |
+|------|--------|--------|----------|---------|
+| docs/en/xxx/yyy.mdx | 10 | dev@alauda.io | howto | Guide for... |
 
 ### Files to Modify
 **IMPORTANT**: List EXISTING files (including placeholders like "Coming Soon") that will have their content replaced.
@@ -287,12 +309,20 @@ Should I apply the above changes? Please confirm.
 - **User Rejects / Partial Adoption**: Respect the decision and proceed accordingly.
 - **User Provides New Feedback**: Return to 2.1 for re-analysis.
 
-### 2.2 Load the Corresponding Template
+### 2.2 Load Template for Reference (Optional)
 
-Load the template based on the document type confirmed in Phase 1 (path relative to `SKILL.md`):
+Template files are available as structural reference. Load based on the category selected in Phase 1 (path relative to `SKILL.md`):
 - `templates/howto-template.mdx`
 - `templates/function-template.mdx`
-- (etc.)
+- `templates/concept-template.mdx`
+- `templates/architecture-template.mdx`
+- `templates/quickstart-template.mdx`
+- `templates/installation-template.mdx`
+- `templates/troubleshooting-template.mdx`
+- `templates/upgrade-template.mdx`
+- `templates/intro-template.mdx`
+
+Templates provide guidance on structure and common patterns, but are not strictly required for AI-generated content.
 
 ### 2.3 Explicitly Load Core Specifications
 
@@ -334,7 +364,7 @@ Adhere to `rules/terminology-consistency.md`: **Avoid inventing new terms**. Pri
 
 Generate the complete document, ensuring:
 - **Metadata Integrity**: Correct `weight`, `author`, `category`, and `queries`.
-- **Structural Completeness**: Follow the template without removing mandatory nodes.
+- **Structural Completeness**: Include all necessary sections for the document category. Refer to templates for guidance, but adapt as needed for the specific content.
 - **Correct Component Usage**: Use `<Overview />`, `<Term />`, `<Directive />`, and `<Steps />` properly.
 - **Directive Control**: Ensure `:::` directives do not exceed 3-4 per document.
 - **Pattern Reuse**: When appropriate, reuse patterns from `rules/best-practices.md` for consistency.
@@ -416,7 +446,7 @@ After generation, output in the following format:
 ## 📋 Documentation Summary
 
 **Requirement Type**: [Simple/Complex]
-**Recommended Doc Type**: [howto/concept/function/etc.]
+**Category**: [howto/concept/feature/api/etc.]
 **Execution Path**: [A / B / C]
 **Actions Taken**: [Create/Modify/Restructure/Merge — with brief description]
 
