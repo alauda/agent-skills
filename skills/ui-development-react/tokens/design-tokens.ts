@@ -1,0 +1,167 @@
+// Auto-generated design tokens for Alauda Container Platform (ACP)
+// This file is generated from design-tokens.json
+// For updates, modify design-tokens.json and run: python3 scripts/design-tokens-converter.py
+
+export const designTokens = {
+  colors: {
+    light: {
+      backgrounds: {
+        main: '#ffffff',
+        primary: '#f4f6f8',
+        panel: '#eef4ff',
+        secondary: '#fafafa',
+      },
+      info: {
+        bg: '#e3f2fd',
+        border: '#90caf9',
+        dark: '#1e3a8a',
+      },
+      success: {
+        bg: '#d7f5e9',
+        border: '#4caf50',
+        dark: '#064e3b',
+      },
+      process: {
+        bg: '#e8f2ff',
+        border: '#2196f3',
+        dark: '#1e40af',
+      },
+      teal: {
+        bg: '#e0f2f1',
+        border: '#4db6ac',
+        dark: '#134e4a',
+      },
+      borders: {
+        primary: '#cbd7e0',
+        secondary: '#cbd5e1',
+        light: '#e2e8f0',
+      },
+      text: {
+        primary: '#1a202c',
+        secondary: '#4a5568',
+        tertiary: '#718096',
+        disabled: '#cbd5e0',
+      },
+    },
+    dark: {
+      backgrounds: {
+        main: '#1a1a1a',
+        primary: '#2d3748',
+        panel: '#1e3a5f',
+        secondary: '#2d3748',
+      },
+      info: {
+        bg: '#1e3a8a',
+        border: '#60a5fa',
+        dark: '#1e3a8a',
+      },
+      success: {
+        bg: '#064e3b',
+        border: '#10b981',
+        dark: '#064e3b',
+      },
+      process: {
+        bg: '#1e40af',
+        border: '#3b82f6',
+        dark: '#1e40af',
+      },
+      teal: {
+        bg: '#134e4a',
+        border: '#14b8a6',
+        dark: '#134e4a',
+      },
+      borders: {
+        primary: '#4b5563',
+        secondary: '#555d6f',
+        light: '#374151',
+      },
+      text: {
+        primary: '#f3f4f6',
+        secondary: '#e5e7eb',
+        tertiary: '#d1d5db',
+        disabled: '#9ca3af',
+      },
+    },
+  },
+
+  spacing: {
+    px0: '0',
+    px1: '0.25rem',
+    px2: '0.5rem',
+    px4: '1rem',
+    px6: '1.5rem',
+    px8: '2rem',
+    px12: '3rem',
+    px16: '4rem',
+    px20: '5rem',
+    px24: '6rem',
+    px32: '8rem',
+    px48: '12rem',
+    px64: '16rem',
+  },
+
+  typography: {
+    sizes: {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+      '2xl': '1.5rem',
+      '3xl': '1.875rem',
+      '4xl': '2.25rem',
+    },
+    weights: {
+      light: 300,
+      normal: 400,
+      medium: 500,
+      semibold: 600,
+      bold: 700,
+    },
+    lineHeights: {
+      tight: 1.1,
+      snug: 1.2,
+      normal: 1.5,
+      relaxed: 1.6,
+      loose: 1.8,
+    },
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+  },
+
+  effects: {
+    shadows: {
+      none: 'none',
+      subtle: '0 1px 2px rgba(0, 0, 0, 0.05)',
+      medium: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      strong: '0 10px 15px rgba(0, 0, 0, 0.15)',
+    },
+    radii: {
+      sm: '4px',
+      md: '8px',
+      lg: '12px',
+      xl: '16px',
+    },
+    transitions: {
+      fast: '200ms',
+      standard: '300ms',
+      slow: '500ms',
+    },
+  },
+} as const;
+
+export type DesignTokens = typeof designTokens;
+
+// Convenience accessors for common patterns
+export const getColor = (mode: 'light' | 'dark', category: string, name: string) => {
+  const colors = designTokens.colors[mode] as any;
+  return colors?.[category]?.[name] || '#000000';
+};
+
+export const getSpacing = (size: keyof typeof designTokens.spacing) => {
+  return designTokens.spacing[size];
+};
+
+export const getFontSize = (size: keyof typeof designTokens.typography.sizes) => {
+  return designTokens.typography.sizes[size];
+};

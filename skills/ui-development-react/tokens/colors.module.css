@@ -1,0 +1,349 @@
+/* CSS Module - Design Tokens for ACP
+   Import in React/Next.js: import tokens from './design-tokens.module.css'
+   Use: <div className={tokens.bgPrimary}>...</div>
+*/
+
+/* Backgrounds */
+.bgMain {
+  background-color: #ffffff;
+}
+
+.bgPrimary {
+  background-color: #f4f6f8;
+}
+
+.bgPanel {
+  background-color: #eef4ff;
+}
+
+.bgSecondary {
+  background-color: #fafafa;
+}
+
+/* Info Colors */
+.infoBg {
+  background-color: #e3f2fd;
+}
+
+.infoBorder {
+  border-color: #90caf9;
+}
+
+.infoDark {
+  color: #1e3a8a;
+}
+
+/* Success Colors */
+.successBg {
+  background-color: #d7f5e9;
+}
+
+.successBorder {
+  border-color: #4caf50;
+}
+
+.successDark {
+  color: #064e3b;
+}
+
+/* Process Colors */
+.processBg {
+  background-color: #e8f2ff;
+}
+
+.processBorder {
+  border-color: #2196f3;
+}
+
+.processDark {
+  color: #1e40af;
+}
+
+/* Teal Colors */
+.tealBg {
+  background-color: #e0f2f1;
+}
+
+.tealBorder {
+  border-color: #4db6ac;
+}
+
+.tealDark {
+  color: #134e4a;
+}
+
+/* Borders */
+.borderPrimary {
+  border-color: #cbd7e0;
+}
+
+.borderSecondary {
+  border-color: #cbd5e1;
+}
+
+.borderLight {
+  border-color: #e2e8f0;
+}
+
+/* Text Colors */
+.textPrimary {
+  color: #1a202c;
+}
+
+.textSecondary {
+  color: #4a5568;
+}
+
+.textTertiary {
+  color: #718096;
+}
+
+.textDisabled {
+  color: #cbd5e0;
+}
+
+/* Spacing Utilities */
+.p0 {
+  padding: 0;
+}
+
+.p1 {
+  padding: 0.25rem;
+}
+
+.p2 {
+  padding: 0.5rem;
+}
+
+.p4 {
+  padding: 1rem;
+}
+
+.p6 {
+  padding: 1.5rem;
+}
+
+.p8 {
+  padding: 2rem;
+}
+
+.p12 {
+  padding: 3rem;
+}
+
+.p16 {
+  padding: 4rem;
+}
+
+.m0 {
+  margin: 0;
+}
+
+.m1 {
+  margin: 0.25rem;
+}
+
+.m2 {
+  margin: 0.5rem;
+}
+
+.m4 {
+  margin: 1rem;
+}
+
+.m6 {
+  margin: 1.5rem;
+}
+
+.m8 {
+  margin: 2rem;
+}
+
+.m12 {
+  margin: 3rem;
+}
+
+.m16 {
+  margin: 4rem;
+}
+
+.gap4 {
+  gap: 1rem;
+}
+
+.gap6 {
+  gap: 1.5rem;
+}
+
+.gap8 {
+  gap: 2rem;
+}
+
+/* Font Sizes */
+.textXs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.textSm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.textBase {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.textLg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.textXl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.text4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
+/* Font Weights */
+.fontLight {
+  font-weight: 300;
+}
+
+.fontNormal {
+  font-weight: 400;
+}
+
+.fontMedium {
+  font-weight: 500;
+}
+
+.fontSemibold {
+  font-weight: 600;
+}
+
+.fontBold {
+  font-weight: 700;
+}
+
+/* Border Radius */
+.roundedSm {
+  border-radius: 4px;
+}
+
+.roundedMd {
+  border-radius: 8px;
+}
+
+.roundedLg {
+  border-radius: 12px;
+}
+
+.roundedXl {
+  border-radius: 16px;
+}
+
+/* Shadows */
+.shadowNone {
+  box-shadow: none;
+}
+
+.shadowSubtle {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.shadowMedium {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.shadowStrong {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Transitions */
+.transitionFast {
+  transition: all 200ms ease-in-out;
+}
+
+.transitionStandard {
+  transition: all 300ms ease-in-out;
+}
+
+.transitionSlow {
+  transition: all 500ms ease-in-out;
+}
+
+/* Dark mode variants */
+.dark {
+  /* Backgrounds */
+  --bg-main: #1a1a1a;
+  --bg-primary: #2d3748;
+  --bg-panel: #1e3a5f;
+  --bg-secondary: #2d3748;
+
+  /* Info */
+  --info-bg: #1e3a8a;
+  --info-border: #60a5fa;
+
+  /* Success */
+  --success-bg: #064e3b;
+  --success-border: #10b981;
+
+  /* Process */
+  --process-bg: #1e40af;
+  --process-border: #3b82f6;
+
+  /* Teal */
+  --teal-bg: #134e4a;
+  --teal-border: #14b8a6;
+
+  /* Borders */
+  --border-primary: #4b5563;
+  --border-secondary: #555d6f;
+  --border-light: #374151;
+
+  /* Text */
+  --text-primary: #f3f4f6;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #d1d5db;
+  --text-disabled: #9ca3af;
+}
+
+.dark .bgMain {
+  background-color: #1a1a1a;
+}
+
+.dark .bgPrimary {
+  background-color: #2d3748;
+}
+
+.dark .bgPanel {
+  background-color: #1e3a5f;
+}
+
+.dark .textPrimary {
+  color: #f3f4f6;
+}
+
+.dark .textSecondary {
+  color: #e5e7eb;
+}
+
+.dark .borderPrimary {
+  border-color: #4b5563;
+}
