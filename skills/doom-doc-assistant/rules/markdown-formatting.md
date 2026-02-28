@@ -116,6 +116,30 @@ Enter the Cluster Endpoint parameter.
 
 ## Lists and Breaks
 
+### Code Blocks in Lists
+
+When a code block appears inside a list item, it must be indented to align with the list content. The linter `remark-lint-code-block-split-list` enforces this rule.
+
+**Good** (properly indented):
+```markdown
+1. First item
+   1.1. Sub-item with code block:
+       ```
+       code here
+       ```
+```
+
+**Bad** (missing indentation):
+```markdown
+1. First item
+   1.1. Sub-item with code block:
+   ```
+   code here (wrong indentation)
+   ```
+```
+
+**Rule**: Add 2 spaces for each nesting level to align the code block with the list text. Most linters support `--fix` to auto-correct this.
+
 ### List Item Continuation
 
 To add multiple paragraphs within a single list item, use `<br />`:

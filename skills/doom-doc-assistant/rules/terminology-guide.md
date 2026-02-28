@@ -50,13 +50,13 @@ Used for brand or product names that may vary across environments.
 | :--- | :--- | :--- |
 | global cluster | global cluster | Management cluster (recommended with `global` style). |
 | workload cluster | workload cluster | Clusters where business workloads run. |
-| Bare Metal | Bare Metal | Installing K8s directly on physical machines. |
+| Bare Metal | Bare Metal | Installing K8s directly on physical machines.<br/><br/>**Hyphenation Rule**:<br/>- Use `Bare Metal` (no hyphen) as a proper noun or feature name.<br/>- Use `bare-metal` (hyphenated) as an attributive adjective before a noun: `a bare-metal server`.<br/>- Use `bare metal` (no hyphen) in predicative position: `the server is bare metal`. |
 | control plane | control plane | Kubernetes components running on management nodes. |
 | node | node | Generic term for cluster nodes (avoid master/slave). |
 | administrator | administrator | System or platform admin. |
 | developer | developer | Application developer. |
 | release notes | release notes | List of updates and fixes. |
-| Dual-stack Network | Dual-stack Network | Support for both IPv4 and IPv6. |
+| Dual-stack Network | Dual-stack Network | Support for both IPv4 and IPv6.<br/><br/>**Hyphenation Rule**:<br/>- Use `Dual-stack Network` (capitalized) as a feature name.<br/>- Use `dual-stack` (lowercase, hyphenated) as an attributive adjective: `dual-stack networking`.<br/>- Use `dual stack` (no hyphen) in predicative position: `the network is dual stack`. |
 | OperatorHub | OperatorHub | Web console to discover and install Operators. |
 
 ### ACP Terms (acp)

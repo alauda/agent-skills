@@ -15,11 +15,40 @@
 Use the `weight` metadata field to control the sorting in the left navigation menu.
 
 ### Directory `index.mdx`
-Each directory must contain an `index.mdx` file:
+
+**The Critical Rule**:
+
+> Every directory that contains `.mdx` files OR has subdirectories MUST have an `index.mdx` file.
+
+**Purpose**: The `index.mdx` serves as the navigation entry for each directory in the documentation sidebar.
+
+**Template**:
 ```mdx
 # Navigation Name
 
 <Overview />
+```
+
+**Verification Steps**:
+1. Use file exploration tools (Glob, `ls`, or `grep`) to traverse the target documentation directory.
+2. Check each directory: if it contains `.mdx` files or has subdirectories, verify an `index.mdx` file exists.
+3. Check any directories you plan to create or modify.
+4. Report any missing `index.mdx` files in your plan output.
+
+**Common Mistake to Avoid**:
+
+❌ **WRONG**: Creating subdirectories without ensuring the parent has `index.mdx`
+```
+docs/en/apis/providers/huawei-dcs/          ← Created with index.mdx ✅
+docs/en/apis/providers/huawei-cloud-stack/  ← Created with index.mdx ✅
+docs/en/apis/providers/                     ← FORGOT to create index.mdx ❌
+```
+
+✅ **CORRECT**: Ensure parent has `index.mdx` BEFORE or TOGETHER with subdirectories
+```
+docs/en/apis/providers/index.mdx                    ← Create this FIRST
+docs/en/apis/providers/huawei-dcs/index.mdx
+docs/en/apis/providers/huawei-cloud-stack/index.mdx
 ```
 
 ## Title Writing Rules

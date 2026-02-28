@@ -46,6 +46,12 @@ To ensure documentation is professional, objective, and easy to translate, all c
 - **Good**: "Expose the service using an Ingress Controller."
 - **Bad**: "Use a gateway to open the service to the outside."
 
+### Preserving Technical Concepts
+- When referring to a specific technical concept or method, preserve its original form rather than converting it to a generic verb phrase.
+- **Good**: "The platform uses an **in-place upgrade approach**." (preserves the technical concept)
+- **Bad**: "The platform performs **in-place upgrades**." (loses precision, becomes a generic action)
+- **Principle**: If a term represents a distinct technical strategy, use `[term] + [noun]` structure (e.g., `approach`, `method`, `strategy`) to maintain its status as a technical concept.
+
 ## Maintainability and Compatibility
 
 - **Best Practices**: Include long-term maintenance tips.

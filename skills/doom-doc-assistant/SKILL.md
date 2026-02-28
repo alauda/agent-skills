@@ -67,58 +67,21 @@ For each document found:
 
 ### 0.3 Output Diagnosis Report and Wait for User Decision
 
-**You MUST output the diagnosis results** in the following format, then stop and wait:
+**You MUST output the diagnosis results** using the template below, then stop and wait.
 
-```markdown
-## 🔍 Diagnosis Report
+**Load**: Read `templates/diagnosis-report.md` for the complete template and branching paths reference.
 
-**Requirement**: [User's description]
-
-**Related Documents Found**:
-| Document | Relevance | Quality Assessment |
-|----------|-----------|--------------------|
-| ...      | High/Med/Low | Structurally sound / Needs restructuring / Poor quality |
-
-**Source Material Coverage**:
-Analyze what content is available vs missing in the provided source material.
-| Content Area | Available | Missing | Notes |
-|--------------|-----------|---------|-------|
-| [e.g., Installation] | ✅ / ❌ | | If missing, note how it will be handled |
-| [e.g., Cluster Creation] | ✅ / ❌ | | |
-
-**Recommended Path**:
-- Path A / Path B / Path C (see below)
-
-**Reasoning**: [Why this path is recommended based on the findings]
-
----
-
-Please confirm the above findings, or let me know of any related documents I may have missed.
-After your confirmation, tell me which path you'd like to take.
-```
+**Output** (following the template):
+- Diagnosis results with document relevance and quality assessment
+- Source material coverage analysis
+- Recommended path with reasoning
+- Request for user confirmation
 
 **⚠️ CRITICAL**: When source material is incomplete, explicitly identify gaps and propose how to handle them (e.g., reference existing patterns, mark as placeholder, ask user for additional information). This sets clear expectations before proceeding.
 
 **Feedback Loop**:
 - **User confirms findings**: Proceed to the user's chosen path
 - **User provides feedback/corrections**: Re-process Phase 0 with the feedback and re-output the diagnosis report. Do NOT proceed to Phase 1 until the user confirms.
-
-**Branching Paths — the user decides:**
-
-- **Path A: Existing docs are in good shape → Create new document directly**
-  Proceed to Phase 1 to plan the new document's location, type, and outline.
-
-- **Path B: Existing docs need restructuring → Restructure first, then write**
-  Proceed to Phase 1 to plan the restructuring, then Phase 2 to plan the new document.
-
-- **Path C: Existing docs need restructuring, but skip it this time → Create new document only**
-  Proceed to Phase 1 to plan the new document only. Output the following reminder before continuing:
-
-  ```
-  ⚠️ Technical Debt Notice:
-  [Brief description of the structural issues identified, without file paths.]
-  Recommend tracking this in Jira for a future iteration.
-  ```
 
 ---
 
@@ -128,33 +91,11 @@ After your confirmation, tell me which path you'd like to take.
 
 **Before formulating any plan, you MUST verify directory structure integrity.**
 
-**Load Rules**: Read `rules/core-conventions.md` and refer to the "Directory `index.mdx`" section.
-
-**The Critical Rule**:
-
-> **Every directory that contains `.mdx` files OR has subdirectories MUST have an `index.mdx` file.**
-
-**Verification Steps**:
-1. Use file exploration tools (Glob, `ls`, or `grep`) to traverse the target documentation directory.
-2. Check each directory: if it contains `.mdx` files or has subdirectories, verify an `index.mdx` file exists.
-3. Check any directories you plan to create or modify.
-4. Report any missing `index.mdx` files in your plan output.
-
-**Common Mistake to Avoid**:
-
-❌ **WRONG**: Creating subdirectories without ensuring the parent has `index.mdx`
-```
-docs/en/apis/providers/huawei-dcs/          ← Created with index.mdx ✅
-docs/en/apis/providers/huawei-cloud-stack/  ← Created with index.mdx ✅
-docs/en/apis/providers/                     ← FORGOT to create index.mdx ❌
-```
-
-✅ **CORRECT**: Ensure parent has `index.mdx` BEFORE or TOGETHER with subdirectories
-```
-docs/en/apis/providers/index.mdx                    ← Create this FIRST
-docs/en/apis/providers/huawei-dcs/index.mdx
-docs/en/apis/providers/huawei-cloud-stack/index.mdx
-```
+**Load Rules**: Read `rules/core-conventions.md` and refer to the "Directory `index.mdx`" section for:
+- The critical rule (every directory with `.mdx` files or subdirectories must have `index.mdx`)
+- Verification steps
+- Common mistakes to avoid
+- Correct/incorrect examples
 
 ### 1.2 Determine Action and Category
 
@@ -275,34 +216,16 @@ Load rules explicitly with `cat` before checking:
 - [ ] **Frontmatter Completeness**: Verify weight, author, category, queries, etc.
 - [ ] **MDX Component Usage**: Check syntax against `rules/mdx-components.md`.
 
-**Output the review report** before making any changes:
+**Output the review report** before making any changes.
 
-```markdown
-## 🔍 Specification Review Report
+**Load**: Read `templates/spec-review-report.md` for the complete template, directive priority reference, and compliance check list.
 
-### `:::` Directive Check
-- **Current Count**: X
-- **Standard Limit**: 3-4
-- **Status**: ✅ Compliant / ❌ Exceeds Limit
-
-[If exceeded, list details]
-| Line | Type | Summary | Priority | Recommendation |
-|------|------|---------|----------|----------------|
-| ...  | ...  | ...     | ...      | ...            |
-
-### Other Checks
-- [ ] Terminology Consistency: ✅ / ❌ [Specific issue]
-- [ ] Link Correctness: ✅ / ❌ [Specific issue]
-- [ ] Language Style: ✅ / ❌ [Specific issue]
-- [ ] Frontmatter: ✅ / ❌ [Specific issue]
-- [ ] MDX Component: ✅ / ❌ [Specific issue]
-
-## 💡 Recommendations
-[List specific modification suggestions]
-
----
-Should I apply the above changes? Please confirm.
-```
+**Output** (following the template):
+- `:::` directive count and status
+- Detailed breakdown if limit exceeded
+- Other compliance checks results
+- Specific modification recommendations
+- Request for user confirmation
 
 **Branching Logic**:
 - **User Confirms**: Apply the changes.
@@ -371,11 +294,13 @@ Generate the complete document, ensuring:
 
 ### 2.7 Self-Verification
 
-After generation, perform the following checks:
+After generation, perform verification using the checklist.
 
-#### Plan Consistency Check (⚠️ CRITICAL)
+**Load**: Read `rules/verification-checklist.md` and execute all checks in order.
 
-**Before any other checks, verify that all generated/modified files match the approved plan from Phase 1.**
+**Plan Consistency Check** (⚠️ CRITICAL — must be performed first):
+
+Before any other checks, verify that all generated/modified files match the approved plan from Phase 1.
 
 - [ ] **All planned files were created** — Compare actual files created vs. "Files to Create" table
 - [ ] **Weight values match exactly** — Each file's weight must match the approved plan
@@ -389,42 +314,14 @@ After generation, perform the following checks:
    - Proceed with correction (fix the inconsistency)
    - Revise the plan (if the change was intentional)
 
-#### Format Check
-- [ ] **Bold Syntax**: Used `**bold**` instead of `<b>` tags (except in MDX JSX props)
-- [ ] **Line Breaks**: Used `<br />` only in table cells or where empty lines are impossible
-- [ ] **Paragraph Spacing**: Used empty lines to separate paragraphs in normal text
-- [ ] **Period Spacing**: No `word.Word` patterns (missing space after period)
-- [ ] **No Redundant HTML**: No HTML tags where Markdown syntax works
-- [ ] **Code Formatting**: Proper use of backticks for parameters, features, and technical terms
-- [ ] **Frontmatter**: Complete metadata (weight, author, category, queries)
+**Other Checks** (from verification-checklist.md):
+- Format Check
+- Content Check
+- Structure Check
+- Data Check
+- Language Check
 
-#### Content Check
-- [ ] **No Redundancy**: Removed "if you need to..." when context is clear
-- [ ] **No Implementation Details**: Removed unnecessary internal details users don't need
-- [ ] **Information Layering**: Content follows Recommendation → Reason → Note structure
-- [ ] **Single Source**: Each piece of information appears only once in the most appropriate location
-- [ ] **Consistent Terminology**: Feature names use consistent capitalization throughout (e.g., `Self-built VIP` not `Self-Built VIP`)
-- [ ] **Recommendation Scope**: All recommendations specify applicable conditions (e.g., "When using X, ...")
-- [ ] **Exception Proximity**: Exception notes immediately follow related recommendations
-- [ ] **Directive Count**: `:::` directives do not exceed 3-4 per document
-
-#### Structure Check
-- [ ] **Related Information Grouped**: Related content is grouped together
-- [ ] **Important Notes Stand Out**: Critical information has proper spacing and emphasis
-- [ ] **Lists Have Context**: Lists are introduced with explanatory text
-- [ ] **Tables Are Readable**: Complex tables are split or well-structured
-- [ ] **Directory Integrity**: Every directory with `.mdx` files or subdirectories has `index.mdx`
-
-#### Data Check
-- [ ] **Table Data Logical**: Version numbers and values in tables follow expected patterns (no copy-paste errors)
-- [ ] **No Stale Versions**: Unnecessary version numbers omitted from prose
-
-#### Language Check
-- [ ] **Objective Tone**: No marketing fluff or emotional language
-- [ ] **Active Voice**: "The system creates" not "A creation is made by..."
-- [ ] **Direct Instructions**: "Enter the value" not "You should enter the value"
-- [ ] **No Double Negatives**: Positive assertions for clarity
-- [ ] **No Filler Words**: Removed "basically", "essentially", etc.
+See `rules/verification-checklist.md` for detailed check items.
 
 ---
 
