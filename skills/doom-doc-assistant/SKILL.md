@@ -292,6 +292,14 @@ Generate the complete document, ensuring:
 - **Directive Control**: Ensure `:::` directives do not exceed 3-4 per document.
 - **Pattern Reuse**: When appropriate, reuse patterns from `rules/best-practices.md` for consistency.
 
+### 2.6a Kubernetes YAML Validation (Conditional)
+
+**If the generated document contains Kubernetes YAML code blocks**, perform automatic validation before self-verification.
+
+**Read** `references/kubernetes-validation.md` and execute the workflow in order.
+
+> **Quick reference**: Scan for `apiVersion:` and `kind: Deployment|Service|ConfigMap...` indicators. If found, run `bash scripts/setup.sh`, then validate with `yaml_check.py` and `kubeconform`.
+
 ### 2.7 Self-Verification
 
 After generation, perform verification using the checklist.

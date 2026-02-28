@@ -1,61 +1,116 @@
-# Agent Skill Development Manual (AGENTS.md)
+# Agent Skills Development Manual
 
-This document serves as the **Supreme Guiding Directive** for developing skills within this repository. When undertaking a development task, you must undergo a **"Mindset Shift"**: You are not writing traditional program code; you are authoring a **highly modular behavioral manual** for another AI.
+This repository contains **Agent Skills** — modular behavioral instruction sets for AI agents. Each skill teaches an AI how to complete a specific, repeatable task.
 
----
-
-## 1. Core Philosophy: The Agentic Mindset
-
-### Declarative over Imperative
-* **❌ The Wrong Way (Traditional Thinking)**: Writing complex Python or Node scripts to hardcode logic for parsing YAML, reading Markdown, and concatenating strings into a prompt.
-* **✅ The Right Way (Agentic Thinking)**: In `SKILL.md`, use clear natural language to instruct the execution-phase AI: "Use your file-reading tool to examine `config.yaml` and extract the template configuration." **Trust the AI's innate reasoning and tool-use capabilities.**
-
-### Embrace Modular Knowledge
-* Avoid stuffing thousands of words of specifications into a single `SKILL.md`. This causes instruction confusion and consumes excessive tokens.
-* Split independent knowledge points (e.g., tone guides, component syntax, terminology tables) into separate Markdown files within the `rules/` directory. Use pointers in your workflow: "Before writing, **you must first read** `rules/style-guide.md` to retrieve tone specifications."
-
-### Leverage Native Tools & RAG (Example-Driven Learning)
-* The AI executing the skill possesses powerful terminal execution, file reading, and global search tools.
-* **Don't hardcode rules**: Instruct the future AI: "When you want to use the Tabs component, use your search tool to run `grep -r "<Tabs" .` in the repository to find the 3 most recent real-world examples and mimic them." This RAG-based approach is far more robust than static rules.
+> **Mindset shift**: You are not writing traditional program code. You are authoring a **behavioral manual for another AI**. The agent reading your skill will use its own reasoning and tools to execute the workflow — your job is to guide it clearly, not control every line.
 
 ---
 
-## 2. Standard Directory Structure
+## Repository Structure
 
-Every Skill must strictly adhere to the following layout to ensure predictability and tool compatibility:
+```text
+agent-skills/
+├── AGENTS.md                   # ← This file. Universal conventions for all skills.
+└── skills/
+    ├── doom-doc-assistant/
+    │   ├── AGENTS.md           # Skill-local conventions (content generation patterns)
+    │   └── SKILL.md
+    └── k8s-yaml-validator/
+        ├── AGENTS.md           # Skill-local conventions (tool-invocation patterns)
+        └── SKILL.md
+```
+
+**Rule**: Root `AGENTS.md` defines what is true for **every** skill. Skill-local `AGENTS.md` defines what is true for **that skill type only**. When they conflict, skill-local wins.
+
+---
+
+## Universal Directory Layout
+
+Every skill must follow this structure:
 
 ```text
 skills/<skill-name>/
-├── SKILL.md          # Core Instruction File: Defines "When to use", "Workflow", and "Core Principles"
-├── rules/            # Modular Knowledge Base: Specific guidelines, terminology, and "Dos/Don'ts"
-├── templates/        # Content Templates: Markdown/MDX templates for generation
-└── scripts/          # (Optional) Helper Scripts: Automated tasks for the AI to execute
+├── SKILL.md          # Required. Frontmatter + workflow instructions.
+├── AGENTS.md         # Required. Skill-local development conventions.
+├── scripts/          # Optional. Helper scripts the AI can execute.
+├── references/       # Optional. Reference docs loaded into context on demand.
+├── rules/            # Optional. Modular knowledge (style guides, terminology, etc.)
+└── templates/        # Optional. Output templates.
 ```
 
----
-
-## 3. Golden Rules for Writing `SKILL.md`
-
-### Linear Workflows
-* Define procedures using ordered lists (1, 2, 3...) to establish clear precedence.
-* **Mandatory Validation Steps**: Require the AI to confirm the success of the previous step before proceeding. For example: "Before generating the body content, you must output the Frontmatter metadata for self-inspection."
-
-### Outsource Complex Logic to MCP (Model Context Protocol)
-* If a task is too complex for an LLM (e.g., querying an internal database or precise scoring across millions of rows).
-* **Never write intermediate parsing scripts.** Instead, develop a lightweight server compliant with the **Model Context Protocol (MCP)** and expose that capability as a Tool for the AI.
+Not every directory is needed — only create what the skill actually uses.
 
 ---
 
-## 4. Key Commands & Operations
+## SKILL.md Requirements (All Skills)
 
-* **Add a New Skill**: `npx skills add <source>`
-* **Development Reference**: Use the `skills/doom-doc-assistant` directory as the gold standard for implementation.
-* **Verification**: Simulate user requirements and observe if the AI activates based on the `SKILL.md` triggers and accurately references the rules in `rules/`.
+Every `SKILL.md` must have:
+
+```yaml
+---
+name: skill-name          # Lowercase, hyphenated. Matches the directory name.
+description: |            # One paragraph. Covers: what it does AND when to trigger.
+  ...
+---
+```
+
+The `description` field is the primary trigger mechanism — the AI decides whether to use this skill based on it alone. Write it to be specific enough to trigger correctly and broad enough not to miss valid use cases.
+
+**Body guidelines:**
+- Keep under 500 lines. If longer, split content into `references/` and use pointers.
+- Define the workflow as a numbered linear sequence.
+- Include explicit stop/validate conditions between steps where failures can cascade.
+- End each major step with a clear success criterion the AI can self-check.
 
 ---
 
-## 5. Contribution Guidelines
+## Two Skill Archetypes
 
-1. **Naming Conventions**: Use English for all file and directory names.
-2. **Metadata**: Ensure `SKILL.md` includes clear `name` and `description` Frontmatter.
-3. **AI Guiding AI**: Always maintain the perspective of "AI guiding AI." You are writing a "Strategy Guide," not a "Device Driver."
+Skills in this repo fall into two patterns. Each has its own best practices — see the skill-local `AGENTS.md` for details.
+
+### Content Generation Skills
+*Example: `doom-doc-assistant`*
+
+The AI produces written artifacts (docs, reports, copy). Quality depends on style consistency, context understanding, and iterative refinement. Key patterns: RAG over existing content, modular `rules/` files, iterative drafting.
+
+### Tool Invocation Skills
+*Example: `k8s-yaml-validator`*
+
+The AI orchestrates external tools (CLI utilities, scripts, APIs) and interprets their output. Quality depends on correct tool usage, version handling, and structured reporting. Key patterns: setup scripts, staged validation, deterministic output parsing.
+
+---
+
+## Naming Conventions
+
+| Item | Convention | Example |
+|------|-----------|---------|
+| Skill directory | lowercase, hyphenated | `k8s-yaml-validator` |
+| `name` frontmatter | same as directory | `k8s-yaml-validator` |
+| Script files | lowercase, underscored | `yaml_check.py` |
+| Reference files | lowercase, hyphenated | `crd-schemas.md` |
+| All files | English only | — |
+
+---
+
+## Adding a New Skill
+
+1. Create `skills/<skill-name>/` directory.
+2. Identify which archetype it is (content generation or tool invocation).
+3. Copy the `AGENTS.md` from the closest existing skill as a starting point.
+4. Write `SKILL.md` following the requirements above.
+5. Test by simulating 3–5 representative user requests and verifying the AI activates the skill and produces correct output.
+
+---
+
+## What Belongs Here vs. in Skill-Local AGENTS.md
+
+| Topic | Root AGENTS.md | Skill-local AGENTS.md |
+|-------|---------------|----------------------|
+| Directory structure | ✅ | — |
+| Naming conventions | ✅ | — |
+| SKILL.md frontmatter format | ✅ | — |
+| Skill archetype philosophy | ✅ (overview) | ✅ (detailed patterns) |
+| RAG / grep strategies | — | ✅ |
+| Tool installation & versioning | — | ✅ |
+| Output format specifications | — | ✅ |
+| Domain-specific rules | — | ✅ |
