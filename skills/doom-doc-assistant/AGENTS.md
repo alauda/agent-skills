@@ -87,49 +87,8 @@ Each workflow step should end with a question or check: "Does this structure mat
 
 ---
 
-## Embedded Tool Invocation
-
-This skill incorporates a **tool invocation component** for Kubernetes YAML validation. This is an exception to the general "no parsing scripts" rule because:
-
-1. **Domain-specific validation**: K8s YAML validation requires specialized tools (ruamel.yaml, kubeconform) that are not part of the AI's native capabilities.
-2. **Quality gate**: YAML validation acts as a quality checkpoint before content delivery, preventing incorrect examples from reaching users.
-3. **Conditional execution**: The tool is only invoked when K8s YAML content is detected, not on every document generation.
-
-### scripts/ usage for YAML validation
-
-The `scripts/` directory contains validation helpers:
-
-```
-scripts/
-├── setup.sh        # Installs ruamel.yaml + kubeconform (idempotent)
-└── yaml_check.py   # YAML 1.2 syntax checker
-```
-
-**Rules for YAML validation**:
-- Always run `setup.sh` first (idempotent, safe to re-run)
-- Use staged validation: YAML 1.2 syntax first, then K8s schema
-- Never proceed to self-verification if YAML validation fails (unless user explicitly overrides)
-- Always ask for K8s version — never infer or default
-- Report validation results clearly with ✅/❌ indicators and actionable error messages
-
-**Platform requirements**:
-- Supported: Linux, macOS (Apple Silicon and Intel)
-- Not supported: Windows (use WSL2 or install tools manually)
-- Python 3.6+ required for `yaml_check.py`
-- Network access required to download kubeconform binary (unless pre-installed)
-
-### When validation should be skipped
-
-YAML validation may be skipped if:
-- The document contains no K8s YAML code blocks
-- The user explicitly declines validation after being prompted
-- The YAML is explicitly marked as example/pseudocode (e.g., using comment indicators)
-
----
-
 ## What NOT to Do
 
 - **Don't use MCP** for this skill's primary workflow. The data the AI needs (existing docs, templates, rules) is all on the filesystem. MCP adds complexity with no benefit here.
-- **Don't write parsing scripts for general content**. If content needs to be extracted from existing files, instruct the AI to read and reason over them directly. The YAML validation scripts are a controlled exception for domain-specific validation.
+- **Don't write parsing scripts for general content**. If content needs to be extracted from existing files, instruct the AI to read and reason over them directly.
 - **Don't put domain knowledge in SKILL.md**. Tone guidance, terminology, component syntax — all of that belongs in `rules/`. `SKILL.md` is a workflow orchestrator, not an encyclopedia.
-- **Don't silently skip YAML validation**. If K8s YAML is detected, explicitly inform the user and run validation. Never bypass validation without user awareness.
