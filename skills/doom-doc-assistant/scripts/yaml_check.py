@@ -32,11 +32,15 @@ except ImportError:
     sys.exit(2)
 
 
-# Patterns that are valid YAML 1.1 but behave differently in YAML 1.2
+# Patterns that are valid YAML 1.1 but behave differently in YAML 1.2.
+#
+# NOTE: `true` and `false` are intentionally excluded — they are the standard
+# boolean literals in YAML 1.2 and must NOT be flagged.
+# Only YAML 1.1-specific aliases (yes/no/on/off and their case variants) are warned.
 YAML11_PATTERNS = [
-    (r'(?<![\'"])\b(yes|no|on|off|true|false|TRUE|FALSE|YES|NO|ON|OFF)\b(?![\'"])',
-     "Bare boolean-like value '{}' — in YAML 1.2, only `true`/`false` are booleans. "
-     "If you intend a boolean, use `true` or `false`. If string, quote it."),
+    (r'(?<![\'"])\b(yes|no|on|off|YES|NO|ON|OFF|Yes|No|On|Off)\b(?![\'"])',
+     "YAML 1.1 boolean alias '{}' — in YAML 1.2 this is a plain string, not a boolean. "
+     "If you intend a boolean, use `true` or `false`. If you intend a string, quote it."),
     (r'(?<!\w)0[0-7]+(?!\w)',
      "Octal literal '{}' — YAML 1.2 requires `0o` prefix (e.g. `0o755`). "
      "YAML 1.1 style `0755` is parsed as decimal in 1.2."),
@@ -47,9 +51,11 @@ def check_yaml11_patterns(content: str) -> list[dict]:
     """
     Scan raw text for YAML 1.1 legacy patterns that changed in 1.2.
 
-    NOTE: Quote detection is heuristic (simple counting) and may produce false positives
-    for escaped quotes. This is acceptable for a linting tool - when in doubt, we prefer
-    to warn rather than miss a potential issue.
+    NOTE: Quote detection is heuristic (counts unmatched quote characters before the match).
+    Known false-positive case: a quoted string value like `permissions: "0644"` may still
+    be flagged if the heuristic mis-counts quotes on the same line. This is acceptable for
+    a documentation linting tool — when in doubt, we prefer to warn rather than miss a real
+    spec issue. Present warnings as advisory, not as blocking errors.
     """
     warnings = []
     lines = content.splitlines()
