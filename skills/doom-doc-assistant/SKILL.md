@@ -294,13 +294,11 @@ Generate the complete document, ensuring:
 
 ### 2.6a Kubernetes YAML Validation (Conditional)
 
-**Trigger**: The generated document contains complete (non-ellipsis) Kubernetes YAML code blocks.
+**If the generated document contains Kubernetes YAML code blocks**, perform automatic validation before self-verification.
 
-**Skip if**: No YAML blocks exist, or all YAML blocks contain `# ...` ellipsis markers
-indicating intentionally incomplete documentation examples.
+**Read** `references/kubernetes-validation.md` and execute the workflow in order.
 
-**Read** `references/kubernetes-validation.md` and execute the full workflow in order.
-This is a quality gate — do not proceed to Phase 2.7 until validation is resolved.
+> **Quick reference**: Scan for `apiVersion:` and `kind: Deployment|Service|ConfigMap...` indicators. If found, run `bash scripts/setup.sh`, then validate with `yaml_check.py` and `kubeconform`.
 
 ### 2.7 Self-Verification
 
