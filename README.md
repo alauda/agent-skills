@@ -4,6 +4,27 @@ A collection of skills for AI coding agents. Skills are packaged instructions an
 
 ## Available Skills
 
+### jira-epic-to-stories
+
+Automatically parse JIRA epic descriptions and create child stories or jobs. Use this skill when you need to generate Jira issues from a standardized epic description.
+
+> **Prerequisite:** This skill requires the [Jira CLI (ankitpokhrel/jira-cli)](https://github.com/ankitpokhrel/jira-cli) to be installed and authenticated on the host machine.
+
+**Use when:**
+- Generating stories from an epic key based on the epic's description.
+- Parsing "Stories" or "Steps"/"Progression" from an epic to create "Story" or "Job" issues.
+
+**Key features:**
+- **Automated Issue Creation**: Interfaces with the JIRA CLI to create child issues.
+- **Robust Parsing**: Handles complex formatting like ANSI escape codes and indentation.
+- **Dry-run Mode**: Supports a `--dry-run` flag to preview issues before creation.
+
+**Jira Commands (`/jira`):**
+This repository also includes standalone scripts and commands in the `jira/` directory:
+- `epic-to-stories.py`: A comprehensive Python script to parse an epic and automatically create stories via the Jira CLI.
+- `epic-to-stories-skill.sh`: A shell script demonstrating the automation pattern for creating stories from an epic.
+- `load.sh`: Helper script to load Jira-related functions or environment configurations.
+
 ### doom-doc-assistant
 
 Automatically generate product documentation that complies with the Doom framework specifications. Supports requirement document transformation, architecture analysis, and multi-type document generation.
