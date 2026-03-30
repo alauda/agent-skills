@@ -4,6 +4,16 @@ A collection of skills for AI coding agents. Skills are packaged instructions an
 
 ## Available Skills
 
+### doom-lint-fix
+
+Use when `doom lint` reports any `doom-lint:*` rule errors in markdown or MDX documentation files using @alauda/doom — routes to rule-specific fix guides in the rules/ subdirectory
+
+**Use when:**
+
+- `doom lint` reports any `doom-lint:*` error
+- You're fixing lint errors in markdown (`.md`) or MDX (`.mdx`) documentation files
+- You need to understand what a doom-lint rule expects
+
 ### jira-epic-to-stories
 
 Automatically parse JIRA epic descriptions and create child stories or jobs. Use this skill when you need to generate Jira issues from a standardized epic description.
