@@ -36,13 +36,17 @@ digraph fix {
   "Add {#hash} to heading" [shape=box, style=bold];
   "Hash close to existing anchor?" [shape=diamond];
   "Fix the link URL" [shape=box];
+  "Clear anchor target exists?" [shape=diamond];
   "Add <a id> element" [shape=box];
+  "SKIP — notify user" [shape=box, style=dashed];
 
   "Parse error" -> "Heading slugs to hash?";
   "Heading slugs to hash?" -> "Add {#hash} to heading" [label="yes (90% of cases)"];
   "Heading slugs to hash?" -> "Hash close to existing anchor?" [label="no"];
   "Hash close to existing anchor?" -> "Fix the link URL" [label="typo"];
-  "Hash close to existing anchor?" -> "Add <a id> element" [label="no match"];
+  "Hash close to existing anchor?" -> "Clear anchor target exists?" [label="no match"];
+  "Clear anchor target exists?" -> "Add <a id> element" [label="yes — identifiable content"];
+  "Clear anchor target exists?" -> "SKIP — notify user" [label="no — ambiguous/unrelated"];
 }
 ```
 
@@ -102,7 +106,21 @@ The hash is close to but doesn't match an existing custom ID. Open the target fi
 
 ### 3. Add Anchor Element (No Matching Heading)
 
-When the anchor target isn't a heading (e.g., a specific paragraph or section marker), add an element with an `id` attribute. The error message suggests `<a id="..."></a>`:
+When the anchor target isn't a heading (e.g., a specific paragraph or section marker), add an element with an `id` attribute — **but only when you can clearly identify the content the anchor should point to**.
+
+**⚠️ Guard: Do NOT blindly add `<a id>` anchors.** Only use this pattern when:
+
+- You can identify a specific paragraph, table, code block, or section that the anchor logically refers to
+- The anchor name clearly relates to nearby content (e.g., `#prerequisites` near a prerequisites paragraph)
+- The placement makes semantic sense to a human reader
+
+**If none of these apply — skip the fix entirely.** Leave the error as-is and notify the user:
+
+> ⚠️ Could not determine a suitable fix for unmatched anchor `#{hash}` in `{file}`. The anchor does not match any heading and no clear target content was identified. Please fix this manually.
+
+Adding `<a id>` anchors to arbitrary locations just to silence the linter creates confusing, unmaintainable markup. It is better to leave the error visible so the user can decide the correct fix.
+
+**When a clear target IS identifiable:**
 
 ```markdown
 <!-- Use an anchor element with id attribute -->
@@ -143,9 +161,11 @@ When many errors exist:
 3. For each target file:
    - Read the file
    - For each missing anchor, find the heading and add `{#hash}` (or `\{#hash}` for `.mdx`)
+   - If no heading or clear target content exists for an anchor, **skip it** — do not add an `<a id>` element arbitrarily
    - Write back once (not per-anchor)
 4. For cross-file refs: fix the **target file**, not the linking file
 5. Re-run `doom lint` to verify
+6. Report any skipped anchors to the user with file paths and anchor names for manual resolution
 
 ## Common Mistakes
 
@@ -156,6 +176,7 @@ When many errors exist:
 | Using `<a name="id">`                      | Rule only recognizes `id` attribute, not `name`        | Use `<a id="id"></a>`                           |
 | Using `{#id}` in `.mdx` without escaping   | MDX parser treats `{}` as JSX expression → parse error | Escape: `\{#id}`                                |
 | Fixing the link instead of the heading     | Link is correct; heading is missing the anchor         | Add custom ID to the heading                    |
+| Adding `<a id>` with no clear target       | Creates confusing markup just to silence the linter    | Skip the fix; notify user to handle manually    |
 
 ## Excluded From This Rule
 
