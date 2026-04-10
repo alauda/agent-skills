@@ -82,5 +82,7 @@ Tabs must include descriptive text alongside code blocks to ensure RAG accessibi
 
 ## Core Constraint: Directive Abuse Prevention
 
-- **Limit**: Do not exceed **3-4** `:::` or `<Directive />` elements in a single document.
-- **Priority**: DANGER > WARNING > TIP > INFO.
+- Match the directive density used by neighboring pages when the repository shows a clear pattern.
+- If no clear local baseline exists, keep directives minimal and reserve them for real risk, constraint, or operator guidance.
+- When a draft uses directives for routine explanation, fold the lower-priority items back into prose first.
+- Priority for streamlining: DANGER > WARNING > TIP > INFO > NOTE.

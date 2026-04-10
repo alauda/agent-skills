@@ -53,7 +53,8 @@ Success criterion: the assistant knows whether to print its reports and question
 
 1. Determine the target repository.
    - If the current workspace already looks like the documentation repository, use it.
-   - Use the current workspace when it clearly contains documentation signals such as `AGENTS.md`, `docs/en/`, Doom config files, or an existing docs tree.
+   - Treat the current workspace as the target repository only when it shows clear documentation-repo signals such as a docs tree with real `.mdx` pages, Doom config files, or existing Doom MDX component usage.
+   - Do not treat a generic `AGENTS.md` file by itself as sufficient evidence that the current workspace is the target docs repository.
    - If the current workspace is not clearly the target repo and the user provided a path, use that path.
    - Ask for a path only when there is no clear repository context.
 2. Read the target repository `AGENTS.md` before applying any built-in rule.
@@ -166,18 +167,19 @@ When restructuring existing documents:
 
 1. Load `rules/mdx-components.md`.
 2. Count all `:::` directives except `:::details`.
-3. If there are more than 3-4 directives, streamline them with this priority:
+3. Compare the directive density against neighboring pages in the same area of the repository.
+4. If the draft materially exceeds the local pattern, or uses directives for routine notes when no clear local pattern exists, streamline them with this priority:
    - DANGER
    - WARNING
    - TIP
    - INFO
    - NOTE
-4. Check terminology, links, language, MDX components, and frontmatter against repository-discovered requirements.
-5. Load `templates/spec-review-report.md`.
-6. Output the review report before making the restructuring change.
-7. Wait for confirmation.
+5. Check terminology, links, language, MDX components, and frontmatter against repository-discovered requirements.
+6. Load `templates/spec-review-report.md`.
+7. Output the review report before making the restructuring change.
+8. Wait for confirmation.
 
-Success criterion: the user sees the current directive count, any compliance issues, the repository-specific frontmatter contract, and the proposed restructuring changes before execution.
+Success criterion: the user sees the current directive count, the observed local directive baseline, any compliance issues, the repository-specific frontmatter contract, and the proposed restructuring changes before execution.
 
 ### 7. Phase 2.7: Self-Verification
 

@@ -103,13 +103,14 @@ Expected assertions:
 
 Repository:
 
-`/Users/changjia/acp-docs`
+`<workspace>/acp-docs`
 
 Expected assertions:
 
 - The diagnosis identifies `docs/en/extend/operator.mdx` as the authoritative entry point.
 - Path A is recommended.
 - The diagnosis does not confuse ingress-related examples with the operator's own core capability.
+- If the current workspace is already this repository, the skill does not pause to ask for the path again.
 
 ## Static Consistency Checks
 

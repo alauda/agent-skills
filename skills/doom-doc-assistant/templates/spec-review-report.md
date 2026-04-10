@@ -9,8 +9,8 @@ Use this template when performing specification review during Path B restructuri
 
 ### `:::` Directive Check
 - **Current Count**: X
-- **Standard Limit**: 3-4
-- **Status**: Compliant / Exceeds Limit
+- **Observed Local Pattern**: [What neighboring pages do, or `No clear baseline`]
+- **Status**: Matches local pattern / Needs streamlining
 
 | Line | Type | Summary | Priority | Recommendation |
 |------|------|---------|----------|----------------|
@@ -49,6 +49,8 @@ Load rules explicitly with `cat` before checking:
 - `rules/common-pitfalls.md`
 - `rules/terminology-guide.md`
 - `rules/language-style.md`
+- `rules/metadata-rules.md`
 - `rules/mdx-components.md`
 
 Verify only the frontmatter fields required by the target repository and neighboring pages.
+For directive density, compare with neighboring pages first. If no local baseline is clear, prefer minimal directives and fold routine notes back into prose.

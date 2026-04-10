@@ -41,15 +41,17 @@ Only use a larger contract when the repository already uses it.
 
 ```yaml
 ---
-title: "Access a Cluster With kubeconfig"
+title: "<title-if-used>"
 weight: 10
-author: "dev@alauda.io"
-category: "howto"
+author: "<author-if-used>"
+category: "<repository-category>"
 queries:
-  - access cluster with kubeconfig
-  - download kubeconfig
+  - "<primary user query>"
+  - "<secondary user query>"
 ---
 ```
+
+Replace angle-bracket placeholders only with values confirmed by the target repository.
 
 ## Category Rules
 

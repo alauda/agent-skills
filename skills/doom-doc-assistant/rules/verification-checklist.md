@@ -36,7 +36,7 @@ Refer to `rules/content-elements.md` for detailed rules.
 - [ ] Recommendations specify their scope or conditions
 - [ ] Exception notes appear close to the related recommendation
 - [ ] Terminology is consistent
-- [ ] `:::` directives do not exceed 3-4 per document
+- [ ] `:::` directive density matches neighboring pages, or stays minimal when the repository shows no clear baseline
 - [ ] Any repository override of a skill default is explicitly stated when relevant
 
 ## Structure Check
