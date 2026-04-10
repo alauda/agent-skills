@@ -1,126 +1,117 @@
 # Doom Framework Core Conventions
 
-## Directory and File Organization
+These are default conventions for Doom documentation work. Apply them only after checking the target repository `AGENTS.md` and neighboring pages.
+
+## Repository-First Discovery
+
+Before proposing paths, frontmatter, or structure:
+
+1. Read the target repository `AGENTS.md`
+2. Sample neighboring pages in the same directory
+3. Sample adjacent modules when the local pattern is unclear
+4. Fall back to these defaults only if the repository is silent
+
+If a repository fact conflicts with this file, the repository fact wins.
+
+## Directory And File Organization
 
 ### Naming Conventions
-- **Format**: `xxx/xxx.mdx`
-- **Characters**: Only lowercase letters, numbers, and underscores are allowed.
-- **Examples**:
-  - `deployment_guide.mdx` ✓
-  - `Deployment-Guide.mdx` ✗
-  - `deployment-guide.mdx` ✗ (No hyphens)
-  - `部署指南.mdx` ✗
+
+- New files and directories should follow the naming style required by the target repository.
+- If the target repo explicitly says `kebab-case`, use `kebab-case` for new paths.
+- Do not infer a global naming rule from historical legacy files.
+- Do not rename existing files just to normalize style unless the user asks for it or the approved restructuring plan requires it.
+- Keep names lowercase and ASCII unless the target repo clearly does otherwise.
 
 ### Sorting Control
-Use the `weight` metadata field to control the sorting in the left navigation menu.
+
+Use the `weight` field only when the target repository uses it for navigation order. Preserve the local spacing pattern found in sibling pages.
 
 ### Directory `index.mdx`
 
-**The Critical Rule**:
+Critical default rule:
 
-> Every directory that contains `.mdx` files OR has subdirectories MUST have an `index.mdx` file.
+> Every directory that contains `.mdx` files or subdirectories should have an `index.mdx` unless the target repository clearly uses a different navigation mechanism.
 
-**Purpose**: The `index.mdx` serves as the navigation entry for each directory in the documentation sidebar.
+Purpose: `index.mdx` is usually the navigation entry for that directory and often hosts `<Overview />`.
 
-**Template**:
-```mdx
-# Navigation Name
+Verification steps:
 
-<Overview />
+1. Traverse the target documentation tree with `ls`, `find`, or `rg --files`.
+2. For every directory you will create or modify, check whether it contains `.mdx` files or subdirectories.
+3. Verify whether an `index.mdx` already exists or must be added.
+4. Report the result in the execution plan.
+
+Common mistake:
+
+Wrong:
+
+```text
+docs/en/apis/providers/huawei-dcs/
+docs/en/apis/providers/huawei-cloud-stack/
+docs/en/apis/providers/
 ```
 
-**Verification Steps**:
-1. Use file exploration tools (Glob, `ls`, or `grep`) to traverse the target documentation directory.
-2. Check each directory: if it contains `.mdx` files or has subdirectories, verify an `index.mdx` file exists.
-3. Check any directories you plan to create or modify.
-4. Report any missing `index.mdx` files in your plan output.
+The parent directory is missing its navigation entry.
 
-**Common Mistake to Avoid**:
+Correct:
 
-❌ **WRONG**: Creating subdirectories without ensuring the parent has `index.mdx`
-```
-docs/en/apis/providers/huawei-dcs/          ← Created with index.mdx ✅
-docs/en/apis/providers/huawei-cloud-stack/  ← Created with index.mdx ✅
-docs/en/apis/providers/                     ← FORGOT to create index.mdx ❌
-```
-
-✅ **CORRECT**: Ensure parent has `index.mdx` BEFORE or TOGETHER with subdirectories
-```
-docs/en/apis/providers/index.mdx                    ← Create this FIRST
+```text
+docs/en/apis/providers/index.mdx
 docs/en/apis/providers/huawei-dcs/index.mdx
 docs/en/apis/providers/huawei-cloud-stack/index.mdx
 ```
 
-## Title Writing Rules
+## Titles
 
-Titles must be concise and descriptive to help users quickly locate information.
+- Keep titles concise and descriptive.
+- Match the title pattern used by sibling pages.
+- Avoid punctuation that is known to break anchors or search.
+- When abbreviations appear in titles, explain them on first mention in the body if the local repository does so.
 
-- **Structure Consistency**: Maintain the same structure for titles of the same type.
-- **Good**: "Deploying Operator" and "Deploying Deployment".
-- **Bad**: "Deploying Operator" and "Deployment of Deployment".
-- **No Special Characters**: Do not use `+`, `*`, `|`, `^`, `~`, `'`, `\`, or `/` in titles, as they may interfere with search and rendering.
-- **Abbreviations**: You may use abbreviations in titles without providing the full name (provide the full name on first mention in the body).
+## Static Assets
 
-## Static Asset Management
+Verify asset conventions in the target repository before creating images or diagrams.
 
-### Resource Directories
-1. **Global Assets**: `docs/public/`
-2. **Document-Specific Assets**: `docs/en/<module>/guides/assets/`
+Default expectations:
 
-### Image Guidelines
-- **Text-First**: Prefer text descriptions over UI screenshots.
-- **Registration**: If a screenshot is absolutely necessary, it must be registered with the documentation team first.
-- **English-Only**: Assets (diagrams, screenshots) should only be provided in English.
+- Prefer text explanations over screenshots.
+- Keep document-specific assets in a nearby `assets/` directory when the repo does so.
+- Avoid cross-module asset references unless the repository explicitly allows them.
 
-## Link Conventions
+## Links
 
-### Internal Links
-Use relative paths: `[Link Name](./module/guides/xxx.mdx)`.
+Verify link style from neighboring pages before writing links.
 
-### Anchor Links
-1. **Add Anchor**: `## Hello World {#custom_id}`
-2. **Reference Anchor**: `[Section Name](./path.mdx#custom_id)`
-- Use only lowercase letters, numbers, and underscores for anchor IDs.
+Default expectations:
 
-### Component-Based Links
-- **Cross-site**: Use `<ExternalSiteLink name="devops" href="/arch.html" children="Arch" />`.
-- **Sub-site**: Use `<ExternalSite name="connectors" />`.
+- Use relative links for internal documentation.
+- Reuse the anchor style already present in the repository.
+- Reuse Doom link components only after checking real repository examples.
 
-## Core Principles
+## Default Content Shapes
 
-### English-First
-- Ensure the correctness and readability of the English version above all else.
-- If multi-language support is unavailable, prioritize the English version.
+These are content-shape defaults, not category enums:
 
-### CLI-First
-- Prioritize command-line operation instructions.
-- Provide Web UI instructions as a supplement when applicable.
+- how-to
+- feature or overview
+- concept
+- quick start
+- troubleshooting
+- installation
+- upgrade
+- architecture
 
-## RAG Search Optimization
+If the repository uses a `category` field, infer the exact allowed values from sibling pages or repo docs. Never derive a category directly from a template file name.
 
-AI agents use specific segmentation logic to retrieve information:
-1. **Header Segmentation**: Markdown headers (`#`, `##`, `###`) are used to split documents into short chunks.
-2. **Tab Segmentation**: The `<Tabs>` component is also used to create semantic blocks.
-3. **Requirement**: Ensure every segment (under a header or inside a tab) has independent, searchable semantic meaning. Do not include only code blocks; always provide descriptive text.
-4. **Descriptive Headers**: Titles must directly describe the paragraph content to improve recall accuracy.
+## Search And Chunking
 
-## Document Types & Strategic Objectives
+Doom repositories often rely on headings and components for chunking and retrieval.
 
-Every document must align with a specific type and objective. These document types map to the `category` field in frontmatter metadata.
-
-### HowTo Documents (category: `howto`)
-- **Objective**: Solve specific problems in real-world scenarios.
-- **Structure**: Title (Verb-first) -> Introduction -> Scenarios -> Prerequisites -> Steps (using `<Steps />`) -> Verification.
-
-### Function Guides (category: `feature` or `introduction`)
-- **Objective**: Explain what a feature is and how it works.
-- **CLI-First**: Prioritize CLI instructions.
-
-### Concept Documents (category: `concept`)
-- **Objective**: Introduce core concepts and background theories.
-
-### Troubleshooting Documents (category: `troubleshooting`)
-- **Objective**: Diagnose and resolve common issues.
+- Use descriptive headings.
+- Avoid sections that contain only code without framing text.
+- When using `<Tabs>`, ensure each tab has enough text to be retrievable on its own.
 
 ## `shared` Directory Convention
-The `shared` directory is for reusable components, fragments, and CRDs. Content here is **not automatically generated** as documentation pages.
+
+The `shared` directory is usually for reusable fragments, CRDs, or non-page content. Do not assume content under `shared` should become a generated documentation page unless the repository explicitly treats it that way.

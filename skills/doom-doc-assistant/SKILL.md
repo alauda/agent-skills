@@ -1,364 +1,241 @@
 ---
 name: doom-doc-assistant
-description: Automatically generate product documentation that complies with Doom framework specifications, supporting PRD transformation, architectural analysis, and multi-type document generation.
+description: Use when working in a Doom documentation repository to turn requirements into repository-aligned documentation diagnosis, plans, and drafts. Supports modifying authoritative existing pages, adding focused scenario documents, planning doc-tree restructures, and checking Doom-specific documentation conventions. Repository facts always override built-in rules and templates.
 ---
 
 # Doom Documentation Assistant
 
-## Agentic Mindset
+## Core Operating Rules
 
-As the Doom Documentation Assistant, you are not just a text generator, but an **Engineering-Minded Documentation Architect**. You should:
-- **Proactively Explore**: Prioritize using `grep` and `ls` to explore the user's actual documentation repository instead of guessing paths or component parameters.
-- **Explicitly Load**: Before performing any compliance check, explicitly execute `cat` commands to read the relevant `rules/*.md` specifications.
-- **Question and Verify**: For ambiguities in requirements or terms that do not match official terminology, proactively confirm with the user rather than "inventing" new terms.
+- Never modify files directly without the user's approval. Always produce the diagnosis or plan first, then wait for confirmation.
+- Treat the target repository as the source of truth. Built-in rules and templates are defaults, not final authority.
+- When repository facts override a built-in rule, say so explicitly in the output. Use wording like: `Repository facts override the skill defaults here: ...`
+- Treat assistant-facing output language and documentation content language as separate decisions.
 
-## When to use
+## Rule Priority
 
-Activate this skill when the user requests the following tasks:
+Apply guidance in this order:
 
-- **Requirement Transformation**: Convert requirements, PRDs, or functional descriptions into user-facing product documentation.
-- **Document Generation**: Create or write Doom framework product documentation (HowTo, Troubleshooting, Function Guide, Concept Document, etc.).
-- **Architecture Analysis**: Evaluate whether the existing documentation structure needs adjustment, splitting, or merging.
-- **Quality Assessment**: Identify and improve existing low-quality documentation.
-- **Standard Query**: Query Doom framework terminology, component usage, or documentation specifications.
+1. The target repository's `AGENTS.md`
+2. Real documentation already present in the target directory and adjacent modules
+3. `doom-doc-assistant/AGENTS.md`
+4. `rules/*.md`
+5. `templates/*`
 
-## Instructions
+Never let a lower-priority source overrule a higher-priority source.
 
-**CRITICAL MANDATE: NEVER MODIFY FILES DIRECTLY WITHOUT PERMISSION.**
-You are an assistant, not an autonomous editor. Regardless of the user's request, **you must ALWAYS output a plan, proposal, or draft first**, and wait for the user's explicit approval before using any file editing or writing tools.
+## When To Use
 
-Follow the workflow below to generate documentation that complies with the Doom framework specifications.
+Activate this skill when the user asks for any of the following in a Doom or `@alauda/doom` documentation repository:
 
-**General Workflow Principle**:
-Each phase requires user approval before proceeding to the next. If the user provides feedback or corrections at any phase:
-1. Re-process the current phase with the feedback incorporated
-2. Re-output the report/plan for that phase
-3. Wait for user approval again
-4. Do NOT proceed to the next phase until the user explicitly confirms
+- Transform requirements, PRDs, or feature notes into documentation updates
+- Modify an existing authoritative page
+- Add a new scenario-focused document under an existing section
+- Evaluate whether documentation should be restructured, split, or merged
+- Check Doom documentation conventions, MDX component usage, or terminology
 
----
+## Workflow
 
-## Phase 0: Intake & Diagnosis
+Follow this sequence. Do not skip steps.
 
-Before any analysis or execution, establish a clear picture of the task and the current state of the documentation. **Do not skip this phase.**
+### 1. Lock The Assistant-Facing Output Language
 
-### 0.1 Collect Task Information
+1. Determine which language the assistant should use for diagnosis reports, execution plans, questions, and other printed output.
+2. If the user already stated a preference, use it.
+3. If the current conversation makes the preference obvious, follow that language.
+4. If the preference is not explicit, ask the user whether assistant-facing output should be in English or Chinese.
+5. Clarify that this choice applies to the assistant's printed output, not automatically to the repository's documentation content language.
 
-If the user has not provided the following, ask before proceeding:
-- What is the feature or requirement to document? (PRD, requirement description, or verbal summary)
-- What is the target documentation repository path?
+Success criterion: the assistant knows whether to print its reports and questions in English or Chinese before starting repository analysis.
 
-**⚠️ STOP**: Do not assume or infer the repository path from previous context. Ask explicitly if not provided.
+### 2. Ground On The Repository
 
-### 0.2 Explore Existing Documentation
+1. Determine the target repository.
+   - If the current workspace already looks like the documentation repository, use it.
+   - Use the current workspace when it clearly contains documentation signals such as `AGENTS.md`, `docs/en/`, Doom config files, or an existing docs tree.
+   - If the current workspace is not clearly the target repo and the user provided a path, use that path.
+   - Ask for a path only when there is no clear repository context.
+2. Read the target repository `AGENTS.md` before applying any built-in rule.
+3. Explore the relevant directory with `rg`, `ls`, and file reads.
+4. Search with multiple keywords from the requirement to avoid keyword traps.
+5. Before suggesting frontmatter, path names, or category values, sample 3-5 neighboring pages in the same directory or adjacent module.
+6. Before recommending MDX components, search for real examples in the repository.
 
-Proactively search the repository for documents related to the requirement. Do not rely on the user's description alone.
+Success criterion: you can name the target repository root, the likely authoritative page or section, and the local conventions you found.
 
-```bash
-grep -r "keyword1" /path/to/docs/ --include="*.mdx" -l
-grep -r "keyword2" /path/to/docs/ --include="*.mdx" -l
-```
+### 3. Phase 0: Intake And Diagnosis
 
-**Cross-verify with multiple keywords** to avoid keyword traps. For example, if the requirement is "Application Backup," search for `backup application`, `backup policy`, and `PVC backup` — not just `velero`.
+1. Restate the requirement in repository context.
+2. Identify the most relevant existing documents.
+3. Assess source material coverage.
+4. Decide between these paths:
+   - Path A: the current structure is healthy enough to directly modify the authoritative page and/or add a focused new document within the existing structure.
+   - Path B: the current structure is wrong enough that restructuring must happen before the new or revised content can be correct.
+   - Path C: structural issues exist, but they are not required to solve the current task; record the debt and continue with the narrowest safe scope.
+5. Load `templates/diagnosis-report.md` and output the diagnosis with all required sections.
+6. Explain all three paths. Do not output only the recommended path.
+7. If the recommended path is not the only plausible option, explain why the other paths are not chosen for this round.
+8. Ask for confirmation before moving on.
 
-For each document found:
-1. Read it to verify it is functionally related to the requirement.
-2. Assess its quality: structure, metadata completeness, and compliance with Doom conventions.
+Success criterion: the user can see the requirement, relevant documents, coverage, Path A/B/C definitions, the recommended path, and why other paths were not selected.
 
-### 0.3 Output Diagnosis Report and Wait for User Decision
+### 4. Phase 1: Planning
 
-**You MUST output the diagnosis results** using the template below, then stop and wait.
+1. Load `rules/core-conventions.md`.
+2. Verify directory integrity, especially the `index.mdx` rule for any directory you will create or touch.
+3. Classify the task as one of:
+   - `modify existing authoritative doc`
+   - `add new scenario doc`
+   - `restructure doc tree`
+4. Infer the metadata contract from the target repo.
+   - Reuse exact neighboring field names and values.
+   - Never invent `category` values from template file names.
+   - Never force `author`, `category`, or `queries` unless the repository actually uses them.
+5. Output the execution plan with the exact sections required by the template below.
+6. Use `None` when a section is empty. Do not omit required sections.
+7. Ask: `Should I proceed with generating or modifying the documentation based on this plan?`
+8. Stop until the user confirms.
 
-**Load**: Read `templates/diagnosis-report.md` for the complete template and branching paths reference.
-
-**Output** (following the template):
-- Diagnosis results with document relevance and quality assessment
-- Source material coverage analysis
-- Recommended path with reasoning
-- Request for user confirmation
-
-**⚠️ CRITICAL**: When source material is incomplete, explicitly identify gaps and propose how to handle them (e.g., reference existing patterns, mark as placeholder, ask user for additional information). This sets clear expectations before proceeding.
-
-**Feedback Loop**:
-- **User confirms findings**: Proceed to the user's chosen path
-- **User provides feedback/corrections**: Re-process Phase 0 with the feedback and re-output the diagnosis report. Do NOT proceed to Phase 1 until the user confirms.
-
----
-
-## Phase 1: Planning
-
-### 1.1 Verify Directory Structure Integrity
-
-**Before formulating any plan, you MUST verify directory structure integrity.**
-
-**Load Rules**: Read `rules/core-conventions.md` and refer to the "Directory `index.mdx`" section for:
-- The critical rule (every directory with `.mdx` files or subdirectories must have `index.mdx`)
-- Verification steps
-- Common mistakes to avoid
-- Correct/incorrect examples
-
-### 1.2 Determine Action and Category
-
-**Step 1: Determine Action (Create vs Modify)**
-
-```text
-Requirement Type:
-├─ UI Form Field Enhancement / Parameter Added → Modify Existing Document
-├─ New Functional Capability → Create New Document
-└─ Scope Assessment:
-   ├─ Simple / Single Function       → Single Document
-   └─ Complex / Multi-functional     → Split into Multiple Documents
-```
-
-**Step 2: Select Category**
-
-Choose the appropriate category for frontatter metadata:
-
-| Category | Usage | Example |
-|----------|-------|---------|
-| `index` | Directory/index pages | Overview pages that link to other documents |
-| `introduction` | Product/service introduction | High-level introduction to a feature or service |
-| `feature` | Feature documentation | Detailed feature descriptions and capabilities |
-| `releasenote` | Release notes | Version updates and changelogs |
-| `architecture` | Architecture documentation | System design and architecture explanations |
-| `concept` | Core concepts | Conceptual explanations of technologies or patterns |
-| `quickstart` | Quick start guides | Getting started tutorials |
-| `howto` | How-to guides | Step-by-step procedural guides |
-| `troubleshooting` | Troubleshooting guides | Problem diagnosis and resolution |
-| `permissions` | Permission documentation | Authorization and permission explanations |
-| `api` | API reference | API documentation and resource references |
-
-**Category Selection Guidelines**:
-- **Step-by-step procedures** → `howto`
-- **Feature overviews and capabilities** → `feature` or `introduction`
-- **API/CRD reference** → `api`
-- **Technical concepts** → `concept`
-- **Architecture explanations** → `architecture`
-
-### 1.3 Output Execution Plan and Wait for Approval
-
-Output a complete execution plan in the following format:
+Use this contract for the execution plan:
 
 ```markdown
-## 📋 Execution Plan
+## Execution Plan
+
+**Action Type**: [modify existing authoritative doc / add new scenario doc / restructure doc tree]
 
 ### Files to Create
-**IMPORTANT**: Only list NEW files that do NOT exist in the repository.
-| File | Weight | Author | Category | Purpose |
-|------|--------|--------|----------|---------|
-| docs/en/xxx/yyy.mdx | 10 | dev@alauda.io | howto | Guide for... |
+[Table or `None`]
 
 ### Files to Modify
-**IMPORTANT**: List EXISTING files (including placeholders like "Coming Soon") that will have their content replaced.
-| File | Changes |
-|------|---------|
-| docs/en/xxx/index.mdx | Add link to new document |
+[Table or `None`]
 
-### Directory Structure
-```
-docs/en/xxx/
-├── index.mdx (weight: 50)
-├── platform-a.mdx (weight: 10)
-├── platform-b.mdx (weight: 20)
-└── platform-c.mdx (weight: 30)
-```
+### Directory Integrity Check Result
+[List missing or verified `index.mdx` coverage]
 
-### Document Outlines
-[High-level outline for each new document]
+### Outline per Target Document
+[One outline per document that will be created or materially reworked]
 
-### index.mdx Files to Create
-[Any index.mdx needed for directory integrity]
+### Assumptions
+[List assumptions or `None`]
+
+### Acceptance Criteria
+[Flat checklist or bullets]
 ```
 
-**⚠️ IMPORTANT**: Once approved, this plan becomes the **source of truth** for Phase 2 execution. All generated files MUST match the planned structure exactly, including weight values.
+Success criterion: the plan makes clear what will be created, what will be modified, whether directory structure is sound, and what a successful outcome looks like.
 
-**STOP AND WAIT FOR APPROVAL.**
+### 5. Phase 2: Execution
 
-You MUST ask: *"Should I proceed with generating/modifying the documentation based on this plan?"*
+1. If the user chose Path B, perform a specification review on the affected existing documents before restructuring them.
+2. Load these rules before drafting:
+   - `rules/metadata-rules.md`
+   - `rules/language-style.md`
+   - `rules/content-elements.md`
+   - `rules/markdown-formatting.md`
+   - `rules/core-conventions.md`
+   - `rules/common-pitfalls.md`
+3. Load these only when needed:
+   - `rules/mdx-components.md`
+   - `rules/terminology-guide.md`
+   - `rules/terminology-consistency.md`
+   - `rules/best-practices.md`
+4. Treat all built-in rules as defaults. Repository facts still win.
+5. Use templates only as structural references after sampling real repository pages.
+6. Available structural templates are:
+   - `templates/howto-template.mdx`
+   - `templates/function-template.mdx`
+   - `templates/concept-template.mdx`
+   - `templates/arch-template.mdx`
+   - `templates/quickstart-template.mdx`
+   - `templates/installation-template.mdx`
+   - `templates/troubleshooting-template.mdx`
+   - `templates/upgrade-template.mdx`
+   - `templates/intro-template.mdx`
+7. Template file names describe content shapes, not mandatory `category` values.
+8. Before using a Doom MDX component, search for a real example in the target repository.
+9. If no trusted example exists, prefer plain Markdown or explicitly note the uncertainty.
+10. For frontmatter, include only fields confirmed by the repository contract for that location.
 
-Do not proceed to Phase 2 until the user explicitly confirms.
+Success criterion: the generated or revised documentation follows the approved plan, matches repository conventions, and does not introduce template-driven fake standards.
 
-**Feedback Loop**:
-- **User approves**: Proceed to Phase 2 execution
-- **User provides feedback/corrections**: Re-process Phase 1 with the feedback and re-output the execution plan. Do NOT proceed to Phase 2 until the user approves the revised plan.
+### 6. Phase 2.1: Specification Review For Path B
 
----
+When restructuring existing documents:
 
-## Phase 2: Execution
+1. Load `rules/mdx-components.md`.
+2. Count all `:::` directives except `:::details`.
+3. If there are more than 3-4 directives, streamline them with this priority:
+   - DANGER
+   - WARNING
+   - TIP
+   - INFO
+   - NOTE
+4. Check terminology, links, language, MDX components, and frontmatter against repository-discovered requirements.
+5. Load `templates/spec-review-report.md`.
+6. Output the review report before making the restructuring change.
+7. Wait for confirmation.
 
-### 2.1 Restructure Existing Documents (Path B only)
+Success criterion: the user sees the current directive count, any compliance issues, the repository-specific frontmatter contract, and the proposed restructuring changes before execution.
 
-If the user chose Path B, execute the restructuring plan approved in Phase 1 before writing any new content.
+### 7. Phase 2.7: Self-Verification
 
-For each document being restructured, perform a Specification Review:
+1. Load `rules/verification-checklist.md`.
+2. Run the checks in order.
+3. Verify plan consistency before any style or content checks.
+4. Confirm that metadata matches the repository-discovered contract, not a hardcoded skill default.
+5. Confirm that any MDX component usage is backed by real repository examples.
+6. If any discrepancy exists, stop and report it instead of silently continuing.
 
-**Load Rules First**: Execute `cat rules/mdx-components.md` to read directive constraints.
+Success criterion: you can explicitly state that the output matches the approved plan, local metadata contract, and repository conventions.
 
-**Directive Count Check (Mandatory)**:
+## Output Contracts
 
-```
-Core Constraint: In a single document, the total number of `:::` directives
-should not exceed 3-4 (excluding :::details).
-```
+### Diagnosis Report
 
-1. Count all `:::` directives (excluding `:::details`).
-2. List the type, location, and content summary of each.
-3. If the count exceeds 3-4, streamline based on priority: DANGER > WARNING > TIP > INFO > NOTE.
+Always include:
 
-**Other Compliance Checks (As Needed)**:
+- `Requirement`
+- `Related Documents Found`
+- `Source Material Coverage`
+- `All Branching Paths`
+- `Recommended Path`
+- `Reasoning`
+- An explicit confirmation request
+- Use the assistant-facing output language selected in Step 1.
 
-Load rules explicitly with `cat` before checking:
+### Execution Summary After Drafting
 
-- [ ] **Common Pitfalls**: Check `rules/common-pitfalls.md` — period spacing, terminology consistency, ambiguous recommendations, table data errors.
-- [ ] **Terminology Consistency**: Check against `rules/terminology-guide.md`.
-- [ ] **Link Correctness**: Verify internal links, anchor links, and external link components.
-- [ ] **Language Style**: Check against `rules/language-style.md`.
-- [ ] **Frontmatter Completeness**: Verify weight, author, category, queries, etc.
-- [ ] **MDX Component Usage**: Check syntax against `rules/mdx-components.md`.
-
-**Output the review report** before making any changes.
-
-**Load**: Read `templates/spec-review-report.md` for the complete template, directive priority reference, and compliance check list.
-
-**Output** (following the template):
-- `:::` directive count and status
-- Detailed breakdown if limit exceeded
-- Other compliance checks results
-- Specific modification recommendations
-- Request for user confirmation
-
-**Branching Logic**:
-- **User Confirms**: Apply the changes.
-- **User Rejects / Partial Adoption**: Respect the decision and proceed accordingly.
-- **User Provides New Feedback**: Return to 2.1 for re-analysis.
-
-### 2.2 Load Template for Reference (Optional)
-
-Template files are available as structural reference. Load based on the category selected in Phase 1 (path relative to `SKILL.md`):
-- `templates/howto-template.mdx`
-- `templates/function-template.mdx`
-- `templates/concept-template.mdx`
-- `templates/architecture-template.mdx`
-- `templates/quickstart-template.mdx`
-- `templates/installation-template.mdx`
-- `templates/troubleshooting-template.mdx`
-- `templates/upgrade-template.mdx`
-- `templates/intro-template.mdx`
-
-Templates provide guidance on structure and common patterns, but are not strictly required for AI-generated content.
-
-### 2.3 Explicitly Load Core Specifications
-
-**Before generating content, you MUST explicitly read the following rules**:
-- **rules/metadata-rules.md** (Frontmatter rules)
-- **rules/language-style.md** (Tone and style)
-- **rules/content-elements.md** (Lists, tables, links, code blocks, conciseness)
-- **rules/markdown-formatting.md** (Markdown syntax rules, line breaks, bold syntax)
-- **rules/core-conventions.md** (Naming, static resources, RAG optimization)
-- **rules/common-pitfalls.md** (Avoid common issues: period spacing, terminology consistency, ambiguous recommendations)
-
-**Load As Needed**:
-- **rules/mdx-components.md** (Doom components)
-- **rules/terminology-guide.md** (Standardized translations)
-- **rules/terminology-consistency.md** (K8s/OpenShift official standards)
-- **rules/best-practices.md** (Common patterns for reuse)
-
-### 2.4 Example-Driven Learning (RAG)
-
-**Crucial**: Do not rely on memorized component parameters. Use `grep` to retrieve real-world use cases and mimic them.
-
-1. **⚠️ STOP**: Ask the user for the documentation repository path if not already confirmed in Phase 0. Do not assume or infer it.
-2. **Search for examples** in the specified path:
-   ```bash
-   grep -r "<Tabs" <path> --include="*.mdx" -A 5
-   ```
-3. If the user provides neither a repository path nor authorization to access a reference repository, **do not use MDX components** whose exact syntax is uncertain. Use plain Markdown alternatives and note this limitation in your output.
-
-**Trust Hierarchy**:
-1. 🥇 **Highest**: Real use cases in the user's repository.
-2. 🥈 **Medium**: Open-source reference repositories (with user authorization).
-3. 🥉 **Lowest**: Built-in rule documents in this skill.
-
-### 2.5 Terminology Retrieval
-
-Adhere to `rules/terminology-consistency.md`: **Avoid inventing new terms**. Prioritize Kubernetes and OpenShift official standards. Use `rules/terminology-guide.md` for standardized translations and to avoid "bad cases."
-
-### 2.6 Generate Document
-
-Generate the complete document, ensuring:
-- **Metadata Integrity**: Correct `weight`, `author`, `category`, and `queries`.
-- **Structural Completeness**: Include all necessary sections for the document category. Refer to templates for guidance, but adapt as needed for the specific content.
-- **Correct Component Usage**: Use `<Overview />`, `<Term />`, `<Directive />`, and `<Steps />` properly.
-- **Directive Control**: Ensure `:::` directives do not exceed 3-4 per document.
-- **Pattern Reuse**: When appropriate, reuse patterns from `rules/best-practices.md` for consistency.
-
-### 2.7 Self-Verification
-
-After generation, perform verification using the checklist.
-
-**Load**: Read `rules/verification-checklist.md` and execute all checks in order.
-
-**Plan Consistency Check** (⚠️ CRITICAL — must be performed first):
-
-Before any other checks, verify that all generated/modified files match the approved plan from Phase 1.
-
-- [ ] **All planned files were created** — Compare actual files created vs. "Files to Create" table
-- [ ] **Weight values match exactly** — Each file's weight must match the approved plan
-- [ ] **File paths match exactly** — No deviation from planned directory structure
-- [ ] **Metadata fields match** — author, category match the approved plan
-- [ ] **No unplanned files** — No extra files created beyond the plan
-
-**If any inconsistency is found:**
-1. Stop and report the discrepancy
-2. Ask user whether to:
-   - Proceed with correction (fix the inconsistency)
-   - Revise the plan (if the change was intentional)
-
-**Other Checks** (from verification-checklist.md):
-- Format Check
-- Content Check
-- Structure Check
-- Data Check
-- Language Check
-
-See `rules/verification-checklist.md` for detailed check items.
-
----
-
-## Core Principles
-
-1. **English First**: Ensure the correctness and readability of the English version.
-2. **CLI First**: Prioritize command-line operation instructions.
-3. **Terminology Consistency**: Avoid inventing terms. Refer to `rules/terminology-guide.md`.
-4. **Safety Alerts**: Use `<Directive type="danger">` or `:::danger` for risky operations.
-5. **Maintainability**: Prefer ConfigMap for configuration suggestions.
-
----
-
-## Output Format
-
-After generation, output in the following format:
+After generating or revising documentation, use this structure:
 
 ```markdown
-## 📋 Documentation Summary
+## Documentation Summary
 
-**Requirement Type**: [Simple/Complex]
-**Category**: [howto/concept/feature/api/etc.]
+**Action Type**: [modify existing authoritative doc / add new scenario doc / restructure doc tree]
 **Execution Path**: [A / B / C]
-**Actions Taken**: [Create/Modify/Restructure/Merge — with brief description]
+**Repository Facts Used**: [Short summary]
+**Repository Overrides**: [Any skill defaults that were overridden, or `None`]
 
-## 📄 Generated Document
+## Generated Or Revised Content
 
-[Full MDX Content]
+[Draft, diff summary, or content]
 
-## ✅ Verification Results
+## Verification Results
 
-- [x] Format check passed
-- [x] Content check passed
-- [x] Link check passed
-- [x] Language check passed
+- [x] Plan consistency check
+- [x] Repository metadata contract check
+- [x] Structure and link check
+- [x] Language and formatting check
 
-## 💡 Suggestions
+## Technical Debt Or Follow-ups
 
-[Any architectural or content adjustment suggestions]
+[Optional]
 ```
+
+## Default Principles
+
+- Ask for the assistant-facing output language when it is not explicit
+- English first unless the target repository states otherwise
+- CLI-first procedures unless the repository or requirement clearly favors UI-first guidance
+- No invented terminology
+- No invented frontmatter fields
+- No invented component syntax

@@ -1,94 +1,109 @@
 # doom-doc-assistant — Skill Development Conventions
 
-This file governs development of the `doom-doc-assistant` skill specifically. It extends the root `AGENTS.md` with patterns specific to **content generation skills**.
+This file governs development of the `doom-doc-assistant` skill specifically. It extends the root `AGENTS.md` with patterns specific to content-generation skills for Doom documentation repositories.
 
----
+## Core Principle
 
-## Skill Archetype: Content Generation
+Repository facts win.
 
-This skill produces written documentation for the [Doom](https://github.com/alauda/doom) documentation framework. The AI's job is to author Markdown/MDX that fits seamlessly into an existing codebase — matching tone, component usage, and structural conventions already present.
+The target repository's `AGENTS.md`, local page samples, and neighboring documentation patterns are more trustworthy than anything bundled in this skill. `rules/` and `templates/` are defaults that help when the repository does not say more.
 
-**Core principle**: Never hardcode style rules as static text. The codebase itself is the source of truth. Teach the AI to *discover* conventions at runtime rather than memorize them at authoring time.
-
----
-
-## Directory Structure
+## Current Layout
 
 ```text
 doom-doc-assistant/
 ├── SKILL.md
-├── AGENTS.md              # ← This file
+├── AGENTS.md
 ├── rules/
-│   ├── style-guide.md     # Tone, voice, writing principles
-│   ├── terminology.md     # Preferred terms and their banned equivalents
-│   └── dos-and-donts.md   # Common mistakes to avoid
-└── templates/
-    ├── concept.mdx        # Template for concept/overview pages
-    ├── how-to.mdx         # Template for procedural guides
-    └── reference.mdx      # Template for API/config reference pages
+│   ├── best-practices.md
+│   ├── common-pitfalls.md
+│   ├── content-elements.md
+│   ├── core-conventions.md
+│   ├── language-style.md
+│   ├── markdown-formatting.md
+│   ├── mdx-components.md
+│   ├── metadata-rules.md
+│   ├── terminology-consistency.md
+│   ├── terminology-guide.md
+│   └── verification-checklist.md
+├── templates/
+│   ├── arch-template.mdx
+│   ├── concept-template.mdx
+│   ├── diagnosis-report.md
+│   ├── function-template.mdx
+│   ├── howto-template.mdx
+│   ├── installation-template.mdx
+│   ├── intro-template.mdx
+│   ├── quickstart-template.mdx
+│   ├── spec-review-report.md
+│   ├── troubleshooting-template.mdx
+│   └── upgrade-template.mdx
+└── references/
+    └── regression-cases.md
 ```
 
-### rules/ usage
+Keep this file aligned with the real directory tree. Do not leave historical placeholder names here.
 
-`rules/` files contain **modular knowledge** the AI loads selectively. Do not dump all rules into `SKILL.md` — it causes instruction overload. Instead, use pointers in `SKILL.md`:
+## Rules And Templates
 
-> "Before writing, read `rules/style-guide.md` to retrieve tone specifications."
+### `rules/`
 
-Keep each rules file focused on a single concern. If a file exceeds ~150 lines, split it.
+- `rules/` files store defaults and reusable checks.
+- A rule file must never claim authority over the target repository.
+- Put stable behaviors here, not repo-specific one-off policies.
+- If a rule becomes "discover from the repository first," say that directly in the rule file.
 
-### templates/ usage
+### `templates/`
 
-Templates provide structural scaffolding. The AI fills in content, but the skeleton (frontmatter fields, section headings, component slots) comes from the template. Update templates when the doc site's page structure changes — don't update `SKILL.md`.
+- Templates are structure references, not truth sources.
+- Template file names describe content shapes only. They are not canonical `category` values.
+- Do not hardcode unstable frontmatter into templates.
+- If a field is conditional across repos, keep it out of template frontmatter and mention it in comments instead.
 
----
+## Discovery-First Patterns
 
-## The RAG Pattern: Prefer Discovery Over Memorization
+Prefer runtime discovery over memorized standards for:
 
-The most important pattern in this skill is **runtime discovery over static rules**.
+- frontmatter fields and category values
+- filename and directory naming
+- MDX component syntax
+- link patterns
+- page structure and section naming
 
-**❌ Wrong**: Documenting in `rules/` that "the Tabs component should be used like this: `<Tabs items={[...]}>...`"
+The preferred sequence is:
 
-**✅ Right**: Instructing the AI in `SKILL.md`: "When you need to use a component, search the repository with `grep -r '<ComponentName' docs/ --include='*.mdx' -l | head -5` and read 2–3 real examples before writing."
+1. Read the target repository `AGENTS.md`
+2. Sample sibling pages in the same directory
+3. Sample adjacent modules when local evidence is too thin
+4. Fall back to bundled rules and templates only when the repository is silent
 
-Why this is better:
-- Components evolve. Static rules go stale. Real usage never lies.
-- The AI learns the actual pattern in context, not an idealized version.
-- No maintenance burden when the codebase changes.
+## Workflow Design Expectations
 
-Apply this pattern for: component usage, frontmatter field conventions, link formats, image paths, and any other structural element that appears repeatedly in the codebase.
+- The skill must lock the assistant-facing output language before Phase 0 when the preference is not explicit.
+- This language choice is separate from the repository's documentation content language.
+- Phase 0 must output a fixed diagnosis contract, not a free-form summary.
+- Phase 1 must output a fixed execution-plan contract, not a new-doc-only checklist.
+- Path A must support modifying authoritative existing docs.
+- Path B should only be recommended when restructuring is necessary for this round.
+- Path C should capture technical debt without silently expanding scope.
 
----
+## Validation Assets
 
-## Workflow Design Principles
+When changing this skill, use [references/regression-cases.md](./references/regression-cases.md) as the minimum regression suite. Add new cases when the skill learns a new branch or fixes a new class of failure.
 
-### Mandatory self-inspection before body content
-
-The AI must output Frontmatter and section headings for the user to review **before** writing body content. This prevents wasted effort if the structure is wrong.
-
-### Iterative drafting, not one-shot generation
-
-Structure the workflow as: outline → section by section → review. Never instruct "write the complete document." Long one-shot generations are hard to correct and waste context.
-
-### Explicit "done" criteria
-
-Each workflow step should end with a question or check: "Does this structure match what you intended? Confirm before I write the body." The AI should not proceed silently.
-
----
-
-## When to Update rules/ vs. SKILL.md
+## When To Update Which File
 
 | Change needed | Update |
 |--------------|--------|
-| Tone or voice changed | `rules/style-guide.md` |
-| New banned/preferred term | `rules/terminology.md` |
-| New page type added to the site | New template in `templates/` + pointer in `SKILL.md` |
-| Workflow step added or reordered | `SKILL.md` |
-| A component is deprecated | `rules/dos-and-donts.md` (add to "don't" list) |
+| Workflow order or output contract | `SKILL.md` |
+| Default naming, directory, link, or metadata guidance | `rules/core-conventions.md` or `rules/metadata-rules.md` |
+| Validation expectations | `rules/verification-checklist.md` or `references/regression-cases.md` |
+| Structural page scaffold | `templates/*.mdx` |
+| Diagnosis or restructuring report contract | `templates/diagnosis-report.md` or `templates/spec-review-report.md` |
 
----
+## What Not To Do
 
-## What NOT to Do
-
-- **Don't use MCP** for this skill's primary workflow. The data the AI needs (existing docs, templates, rules) is all on the filesystem. MCP adds complexity with no benefit here.
-- **Don't write parsing scripts for general content**. If content needs to be extracted from existing files, instruct the AI to read and reason over them directly.
-- **Don't put domain knowledge in SKILL.md**. Tone guidance, terminology, component syntax — all of that belongs in `rules/`. `SKILL.md` is a workflow orchestrator, not an encyclopedia.
+- Do not force the agent to ask for a repository path when the current workspace already identifies the target repo.
+- Do not require `author`, `category`, or `queries` unless repository facts support them.
+- Do not let one directory's legacy naming pattern turn into a fake global naming rule for the whole repository.
+- Do not treat technical debt as automatic evidence that Path B is required.
