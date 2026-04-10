@@ -11,6 +11,7 @@ description: Use when working in a Doom documentation repository to turn require
 - Treat the target repository as the source of truth. Built-in rules and templates are defaults, not final authority.
 - When repository facts override a built-in rule, say so explicitly in the output. Use wording like: `Repository facts override the skill defaults here: ...`
 - Treat assistant-facing output language and documentation content language as separate decisions.
+- For repository collaboration, all drafted or revised documentation content must be English. Do not produce Chinese documentation content with this skill.
 
 ## Rule Priority
 
@@ -44,9 +45,9 @@ Follow this sequence. Do not skip steps.
 2. If the user already stated a preference, use it.
 3. If the current conversation makes the preference obvious, follow that language.
 4. If the preference is not explicit, ask the user whether assistant-facing output should be in English or Chinese.
-5. Clarify that this choice applies to the assistant's printed output, not automatically to the repository's documentation content language.
+5. Clarify that this choice applies only to the assistant's printed output. Documentation content produced by this skill remains English-only.
 
-Success criterion: the assistant knows whether to print its reports and questions in English or Chinese before starting repository analysis.
+Success criterion: the assistant knows whether to print its reports and questions in English or Chinese before starting repository analysis, while keeping documentation content English-only.
 
 ### 2. Ground On The Repository
 
@@ -155,6 +156,7 @@ Success criterion: the plan makes clear what will be created, what will be modif
 8. Before using a Doom MDX component, search for a real example in the target repository.
 9. If no trusted example exists, prefer plain Markdown or explicitly note the uncertainty.
 10. For frontmatter, include only fields confirmed by the repository contract for that location.
+11. Write all document titles, headings, prose, and examples in English only, even when the assistant-facing output is Chinese.
 
 Success criterion: the generated or revised documentation follows the approved plan, matches repository conventions, and does not introduce template-driven fake standards.
 
@@ -202,6 +204,7 @@ Always include:
 - `Reasoning`
 - An explicit confirmation request
 - Use the assistant-facing output language selected in Step 1.
+- Keep any generated or revised documentation content in English.
 
 ### Execution Summary After Drafting
 
@@ -234,7 +237,7 @@ After generating or revising documentation, use this structure:
 ## Default Principles
 
 - Ask for the assistant-facing output language when it is not explicit
-- Documentation content language follows the target repository's conventions unless the user requests otherwise
+- Documentation content is English-only for repository collaboration with this skill
 - CLI-first procedures unless the repository or requirement clearly favors UI-first guidance
 - No invented terminology
 - No invented frontmatter fields

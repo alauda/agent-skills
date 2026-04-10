@@ -26,6 +26,18 @@ Expected assertions:
 - If the preferred assistant-facing output language is not explicit, the skill first asks whether the assistant should print in English or Chinese.
 - The question makes clear this is about the assistant's reports and questions, not automatically the documentation content language.
 
+## Case 1B: Chinese Assistant Output, English Documentation
+
+Prompt:
+
+`请用中文和我沟通，但帮我起草这个仓库里的文档改动。`
+
+Expected assertions:
+
+- The assistant may print diagnosis and planning output in Chinese.
+- Any generated or revised repository documentation content remains in English.
+- The skill does not switch document headings or prose into Chinese.
+
 ## Case 2: Related How-To Docs Are Scattered, But Scope Stays Narrow
 
 Prompt:

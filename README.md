@@ -58,6 +58,7 @@ Repository-first assistant for Doom documentation work. It turns requirements in
 
 **Key features:**
 - **Repository Facts First**: Target repo `AGENTS.md` and neighboring pages override skill defaults.
+- **English-Only Documentation Content**: The skill may discuss plans in English or Chinese, but drafted or revised repository documentation content stays in English.
 - **Fixed Output Contracts**: Diagnosis Report and Execution Plan include required sections instead of free-form summaries.
 - **Example-Driven**: Leverages real codebase search for context-aware component and frontmatter choices.
 - **Scope Control**: Distinguishes direct modification, focused addition, and true restructure work.

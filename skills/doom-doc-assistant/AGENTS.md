@@ -81,6 +81,7 @@ The preferred sequence is:
 
 - The skill must lock the assistant-facing output language before Phase 0 when the preference is not explicit.
 - This language choice is separate from the repository's documentation content language.
+- Assistant-facing output may be English or Chinese, but drafted or revised repository documentation content must always stay in English.
 - Phase 0 must output a fixed diagnosis contract, not a free-form summary.
 - Phase 1 must output a fixed execution-plan contract, not a new-doc-only checklist.
 - Path A must support modifying authoritative existing docs.
@@ -107,3 +108,4 @@ When changing this skill, use [references/regression-cases.md](./references/regr
 - Do not require `author`, `category`, or `queries` unless repository facts support them.
 - Do not let one directory's legacy naming pattern turn into a fake global naming rule for the whole repository.
 - Do not treat technical debt as automatic evidence that Path B is required.
+- Do not let a user preference for Chinese assistant output turn into Chinese documentation content.
