@@ -234,7 +234,7 @@ After generating or revising documentation, use this structure:
 ## Default Principles
 
 - Ask for the assistant-facing output language when it is not explicit
-- English first unless the target repository states otherwise
+- Documentation content language follows the target repository's conventions unless the user requests otherwise
 - CLI-first procedures unless the repository or requirement clearly favors UI-first guidance
 - No invented terminology
 - No invented frontmatter fields
