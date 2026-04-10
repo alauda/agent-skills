@@ -206,7 +206,7 @@ Always include:
 - Use the assistant-facing output language selected in Step 1.
 - Keep any generated or revised documentation content in English.
 
-### Execution Summary After Drafting
+### Documentation Summary
 
 After generating or revising documentation, use this structure:
 
