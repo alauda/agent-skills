@@ -60,11 +60,11 @@ Use resource limits to avoid contention.
 - Keep directive content concise (usually within one paragraph).
 - **Exclusions**: Do not include tables or complex images inside a directive (icons are acceptable).
 - Place Warnings and Dangers *before* the relevant text or step.
-- **Strict Limit**: Do not exceed 3-4 directives per document (excluding details). If you exceed this limit, fallback to inline bolding (e.g., `**Note:**`).
+- **Density Rule**: Match the directive density used by neighboring pages when the repository shows a clear pattern. If no local pattern is obvious, keep directives minimal and fall back to inline bolding (e.g., `**Note:**`) for routine notes.
 - **Syntax Boundaries**: `:::` and `<Directive />` render identical styles. However, **`:::` syntax fails inside JSX components** (like `<Tabs>`, `<TabItem>`, or other custom components) and deep list indentations. **You MUST use `<Directive />`** whenever you are placing a directive inside any JSX tag or complex nested list.
 
 ### Fallback Notes (e.g., `**Note:**`)
-When falling back from a Directive to inline text (`**Note:**`) due to limits:
+When falling back from a Directive to inline text (`**Note:**`) due to local density or repository patterns:
 1. **Paragraph Spacing**: You **must** insert a completely blank line before `**Note:**` if it follows a list item. Without the blank line, it will render inline with the list instead of starting a new block.
 2. **Indentation and Wrapping**: If the note spans multiple sentences, either keep them on the same line immediately following `**Note:** `, or ensure the subsequent lines are structurally separated (e.g., as another list item) so they don't break the document's hierarchy.
 

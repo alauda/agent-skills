@@ -1,33 +1,34 @@
 # Specification Review Report Template
 
-Use this template when performing specification review during Phase 2.1 (Restructure Existing Documents) in SKILL.md.
+Use this template when performing specification review during Path B restructuring work.
 
 ## Template
 
 ```markdown
-## 🔍 Specification Review Report
+## Specification Review Report
 
 ### `:::` Directive Check
 - **Current Count**: X
-- **Standard Limit**: 3-4
-- **Status**: ✅ Compliant / ❌ Exceeds Limit
+- **Observed Local Pattern**: [What neighboring pages do, or `No clear baseline`]
+- **Status**: Matches local pattern / Needs streamlining
 
-[If exceeded, list details]
 | Line | Type | Summary | Priority | Recommendation |
 |------|------|---------|----------|----------------|
 | ...  | ...  | ...     | ...      | ...            |
 
 ### Other Checks
-- [ ] Terminology Consistency: ✅ / ❌ [Specific issue]
-- [ ] Link Correctness: ✅ / ❌ [Specific issue]
-- [ ] Language Style: ✅ / ❌ [Specific issue]
-- [ ] Frontmatter: ✅ / ❌ [Specific issue]
-- [ ] MDX Component: ✅ / ❌ [Specific issue]
+- [ ] Terminology Consistency: Pass / Fail [Specific issue]
+- [ ] Link Correctness: Pass / Fail [Specific issue]
+- [ ] Language Style: Pass / Fail [Specific issue]
+- [ ] Repository Frontmatter Contract: Pass / Fail [Only check fields required by the target repo]
+- [ ] MDX Components: Pass / Fail [Specific issue]
 
-## 💡 Recommendations
+## Recommendations
 [List specific modification suggestions]
 
----
+## Repository Overrides
+[List any repository facts that override the skill defaults, or `None`]
+
 Should I apply the above changes? Please confirm.
 ```
 
@@ -35,25 +36,21 @@ Should I apply the above changes? Please confirm.
 
 When streamlining directives that exceed the limit, use this priority order:
 
-1. **DANGER** — Keep (highest priority)
-2. **WARNING** — Keep
-3. **TIP** — Consider removing
-4. **INFO** — Consider removing
-5. **NOTE** — Remove first (lowest priority)
+1. DANGER
+2. WARNING
+3. TIP
+4. INFO
+5. NOTE
 
 ## Compliance Check Reference
 
 Load rules explicitly with `cat` before checking:
 
-- [ ] **Common Pitfalls**: Check `rules/common-pitfalls.md` — period spacing, terminology consistency, ambiguous recommendations, table data errors.
-- [ ] **Terminology Consistency**: Check against `rules/terminology-guide.md`.
-- [ ] **Link Correctness**: Verify internal links, anchor links, and external link components.
-- [ ] **Language Style**: Check against `rules/language-style.md`.
-- [ ] **Frontmatter Completeness**: Verify weight, author, category, queries, etc.
-- [ ] **MDX Component Usage**: Check syntax against `rules/mdx-components.md`.
+- `rules/common-pitfalls.md`
+- `rules/terminology-guide.md`
+- `rules/language-style.md`
+- `rules/metadata-rules.md`
+- `rules/mdx-components.md`
 
-## Branching Logic
-
-- **User Confirms**: Apply the changes.
-- **User Rejects / Partial Adoption**: Respect the decision and proceed accordingly.
-- **User Provides New Feedback**: Return to Phase 2.1 for re-analysis.
+Verify only the frontmatter fields required by the target repository and neighboring pages.
+For directive density, compare with neighboring pages first. If no local baseline is clear, prefer minimal directives and fold routine notes back into prose.

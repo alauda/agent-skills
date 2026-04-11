@@ -1,59 +1,66 @@
 # Diagnosis Report Template
 
-Use this template when outputting Phase 0 (Intake & Diagnosis) results in SKILL.md.
+Use this template when outputting Phase 0 (Intake & Diagnosis) results in `SKILL.md`.
 
 ## Template
 
 ```markdown
-## 🔍 Diagnosis Report
+## Diagnosis Report
 
 **Requirement**: [User's description]
 
 **Related Documents Found**:
-| Document | Relevance | Quality Assessment |
-|----------|-----------|--------------------|
-| ...      | High/Med/Low | Structurally sound / Needs restructuring / Poor quality |
+| Document | Role | Relevance | Quality Assessment |
+|----------|------|-----------|--------------------|
+| ...      | Authoritative / Supporting / Adjacent | High / Medium / Low | Structurally sound / Needs restructuring / Poor quality |
 
 **Source Material Coverage**:
-Analyze what content is available vs missing in the provided source material.
-| Content Area | Available | Missing | Notes |
-|--------------|-----------|---------|-------|
-| [e.g., Installation] | ✅ / ❌ | | If missing, note how it will be handled |
-| [e.g., Cluster Creation] | ✅ / ❌ | | |
+| Content Area | Evidence Found | Coverage | Gaps And Handling |
+|--------------|----------------|----------|-------------------|
+| ...          | [Page names or examples] | Full / Partial / Missing | [How gaps will be handled] |
 
-**Recommended Path**:
-- Path A / Path B / Path C (see below)
+**All Branching Paths**:
+- **Path A**: [Explain the direct-modify or focused-add option in this repository]
+- **Path B**: [Explain the restructure-first option in this repository]
+- **Path C**: [Explain the narrow-scope-with-technical-debt option in this repository]
 
-**Reasoning**: [Why this path is recommended based on the findings]
+**Recommended Path**: Path A / Path B / Path C
 
----
+**Reasoning**:
+- [Why the recommended path fits the repository evidence]
+- [Why the non-selected paths are not the best choice for this round]
 
-Please confirm the above findings, or let me know of any related documents I may have missed.
-After your confirmation, tell me which path you'd like to take.
+Please confirm the findings above.
+If I missed a related document, tell me which one.
+After that, tell me whether you want Path A, Path B, or Path C.
 ```
 
 ## Branching Paths Reference
 
-**Path A: Existing docs are in good shape → Create new document directly**
-- Proceed to Phase 1 to plan the new document's location, type, and outline.
+**Path A: Structure is healthy enough to proceed directly**
 
-**Path B: Existing docs need restructuring → Restructure first, then write**
-- Proceed to Phase 1 to plan the restructuring, then Phase 2 to plan the new document.
+- Use this when the task can be solved by modifying the authoritative existing page and/or adding a focused new document within the current structure.
 
-**Path C: Existing docs need restructuring, but skip it this time → Create new document only**
-- Proceed to Phase 1 to plan the new document only.
-- Output the following reminder before continuing:
+**Path B: Restructure first, then write**
+
+- Use this when the current information architecture would make the result wrong, misleading, or unmaintainable unless it is restructured first.
+
+**Path C: Structural issues exist, but do not expand scope this round**
+
+- Use this when restructuring is desirable but not required to complete the current task safely.
+- Record the debt and continue with the narrowest viable scope.
+
+If Path C is chosen, output this reminder before continuing:
 
 ```markdown
-⚠️ Technical Debt Notice:
-[Brief description of the structural issues identified, without file paths.]
-Recommend tracking this in Jira for a future iteration.
+Technical Debt Notice:
+[Brief description of the structural issues identified.]
+Recommend tracking this for a future iteration.
 ```
 
 ## Important Notes
 
-- **⚠️ CRITICAL**: When source material is incomplete, explicitly identify gaps and propose how to handle them (e.g., reference existing patterns, mark as placeholder, ask user for additional information). This sets clear expectations before proceeding.
-
-- **Feedback Loop**:
-  - User confirms findings → Proceed to the user's chosen path
-  - User provides feedback/corrections → Re-process Phase 0 with the feedback and re-output the diagnosis report. Do NOT proceed to Phase 1 until the user confirms.
+- When source material is incomplete, explicitly identify gaps and propose how to handle them.
+- The report is incomplete if it only outputs the recommended path. Path A, Path B, and Path C must all be explained.
+- Path A must be allowed for both "modify authoritative existing doc" and "add focused new doc" scenarios.
+- If repository facts override the skill defaults, say so explicitly in the reasoning.

@@ -37,30 +37,31 @@ This repository also includes standalone scripts and commands in the `jira/` dir
 
 ### doom-doc-assistant
 
-Automatically generate product documentation that complies with the Doom framework specifications. Supports requirement document transformation, architecture analysis, and multi-type document generation.
+Repository-first assistant for Doom documentation work. It turns requirements into repository-aligned diagnosis reports, execution plans, and drafts for existing or new documentation.
 
 **Use when:**
 - Converting PRDs or requirements into user-facing documentation.
-- Generating HowTo, troubleshooting, feature, or concept documents.
-- Analyzing and restructuring existing documentation architecture.
+- Modifying authoritative existing pages or adding focused new scenario documents.
+- Analyzing when documentation architecture should stay in place versus be restructured.
 - Querying Doom framework terminology or documentation guidelines.
 
-**Document types supported:**
-- **intro**: Product/module introduction.
-- **quickstart**: Quick start guide.
-- **concept**: Core concept explanation.
-- **function**: Feature description.
-- **howto**: Practical operation guide.
-- **troubleshooting**: Troubleshooting guide.
-- **installation**: Installation guide.
-- **upgrade**: Upgrade guide.
-- **arch**: Architecture design.
+**Content shapes supported:**
+- Overview or introduction
+- Quick start
+- Concept
+- Feature guide
+- How-to
+- Troubleshooting
+- Installation
+- Upgrade
+- Architecture
 
 **Key features:**
-- **Terminology Consistency**: Prioritizes Kubernetes and OpenShift official documentation standards.
-- **Component Automation**: Automatic retrieval and application of Doom framework MDX component specs.
-- **Example-Driven**: Leverages real codebase search for context-aware generation.
-- **Multi-Stage Validation**: Checks for format, content, links, and language style.
+- **Repository Facts First**: Target repo `AGENTS.md` and neighboring pages override skill defaults.
+- **English-Only Documentation Content**: The skill may discuss plans in English or Chinese, but drafted or revised repository documentation content stays in English.
+- **Fixed Output Contracts**: Diagnosis Report and Execution Plan include required sections instead of free-form summaries.
+- **Example-Driven**: Leverages real codebase search for context-aware component and frontmatter choices.
+- **Scope Control**: Distinguishes direct modification, focused addition, and true restructure work.
 
 **Agent Compatibility (Empirical)**
 
