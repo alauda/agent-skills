@@ -161,7 +161,7 @@ Success criterion: the plan makes clear what will be created, what will be modif
 
 Success criterion: the generated or revised documentation follows the approved plan, matches repository conventions, and does not introduce template-driven fake standards.
 
-### 6. Phase 2.1: Specification Review For Path B
+### 6. Specification Review For Path B
 
 When restructuring existing documents:
 
@@ -181,7 +181,7 @@ When restructuring existing documents:
 
 Success criterion: the user sees the current directive count, the observed local directive baseline, any compliance issues, the repository-specific frontmatter contract, and the proposed restructuring changes before execution.
 
-### 7. Phase 2.7: Self-Verification
+### 7. Self-Verification
 
 1. Load `rules/verification-checklist.md`.
 2. Run the checks in order.

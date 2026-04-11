@@ -19,10 +19,10 @@ Used for replaceable terms (e.g., product names, company names) defined in `term
 ## `<Directive />`
 
 ### Usage
-Used for highlighting important information (Tips, Warnings, etc.).
+Used for highlighting important information such as notes, tips, warnings, and dangers.
 
 ### Parameters
-- `type`: `tip`, `info`, `warning`, or `danger`.
+- `type`: `note`, `tip`, `info`, `warning`, or `danger`.
 - `title`: The header text.
 
 ### Constraints
