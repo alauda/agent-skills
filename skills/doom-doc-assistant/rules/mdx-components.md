@@ -19,15 +19,17 @@ Used for replaceable terms (e.g., product names, company names) defined in `term
 ## `<Directive />`
 
 ### Usage
-Used for highlighting important information such as notes, tips, warnings, and dangers.
+Used for highlighting important information such as notes, tips, warnings, dangers, and collapsible details.
 
 ### Parameters
-- `type`: `note`, `tip`, `info`, `warning`, or `danger`.
+- `type`: `note`, `tip`, `info`, `warning`, `danger`, or `details`.
 - `title`: The header text.
 
 ### Constraints
 - **Do not** use `:::` syntax (Option 1 from `content-elements.md`) inside JSX components like `<TabItem>`, `<Tabs>`, `<Overview>`, `<Steps>`, or deep list indentations. The markdown parser will fail.
 - You **must** use the `<Directive />` component in these scenarios instead.
+- Use `type="details"` for collapsible secondary detail, long logs, or optional deep-dive content.
+
 ## `<Steps />`
 
 ### Usage
@@ -84,5 +86,6 @@ Tabs must include descriptive text alongside code blocks to ensure RAG accessibi
 
 - Match the directive density used by neighboring pages when the repository shows a clear pattern.
 - If no clear local baseline exists, keep directives minimal and reserve them for real risk, constraint, or operator guidance.
+- `details` is collapsible supporting content and does not count toward ordinary note/tip/info/warning/danger density.
 - When a draft uses directives for routine explanation, fold the lower-priority items back into prose first.
 - Priority for streamlining: DANGER > WARNING > TIP > INFO > NOTE.

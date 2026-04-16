@@ -63,4 +63,4 @@ Recommend tracking this for a future iteration.
 - When source material is incomplete, explicitly identify gaps and propose how to handle them.
 - The report is incomplete if it only outputs the recommended path. Path A, Path B, and Path C must all be explained.
 - Path A must be allowed for both "modify authoritative existing doc" and "add focused new doc" scenarios.
-- If repository facts override the skill defaults, say so explicitly in the reasoning.
+- If explicit repository rules override the skill defaults, say so explicitly in the reasoning.

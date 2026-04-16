@@ -8,7 +8,7 @@ Use this template when performing specification review during Path B restructuri
 ## Specification Review Report
 
 ### `:::` Directive Check
-- **Current Count**: X
+- **Current Count**: X, excluding `details`
 - **Observed Local Pattern**: [What neighboring pages do, or `No clear baseline`]
 - **Status**: Matches local pattern / Needs streamlining
 
@@ -20,14 +20,14 @@ Use this template when performing specification review during Path B restructuri
 - [ ] Terminology Consistency: Pass / Fail [Specific issue]
 - [ ] Link Correctness: Pass / Fail [Specific issue]
 - [ ] Language Style: Pass / Fail [Specific issue]
-- [ ] Repository Frontmatter Contract: Pass / Fail [Only check fields required by the target repo]
+- [ ] Metadata Contract: Pass / Fail [Check explicit repository rules and built-in product documentation minimums]
 - [ ] MDX Components: Pass / Fail [Specific issue]
 
 ## Recommendations
 [List specific modification suggestions]
 
 ## Repository Overrides
-[List any repository facts that override the skill defaults, or `None`]
+[List any explicit repository rules that override the skill defaults, or `None`]
 
 Should I apply the above changes? Please confirm.
 ```
@@ -52,5 +52,6 @@ Load rules explicitly with `cat` before checking:
 - `rules/metadata-rules.md`
 - `rules/mdx-components.md`
 
-Verify only the frontmatter fields required by the target repository and neighboring pages.
+Verify the frontmatter fields required by explicit repository rules and built-in product documentation minimums.
 For directive density, compare with neighboring pages first. If no local baseline is clear, prefer minimal directives and fold routine notes back into prose.
+Exclude `details` from ordinary note/tip/info/warning/danger density counts.
