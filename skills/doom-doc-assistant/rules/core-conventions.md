@@ -10,6 +10,7 @@ Before proposing paths, frontmatter, or structure:
 2. Apply these built-in product documentation standards
 3. Sample neighboring pages in the same directory for local ordering and placement
 4. Sample adjacent modules when the local placement pattern is unclear
+5. Fall back to templates only for structural scaffolding when repository rules and local samples are silent
 
 If an explicit repository rule conflicts with this file, the explicit repository rule wins. If only legacy examples conflict with this file, this file wins for new content.
 

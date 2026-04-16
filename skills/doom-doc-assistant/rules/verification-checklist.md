@@ -15,6 +15,7 @@ Before any other checks, verify that all generated or modified files match the a
 - [ ] Review-only or audit-only requests did not produce write plans, file edits, or local preview prep commands
 - [ ] Explicit `yarn build` or `yarn translate` tasks appear only when the user requested that exact command
 - [ ] Explicit command tasks use the `Explicit Command Result` section instead of free-form reporting
+- [ ] Explicit-command-only requests skipped the documentation collaboration phases and stopped after the Explicit Command Result
 - [ ] No unplanned files were created
 
 If any inconsistency is found:

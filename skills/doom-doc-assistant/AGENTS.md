@@ -118,11 +118,8 @@ When changing this skill, use [references/regression-cases.md](./references/regr
 ## What Not To Do
 
 - Do not force the agent to ask for a repository path when the current workspace already identifies the target repo.
-- Do not require `author` or `category` unless explicit repository rules require them.
-- Do not let legacy naming, missing `queries`, or missing `index.mdx` in existing files become the rule for new product documentation.
-- Do not automatically run `yarn dev`.
-- Do not automatically or by default run `yarn build` or `yarn translate`.
-- Do not tell the human to run `yarn dev` after a failed `yarn up @alauda/doom` or `yarn install`.
-- Do not run local preview prep commands for read-only review or audit requests.
+- Metadata and legacy samples must not become fake rules: require `author` or `category` only when explicit repository rules require them, and do not let legacy naming, missing `queries`, or missing `index.mdx` in existing files dictate new product documentation.
+- Command handling must stay narrow: do not automatically run `yarn dev`, `yarn build`, or `yarn translate`, and do not tell the human to run `yarn dev` after a failed `yarn up @alauda/doom` or `yarn install`.
+- Read-only review or audit requests must stay read-only; do not run local preview prep commands in those routes.
 - Do not treat technical debt as automatic evidence that Path B is required.
 - Do not let a user preference for Chinese assistant output turn into Chinese documentation content.

@@ -96,10 +96,12 @@ If the request includes an `explicit command task`:
 3. Do not use either command as a substitute when local preview prep fails or is not applicable.
 4. If documentation changes are also requested, keep the normal documentation collaboration plan separate from the explicit command task.
 5. Before running the explicit command, state the exact command, scope, and expected output or failure handling.
+6. If the request is command-only, skip Phases 0-9, execute Step 10, output the Explicit Command Result, and stop.
+7. If documentation collaboration is also requested, complete Phases 0-9 first, then execute Step 10 as a separate explicit-command branch.
 
-If the request is `documentation collaboration`, continue to Phase 0.
+If the request is only `documentation collaboration`, continue to Phase 0.
 
-Success criterion: review-only work stops with findings only, explicit command work is separated from default validation, and documentation collaboration continues through the phased workflow.
+Success criterion: review-only work stops with findings only, command-only work skips the documentation phases, mixed explicit-command work stays separate from default validation, and documentation collaboration continues through the phased workflow when requested.
 
 ### 4. Phase 0: Intake And Diagnosis
 

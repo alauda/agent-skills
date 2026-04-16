@@ -228,6 +228,19 @@ Expected assertions:
 - The default manual-acceptance flow still keeps `yarn dev` with the human reviewer.
 - The skill does not rewrite the default summary to imply `yarn build` always belongs to documentation collaboration.
 
+## Case 15A: Command-Only `yarn build` Request
+
+Prompt:
+
+`Run yarn build for this documentation repository.`
+
+Expected assertions:
+
+- The skill chooses the `explicit command task` route.
+- The skill skips Phases 0-9 and does not output a Diagnosis Report or Execution Plan.
+- The skill outputs an `Explicit Command Result` section.
+- The skill stops after the explicit command result unless the user separately asks for documentation changes.
+
 ## Case 16: Explicit `yarn translate` Request
 
 Prompt:
