@@ -30,7 +30,7 @@ Expected assertions:
 
 Prompt:
 
-`请用中文和我沟通，但帮我起草这个仓库里的文档改动。`
+`The user asks the assistant to communicate in Chinese while drafting documentation changes for the repository.`
 
 Expected assertions:
 
@@ -50,16 +50,17 @@ Expected assertions:
 - Path C remains valid when restructuring is not required to complete the current task.
 - The plan does not silently expand scope to Path B.
 
-## Case 3: Repository Does Not Use `author/category/queries`
+## Case 3: New Product Doc Requires Metadata Even When Samples Are Thin
 
 Prompt:
 
-`Create or update a page in a repo where neighboring pages only use weight, with optional title.`
+`Create a new HowTo page in a repo where neighboring pages only use weight and the repository has no explicit AGENTS.md.`
 
 Expected assertions:
 
-- The plan does not require `author`, `category`, or `queries`.
-- The generated frontmatter follows the local minimum contract.
+- The plan still requires `weight` and 2-4 English `queries`.
+- The plan does not require `author` or `category`.
+- The generated frontmatter uses the built-in product documentation minimum rather than copying missing metadata from legacy samples.
 
 ## Case 4: No Path Given, But Current Workspace Is The Repository
 
@@ -92,12 +93,180 @@ Expected assertions:
 
 Prompt:
 
-`Create a new overview page in a repo whose sibling pages use the long-form introduction category value.`
+`Create a new overview page in a repo whose explicit metadata rules use the long-form introduction category value.`
 
 Expected assertions:
 
 - The skill does not output the legacy short intro category value just because `intro-template.mdx` exists.
-- The skill reuses the category value found in the repository, or omits `category` if the repo does not use it.
+- The skill uses the explicit category rule when present.
+- The skill omits `category` when the value appears only in historical samples without an explicit repository rule.
+
+## Case 7: New Path Uses Lowercase Underscores
+
+Prompt:
+
+`Create a new provider API page for Huawei DCS under docs/en/apis/providers.`
+
+Expected assertions:
+
+- The proposed path uses lowercase letters, numbers, and underscores only.
+- The plan rejects hyphenated, uppercase, spaced, or non-ASCII new paths.
+- Existing noncompliant sibling files, if any, are treated as legacy evidence rather than new naming rules.
+
+## Case 8: New Directory Requires Index Coverage
+
+Prompt:
+
+`Create a new how-to under docs/en/networking/load_balancing/session_affinity.`
+
+Expected assertions:
+
+- The execution plan checks both the parent directory and the target directory for `index.mdx`.
+- Missing `index.mdx` files are listed in the Directory Integrity Check Result.
+- New `index.mdx` content is planned as H1 plus `<Overview />` unless explicit repository rules say otherwise.
+
+## Case 9: Chinese Product Documentation Is Rejected
+
+Prompt:
+
+`The user asks, in Chinese, to create a Chinese product documentation page under docs/zh.`
+
+Expected assertions:
+
+- The assistant may explain the issue in Chinese if that is the selected assistant-facing language.
+- The skill does not draft Chinese product documentation content.
+- The skill asks for an English target path or English documentation goal.
+
+## Case 10: Legacy Samples Do Not Override Product Standards
+
+Prompt:
+
+`Add a new page next to old pages that lack queries and use mixed naming styles.`
+
+Expected assertions:
+
+- The plan keeps existing files unchanged unless restructuring is approved.
+- The new page still uses lowercase underscore naming.
+- The new page still includes `weight` and English `queries`.
+
+## Case 11: Directive Details Support
+
+Prompt:
+
+`Review this draft that uses details blocks for long optional logs and several warnings.`
+
+Expected assertions:
+
+- `details` is recognized as a supported directive type.
+- `details` does not count toward ordinary note/tip/info/warning/danger density.
+- Warnings and dangers are still reviewed against local density and relevance.
+
+## Case 12: Modify Existing Page With Missing Queries
+
+Prompt:
+
+`Update this existing authoritative page with a small paragraph-level clarification.`
+
+Expected assertions:
+
+- The plan recommends Path A when the structure is healthy.
+- The plan does not force a file rename for legacy naming.
+- If the existing page lacks `queries`, the plan marks it as a follow-up or includes it only when the approved edit scope includes metadata completion.
+
+## Case 12A: Read-Only Convention Review
+
+Prompt:
+
+`Review this document for Doom documentation convention compliance only. Do not modify files.`
+
+Expected assertions:
+
+- The skill chooses the `review/audit only` route.
+- The skill outputs a Review Findings Report instead of an execution plan.
+- The skill does not modify files.
+- The skill does not run `yarn up @alauda/doom`, `yarn install`, `yarn dev`, `yarn build`, or `yarn translate`.
+- The report asks whether the user wants a fix plan or implementation.
+
+## Case 13: Standard Local Preview Prep And Human Handoff
+
+Prompt:
+
+`Update this English documentation page in a Doom/Yarn repository and prepare it for local manual acceptance.`
+
+Expected assertions:
+
+- After the documentation change is ready, the skill runs `yarn up @alauda/doom` and then `yarn install`.
+- The skill does not automatically run `yarn dev`.
+- The final summary tells the human reviewer to run `yarn dev` locally only after local preview prep completes.
+- The summary does not claim `yarn build` or `yarn translate` were run by default.
+
+## Case 14: Preview Prep Failure Blocks Manual Handoff
+
+Prompt:
+
+`Update the documentation, but assume the dependency update or install step fails.`
+
+Expected assertions:
+
+- The skill stops after the failed `yarn up @alauda/doom` or `yarn install` command.
+- The skill reports the blocking error.
+- The skill says manual preview is blocked or unavailable.
+- The skill does not tell the human reviewer to run `yarn dev`.
+- The skill does not substitute `yarn build` or `yarn translate` as fallback validation.
+
+## Case 15: Explicit `yarn build` Request
+
+Prompt:
+
+`After planning the documentation update, also run yarn build for this repo.`
+
+Expected assertions:
+
+- The skill treats `yarn build` as an explicit separate request, not as default documentation verification.
+- The command appears in an `Explicit Command Result` section.
+- The result includes `Requested Command`, `Explicit Request Evidence`, `Scope`, and `Separation From Default Flow`.
+- The default manual-acceptance flow still keeps `yarn dev` with the human reviewer.
+- The skill does not rewrite the default summary to imply `yarn build` always belongs to documentation collaboration.
+
+## Case 16: Explicit `yarn translate` Request
+
+Prompt:
+
+`After updating the English documentation, also run yarn translate for the specified glob.`
+
+Expected assertions:
+
+- The skill treats `yarn translate` as an explicit separate request, not as default documentation verification.
+- The command appears in an `Explicit Command Result` section.
+- The result includes `Requested Command`, `Explicit Request Evidence`, `Scope`, and `Separation From Default Flow`.
+- The default manual-acceptance flow still avoids automatic `yarn translate` unless the user asked for it.
+- The skill does not rewrite the default summary to imply `yarn translate` always belongs to documentation collaboration.
+
+## Case 17: Standard Preview Prep Not Applicable
+
+Prompt:
+
+`Update the documentation in a repository that does not have the normal Doom/Yarn package signals.`
+
+Expected assertions:
+
+- The plan states that standard Doom/Yarn preview prep is not applicable.
+- The skill does not invent substitute validation commands.
+- The summary says manual preview is blocked or unavailable.
+- The summary does not tell the human reviewer to run `yarn dev`.
+
+## Case 18: Branded Terms And `<Term />`
+
+Prompt:
+
+`Review a draft that uses Alauda, ACP, and <Term /> in a repository that has explicit terminology examples.`
+
+Expected assertions:
+
+- The skill does not apply a blanket ban to all branded terms.
+- The skill rejects unsafe hardcoded brand names when the repository expects replaceable `<Term />` usage.
+- The skill follows explicit repository terminology rules or real `<Term />` examples.
+- The skill does not invent new brand names or strip required product terminology blindly.
 
 ## ACP Validation Case: Operator Targeted Deployment
 
@@ -117,6 +286,15 @@ Expected assertions:
 After any refactor, run repository-local searches to confirm:
 
 - no rule claims a single legacy naming style is the only allowed style everywhere
-- no rule still marks `author`, `category`, and `queries` as unconditionally mandatory
+- no rule turns optional `author` or `category` fields into required fields
 - no template frontmatter still outputs legacy template-name-derived category values
 - no file references the old nonexistent architecture template filename
+- no product documentation rule recommends hyphenated, uppercase, spaced, or non-ASCII new paths
+- all new document templates include `weight` and English `queries`
+- directive rules include `details` and exclude it from ordinary density counts
+- the skill rules mention `yarn up @alauda/doom`, `yarn install`, and `yarn dev` for the default manual-acceptance flow
+- the default skill flow does not describe `yarn build` or `yarn translate` as automatic steps
+- review-only or audit-only routes do not include file edits or local preview prep commands
+- explicit `yarn build` and `yarn translate` requests are represented as separate command tasks
+- explicit command tasks use the `Explicit Command Result` section
+- branding rules allow repository-approved `<Term />` or explicit terminology patterns while preventing unsafe hardcoded brand defaults

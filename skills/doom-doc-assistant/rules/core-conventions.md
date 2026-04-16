@@ -1,39 +1,39 @@
 # Doom Framework Core Conventions
 
-These are default conventions for Doom documentation work. Apply them only after checking the target repository `AGENTS.md` and neighboring pages.
+These are product documentation standards for Doom documentation work. Explicit target repository rules may override them, but historical samples must not override them for new product documentation.
 
 ## Repository-First Discovery
 
 Before proposing paths, frontmatter, or structure:
 
-1. Read the target repository `AGENTS.md`
-2. Sample neighboring pages in the same directory
-3. Sample adjacent modules when the local pattern is unclear
-4. Fall back to these defaults only if the repository is silent
+1. Read the target repository `AGENTS.md` when it exists
+2. Apply these built-in product documentation standards
+3. Sample neighboring pages in the same directory for local ordering and placement
+4. Sample adjacent modules when the local placement pattern is unclear
 
-If a repository fact conflicts with this file, the repository fact wins.
+If an explicit repository rule conflicts with this file, the explicit repository rule wins. If only legacy examples conflict with this file, this file wins for new content.
 
 ## Directory And File Organization
 
 ### Naming Conventions
 
-- New files and directories should follow the naming style required by the target repository.
-- If the target repo explicitly says `kebab-case`, use `kebab-case` for new paths.
+- New product documentation files and directories must use lowercase English letters, numbers, and underscores only.
+- Do not create new paths that use hyphens, spaces, uppercase letters, or non-ASCII characters.
 - Do not infer a global naming rule from historical legacy files.
 - Do not rename existing files just to normalize style unless the user asks for it or the approved restructuring plan requires it.
-- Keep names lowercase and ASCII unless the target repo clearly does otherwise.
+- Existing noncompliant paths are legacy evidence, not valid examples for new paths.
 
 ### Sorting Control
 
-Use the `weight` field only when the target repository uses it for navigation order. Preserve the local spacing pattern found in sibling pages.
+Use the `weight` field for new product documentation. Preserve the local spacing pattern found in sibling pages.
 
 ### Directory `index.mdx`
 
-Critical default rule:
+Critical rule:
 
-> Every directory that contains `.mdx` files or subdirectories should have an `index.mdx` unless the target repository clearly uses a different navigation mechanism.
+> Every product documentation directory that contains `.mdx` files or subdirectories must have an `index.mdx` unless an explicit target repository rule says otherwise.
 
-Purpose: `index.mdx` is usually the navigation entry for that directory and often hosts `<Overview />`.
+Purpose: `index.mdx` is the navigation entry for that directory and should contain an H1 plus `<Overview />` by default.
 
 Verification steps:
 
@@ -47,8 +47,8 @@ Common mistake:
 Wrong:
 
 ```text
-docs/en/apis/providers/huawei-dcs/
-docs/en/apis/providers/huawei-cloud-stack/
+docs/en/apis/providers/provider-alpha/
+docs/en/apis/providers/provider-beta/
 docs/en/apis/providers/
 ```
 
@@ -58,8 +58,8 @@ Correct:
 
 ```text
 docs/en/apis/providers/index.mdx
-docs/en/apis/providers/huawei-dcs/index.mdx
-docs/en/apis/providers/huawei-cloud-stack/index.mdx
+docs/en/apis/providers/provider_alpha/index.mdx
+docs/en/apis/providers/provider_beta/index.mdx
 ```
 
 ## Titles
@@ -101,8 +101,9 @@ These are content-shape defaults, not category enums:
 - installation
 - upgrade
 - architecture
+- release notes
 
-If the repository uses a `category` field, infer the exact allowed values from sibling pages or repo docs. Never derive a category directly from a template file name.
+If explicit repository rules require a `category` field, follow `rules/metadata-rules.md`. Never derive a category directly from a template file name or historical sample alone.
 
 ## Search And Chunking
 

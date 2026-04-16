@@ -114,7 +114,7 @@ This document catalogs common documentation issues observed in real-world review
 
 ## Integration: Add to Self-Verification Checklist
 
-In **Phase 2, Step 9 (Self-Verification)**, add these checks:
+During the `Self-Verification` workflow step, add these checks:
 
 ### Format Check (Additions)
 - [ ] **Period Spacing**: No `word.Word` patterns (missing space after period)

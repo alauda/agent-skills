@@ -1,74 +1,91 @@
 # Metadata Specification (Frontmatter)
 
-Frontmatter must be discovered from the target repository, not assumed from this skill.
+These are product documentation metadata standards. Explicit target repository rules may override them, but historical samples that omit metadata are legacy evidence only.
 
 ## Discovery Order
 
 Determine the frontmatter contract in this order:
 
-1. The target repository `AGENTS.md`
-2. Pages in the same directory
-3. Pages in adjacent modules that clearly share the same documentation pattern
-4. This file, only as a fallback
+1. User task scope and explicit target repository rules
+2. Built-in product documentation minimums in this file
+3. Sibling pages for local ordering, optional fields, and non-conflicting style
+4. Adjacent modules when local evidence is too thin
 
-If repository facts conflict with this file, the repository facts win.
+If an explicit repository rule conflicts with this file, the explicit repository rule wins and the output must say so. If only historical samples conflict, this file wins for new product documentation.
 
 ## Field Guidance
 
 | Field | Default status | Use when |
 | :--- | :--- | :--- |
-| `weight` | Usually required in Doom repos | The repository uses it for navigation order |
-| `title` | Optional | The repository or neighboring pages use explicit titles instead of relying on the H1 |
-| `author` | Conditional | The repository actually tracks authors in the same directory |
-| `category` | Conditional | The repository uses a category field and the allowed values can be inferred from real pages or repo docs |
-| `queries` | Conditional | The repository uses retrieval hints in that area of the docs |
+| `weight` | Required for new English product docs | Controls local navigation order |
+| `queries` | Required for new English product docs | Provides English retrieval hints for RAG and search |
+| `title` | Optional | Explicit repository rules or neighboring pages use titles instead of relying on the H1 |
+| `author` | Optional | Explicit repository rules require author tracking |
+| `category` | Optional | Explicit repository rules require category metadata |
 
-Do not force `author`, `category`, or `queries` unless you have direct repository evidence for them.
+For small edits to existing pages, preserve the existing frontmatter shape. If the page lacks `queries`, list it as a follow-up or add it in the same change only when the approved scope includes metadata completion.
 
-## Minimal Example
+## New Product Documentation Example
 
-Use the smallest frontmatter contract the repository supports.
+Use this minimum contract for new English product documentation:
 
 ```yaml
 ---
 weight: 10
----
-```
-
-## Extended Example
-
-Only use a larger contract when the repository already uses it.
-
-```yaml
----
-title: "<title-if-used>"
-weight: 10
-author: "<author-if-used>"
-category: "<repository-category>"
 queries:
-  - "<primary user query>"
-  - "<secondary user query>"
+  - "How do I configure <feature>?"
+  - "What is <feature> used for?"
+  - "<feature> troubleshooting"
 ---
 ```
 
-Replace angle-bracket placeholders only with values confirmed by the target repository.
+Choose `weight` from the local spacing pattern in sibling pages.
+
+## Optional Extended Example
+
+Only include optional fields when explicit repository rules require them:
+
+```yaml
+---
+title: "<title-if-required>"
+weight: 10
+category: "howto"
+queries:
+  - "How do I configure <feature>?"
+  - "What is <feature> used for?"
+  - "<feature> troubleshooting"
+---
+```
+
+Do not include `author` or `category` just because a template mentions a content shape.
+
+## `queries` Rules
+
+- `queries` must be an English string list.
+- Default to 3 entries.
+- Use 2-4 entries when the page scope is unusually narrow or broad.
+- Write queries as user-facing search questions or keywords.
+- Cover important synonyms and acronyms when they matter.
+- Keep queries specific to the current page.
+- Avoid duplicating queries already used by sibling pages when possible.
 
 ## Category Rules
 
-- Never derive a category value from a template file name such as `intro-template` or `arch-template`.
-- Reuse exact category values already present in sibling pages.
-- If the repository does not use `category` in that area, omit it.
+Only use `category` when explicit target repository rules require it. When required, use only these values unless the explicit repository rule provides a different closed set:
 
-## `queries` Guidance
+- `index`
+- `introduction`
+- `feature`
+- `releasenote`
+- `architecture`
+- `concept`
+- `quickstart`
+- `howto`
+- `troubleshooting`
+- `permissions`
+- `api`
 
-When the repository uses `queries`:
-
-- Prefer user-facing search phrases
-- Cover synonyms and acronyms when they matter
-- Keep them specific to the current page
-- Match the style and density used by neighboring pages
-
-If the repository does not use `queries`, do not introduce them.
+Never derive a category value from a template file name such as `intro-template`, `function-template`, or `arch-template`.
 
 ## Weight Guidance
 

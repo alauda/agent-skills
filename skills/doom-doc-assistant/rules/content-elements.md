@@ -60,7 +60,7 @@ Use resource limits to avoid contention.
 - Keep directive content concise (usually within one paragraph).
 - **Exclusions**: Do not include tables or complex images inside a directive (icons are acceptable).
 - Place Warnings and Dangers *before* the relevant text or step.
-- **Density Rule**: Match the directive density used by neighboring pages when the repository shows a clear pattern. If no local pattern is obvious, keep directives minimal and fall back to inline bolding (e.g., `**Note:**`) for routine notes.
+- **Density Rule**: Match the directive density used by neighboring pages when the repository shows a clear pattern. If no local pattern is obvious, keep directives minimal and fall back to inline bolding (e.g., `**Note:**`) for routine notes. `details` is collapsible supporting content and does not count toward ordinary note/tip/info/warning/danger density.
 - **Syntax Boundaries**: `:::` and `<Directive />` render identical styles. However, **`:::` syntax fails inside JSX components** (like `<Tabs>`, `<TabItem>`, or other custom components) and deep list indentations. **You MUST use `<Directive />`** whenever you are placing a directive inside any JSX tag or complex nested list.
 
 ### Fallback Notes (e.g., `**Note:**`)
@@ -127,14 +127,20 @@ Memory overhead ≈ (requested memory) \
 
 ## Sensitive Information (Prohibited)
 
-The following information is strictly prohibited:
-1. **Internal Branding**: ACP, Alauda, or company-specific internal terms.
+The following information is strictly prohibited unless an explicit target repository rule requires it:
+1. **Hardcoded Internal Branding**: Do not hardcode ACP, Alauda, or other internal or white-label-unsafe brand terms as generic defaults. If the target repository explicitly uses branded terminology or `<Term />`, follow the repository pattern instead of inventing or stripping names blindly.
 2. **Discriminatory Terms**: Avoid biased or offensive language.
 3. **Third-Party Info**: Do not include non-essential company names, logos, or products.
 4. **PII**: Avoid ID numbers, phone numbers, home addresses, or bank accounts.
 5. **Intellectual Property**: No unauthorized code, fonts, or images.
 6. **Confidentiality**: No internal project codes, testing environment URLs, or commercial secrets (financials, contracts).
 7. **Political/Religious**: No sensitive political, religious, or racial content.
+
+Branding handling rule:
+
+- Prefer repository-approved `<Term />` usage or explicit terminology rules when brand names are required.
+- Treat `rules/terminology-guide.md` as a controlled vocabulary reference, not a mandate to hardcode brand names into every repository.
+- If the repository is white-labeled or avoids product branding, keep the wording generic.
 
 | Prohibited | Replacement |
 | :--- | :--- |

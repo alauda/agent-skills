@@ -55,27 +55,27 @@ Repository-first assistant for Doom documentation work. It turns requirements in
 - Installation
 - Upgrade
 - Architecture
+- Release notes
 
 **Key features:**
-- **Repository Facts First**: Target repo `AGENTS.md` and neighboring pages override skill defaults.
+- **Product Standards First**: Explicit target repo rules override skill defaults; otherwise built-in product documentation standards govern new docs.
+- **Stable New-Doc Contract**: New product docs use lowercase underscore paths plus `weight` and English `queries`.
 - **English-Only Documentation Content**: The skill may discuss plans in English or Chinese, but drafted or revised repository documentation content stays in English.
+- **Manual Preview Prep**: After documentation work in a Doom/Yarn repo, the skill prepares local preview with `yarn up @alauda/doom` and `yarn install`, then hands `yarn dev` to a human reviewer.
+- **No Default Build Or Translate**: `yarn build` and `yarn translate` are not automatic validation steps.
 - **Fixed Output Contracts**: Diagnosis Report and Execution Plan include required sections instead of free-form summaries.
-- **Example-Driven**: Leverages real codebase search for context-aware component and frontmatter choices.
+- **Example-Driven**: Leverages real codebase search for placement, ordering, component examples, and non-conflicting local style.
 - **Scope Control**: Distinguishes direct modification, focused addition, and true restructure work.
 
-**Agent Compatibility (Empirical)**
-
-Based on hands-on usage with various AI coding agents:
-
-| Agent | Experience | Notes |
-|-------|-----------|-------|
-| **Claude Code** | ⭐⭐⭐⭐ | Optimal integration and output quality |
-| **OpenCode** | ⭐⭐⭐ | Works well, but 2-3x slower than Claude Code for similar tasks |
-| **Gemini CLI** | ⭐⭐ | Not recommended for this skill |
-
-> **Note**: These observations are based on current usage as of 2026-02-25. Other agents have not been tested. If you have experience with different agents, please feel free to update this README via PR.
-
 ## Installation
+
+Install only `doom-doc-assistant`:
+
+```bash
+npx skills add alauda/agent-skills --skill doom-doc-assistant
+```
+
+Install the full skill bundle only if you want every skill in this repository:
 
 ```bash
 npx skills add alauda/agent-skills
@@ -86,9 +86,8 @@ npx skills add alauda/agent-skills
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
 
 **Examples:**
-- "Generate a HowTo document for database scaling based on these requirements: [paste requirements]"
-- "Review this documentation for Doom framework compliance."
-- "Convert this PRD into a product feature document."
+- "Update the authoritative operator documentation based on this requirement and prepare it for local preview handoff."
+- "Create a new HowTo page under `docs/en/...` with repository-aligned `weight` and English `queries`."
 
 ## Skill Structure
 
@@ -110,6 +109,6 @@ See [AGENTS.md](AGENTS.md) for the **Supreme Guiding Directive** on developing n
 
 ## Project Context for AI Assistants
 
-This repository includes pre-configured context files to help AI assistants (like Gemini CLI or Claude Code) quickly understand the project standards:
+This repository includes pre-configured context files to help AI assistants quickly understand the project standards:
 - [AGENTS.md](AGENTS.md): The core development manual (read this first).
 - [GEMINI.md](GEMINI.md) / [CLAUDE.md](CLAUDE.md): Entry points for specific AI agents.
