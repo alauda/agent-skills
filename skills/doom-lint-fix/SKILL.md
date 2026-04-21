@@ -21,6 +21,7 @@ This skill routes `doom lint` errors to rule-specific fix guides. Each guide con
 
 | Rule                            | Fix Guide                                                            | Status                |
 | ------------------------------- | -------------------------------------------------------------------- | --------------------- |
+| `heading-anchor-format`         | [rules/heading-anchor-format.md](rules/heading-anchor-format.md)     | ✅ Documented         |
 | `no-unmatched-anchor`           | [rules/no-unmatched-anchor.md](rules/no-unmatched-anchor.md)         | ✅ Documented         |
 | `no-multi-open-api-paths`       | [rules/no-multi-open-api-paths.md](rules/no-multi-open-api-paths.md) | ✅ Documented         |
 | `check-dead-links`              | —                                                                    | ⬜ Not yet documented |
@@ -84,6 +85,7 @@ When `doom lint` reports many errors across multiple rules:
 ## General Principles
 
 - **Fix the source, not the symptom** — if a heading needs an anchor, add it to the heading, don't change the link
+- **Keep heading anchors inline** — if an `id` belongs to a heading, encode it as `{#id}` in the heading instead of adjacent HTML or JSX
 - **Fix all translations** — anchor IDs, heading custom IDs must be consistent across all language variants
 - **One write per file** — batch all fixes for a file into a single edit to avoid repeated I/O
 - **`.md` vs `.mdx` syntax matters** — MDX requires escaping `{#id}` as `\{#id}` due to JSX expression parsing
