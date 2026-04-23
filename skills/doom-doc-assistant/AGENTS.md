@@ -8,6 +8,8 @@ Explicit rules and product documentation standards win.
 
 The target repository's explicit rules are authoritative. When a repository is silent, the product documentation standards bundled in this skill are authoritative. Local page samples are useful for placement, ordering, and style, but legacy samples must not override required product documentation standards such as English product content, underscore-only new paths, `weight` plus `queries`, or directory `index.mdx` coverage.
 
+AI usability is a first-class documentation quality target. When the user asks whether documentation is ready for AI writing, review, retrieval, or assistant answering, the skill must explicitly inspect value sources, prerequisites, support boundaries, and cross-page consistency instead of limiting itself to formatting or Doom syntax.
+
 ## Current Layout
 
 ```text
@@ -16,6 +18,7 @@ doom-doc-assistant/
 ├── AGENTS.md
 ├── CLAUDE.md
 ├── rules/
+│   ├── ai-usable-docs.md
 │   ├── best-practices.md
 │   ├── common-pitfalls.md
 │   ├── content-elements.md
@@ -85,8 +88,19 @@ The preferred sequence is:
 - The skill must lock the assistant-facing output language before Phase 0 when the preference is not explicit.
 - This language choice is separate from the repository's documentation content language.
 - Assistant-facing output may be English or Chinese, but drafted or revised repository documentation content must always stay in English.
+- The skill must classify the documentation layer before planning or drafting:
+  - `user-facing product doc`
+  - `engineering fact doc`
+  - `versioned validation report`
+  - `known issue tracker`
+  - `evidence index`
+- The skill must not silently mix document layers. Public product docs should not inherit raw evidence bookkeeping, and engineering docs should not overstate support by copying user-facing prose.
 - New product documentation paths must use lowercase letters, numbers, and underscores only.
 - New product documentation frontmatter must include `weight` and English `queries`.
+- For AI-usable product docs, `queries` should cover user intent plus high-value platform terms, field names, or aliases when they materially improve retrieval.
+- For user-facing product docs, the workflow should explicitly consider prerequisite checklists, value-to-field mappings, controller-managed fields, and supported or unsupported boundaries.
+- For engineering docs, the workflow should explicitly distinguish released capability, known gaps, known issues, evidence links, and version baselines.
+- If a change introduces or revises a prerequisite, field constraint, lifecycle boundary, or limitation, the plan must either propagate it to affected sibling pages or record explicit debt.
 - For Doom/Yarn repositories, the post-drafting handoff must run `yarn up @alauda/doom` and then `yarn install` before human acceptance.
 - Manual acceptance must be handed to a human reviewer who runs `yarn dev` locally only after local preview prep completes successfully.
 - `yarn build` and `yarn translate` are never default verification steps. They are separate tasks that require explicit user direction.
@@ -123,3 +137,5 @@ When changing this skill, use [references/regression-cases.md](./references/regr
 - Read-only review or audit requests must stay read-only; do not run local preview prep commands in those routes.
 - Do not treat technical debt as automatic evidence that Path B is required.
 - Do not let a user preference for Chinese assistant output turn into Chinese documentation content.
+- Do not treat "code path exists" as equivalent to "supported," "documented workflow," or "formally validated."
+- Do not let engineering-truth documents leak baseline-specific or issue-specific claims into public docs unless those details are necessary for user success and stated at the right abstraction level.

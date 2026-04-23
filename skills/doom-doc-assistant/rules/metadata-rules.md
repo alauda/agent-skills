@@ -66,6 +66,11 @@ Do not include `author` or `category` just because a template mentions a content
 - Use 2-4 entries when the page scope is unusually narrow or broad.
 - Write queries as user-facing search questions or keywords.
 - Cover important synonyms and acronyms when they matter.
+- For AI-usable product docs, prefer a mixed set that covers:
+  - at least one user-intent query
+  - the platform or provider term when it is not obvious from the title alone
+  - critical field names, parameter names, or resource names when users or assistants are likely to search by them
+  - important aliases or "display name vs API value" hints when they affect successful usage
 - Keep queries specific to the current page.
 - Avoid duplicating queries already used by sibling pages when possible.
 
