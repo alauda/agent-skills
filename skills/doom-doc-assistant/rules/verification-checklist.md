@@ -16,6 +16,8 @@ Before any other checks, verify that all generated or modified files match the a
 - [ ] Explicit `yarn build` or `yarn translate` tasks appear only when the user requested that exact command
 - [ ] Explicit command tasks use the `Explicit Command Result` section instead of free-form reporting
 - [ ] Explicit-command-only requests skipped the documentation collaboration phases and stopped after the Explicit Command Result
+- [ ] The planned or reviewed document layer matches the actual deliverable type
+- [ ] Cross-page propagation needs were either included in scope or recorded explicitly as debt
 - [ ] No unplanned files were created
 
 If any inconsistency is found:
@@ -34,6 +36,7 @@ Refer to `rules/markdown-formatting.md` for detailed rules.
 - [ ] Code formatting uses backticks consistently
 - [ ] New product documentation frontmatter includes `weight` and English `queries`
 - [ ] Optional fields such as `author` and `category` appear only when explicit repository rules require them
+- [ ] For AI-usable docs, `queries` cover user intent plus important platform terms, fields, or aliases when needed
 
 ## Content Check
 
@@ -43,6 +46,12 @@ Refer to `rules/content-elements.md` for detailed rules.
 - [ ] Recommendations specify their scope or conditions
 - [ ] Exception notes appear close to the related recommendation
 - [ ] Terminology is consistent
+- [ ] The content matches its document layer and does not mix user-facing guidance with engineering-truth bookkeeping without a clear reason
+- [ ] User-facing docs state prerequisite inputs or link to the authoritative prerequisite checklist when successful execution depends on them
+- [ ] User-facing docs state important field-value sources, especially when the real value differs from the UI display name or requires an administrator
+- [ ] User-facing docs call out controller-managed fields instead of implying that users should fill them manually
+- [ ] User-facing docs distinguish supported workflows, create-only paths, unsupported paths, and out-of-scope paths when those boundaries matter
+- [ ] Engineering docs that make version-sensitive claims include explicit baseline identifiers
 - [ ] `:::` directive density matches neighboring pages, or stays minimal when the repository shows no clear baseline; `details` is excluded from ordinary directive density
 - [ ] Any explicit repository-rule override of a skill default is explicitly stated when relevant
 - [ ] For documentation collaboration flows, the documentation summary includes a Local Preview Prep section and a Manual Acceptance Handoff section
@@ -59,11 +68,13 @@ Refer to `rules/content-elements.md` for detailed rules.
 - [ ] Lists and tables have enough framing context
 - [ ] Directory integrity is preserved
 - [ ] The chosen path fits the current scope and does not expand a modify-only task into an unnecessary new-doc task
+- [ ] Constraints or prerequisites introduced in one workflow are propagated to sibling pages when needed or are explicitly tracked as debt
 
 ## Data Check
 
 - [ ] Table data and version references are internally consistent
 - [ ] No stale versions or copied values remain in prose
+- [ ] Value-to-field mappings, field names, and source references are internally consistent
 
 ## Repository-Fact Check
 
@@ -72,6 +83,7 @@ Refer to `rules/content-elements.md` for detailed rules.
 - [ ] Any nontrivial MDX component usage is backed by repository examples
 - [ ] Root `package.json` and Doom/Yarn signals were checked before using the standard preview prep flow
 - [ ] Hardcoded brand names were avoided unless explicit repository rules or repository-approved `<Term />` usage require them
+- [ ] If stronger source-of-truth material exists, such as engineering docs, versioned reports, issue trackers, or evidence indexes, the output reflects it at the correct abstraction level
 
 ## Language Check
 

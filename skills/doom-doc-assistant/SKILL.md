@@ -1,6 +1,6 @@
 ---
 name: doom-doc-assistant
-description: Use when working in a Doom documentation repository to turn requirements into repository-aligned documentation diagnosis, plans, and drafts. Supports modifying authoritative existing pages, adding focused scenario documents, planning doc-tree restructures, read-only convention reviews, and explicitly requested `yarn build` or `yarn translate` tasks. Explicit target repository rules override skill defaults; when the repository is silent, built-in product documentation standards govern new product docs.
+description: Use when working in a Doom documentation repository to turn requirements into repository-aligned documentation diagnosis, plans, drafts, and AI-usability reviews. Supports modifying authoritative existing pages, adding focused scenario documents, separating user-facing docs from engineering-truth docs, planning doc-tree restructures, read-only convention or AI-usability reviews, and explicitly requested `yarn build` or `yarn translate` tasks. Explicit target repository rules override skill defaults; when the repository is silent, built-in product documentation standards govern new product docs.
 ---
 
 # Doom Documentation Assistant
@@ -82,9 +82,9 @@ Classify the request before planning edits:
 If the request is `review/audit only`:
 
 1. Keep the workflow read-only.
-2. Load only the rules needed for the requested check.
+2. Load only the rules needed for the requested check. Include `rules/ai-usable-docs.md` whenever the user asks whether the docs are AI-usable, self-contained, complete enough for assistants, or ready for automated review or retrieval.
 3. Inspect repository examples and the target document.
-4. Output a Review Findings Report using the contract in Output Contracts.
+4. Output a Review Findings Report using the contract in Output Contracts. Use the AI-usability lens when applicable, not only formatting or Doom-convention checks.
 5. Do not output an execution plan, modify files, run `yarn up @alauda/doom`, run `yarn install`, or hand off `yarn dev`.
 6. Ask whether the user wants a fix plan for the findings.
 7. Stop unless the user asks for edits.
@@ -107,41 +107,53 @@ Success criterion: review-only work stops with findings only, command-only work 
 
 1. Restate the requirement in repository context.
 2. Identify the most relevant existing documents.
-3. Assess source material coverage.
-4. Decide between these paths:
+3. Classify the target documentation layer before planning edits:
+   - `user-facing product doc`
+   - `engineering fact doc`
+   - `versioned validation report`
+   - `known issue tracker`
+   - `evidence index`
+4. Assess source material coverage, including whether there is a stronger source of truth such as provider engineering docs, versioned reports, issue trackers, or evidence indexes that should inform the target page.
+5. Decide between these paths:
    - Path A: the current structure is healthy enough to directly modify the authoritative page and/or add a focused new document within the existing structure.
    - Path B: the current structure is wrong enough that restructuring must happen before the new or revised content can be correct.
    - Path C: structural issues exist, but they are not required to solve the current task; record the debt and continue with the narrowest safe scope.
-5. Load `templates/diagnosis-report.md` and output the diagnosis with all required sections.
-6. Explain all three paths. Do not output only the recommended path.
-7. If the recommended path is not the only plausible option, explain why the other paths are not chosen for this round.
-8. Ask for confirmation before moving on.
+6. Identify any propagation risk: if the change introduces or revises a prerequisite, field constraint, lifecycle boundary, or known limitation, determine which sibling workflows or overview pages may also need updates.
+7. Load `templates/diagnosis-report.md` and output the diagnosis with all required sections.
+8. Explain all three paths. Do not output only the recommended path.
+9. If the recommended path is not the only plausible option, explain why the other paths are not chosen for this round.
+10. Ask for confirmation before moving on.
 
-Success criterion: the user can see the requirement, relevant documents, coverage, Path A/B/C definitions, the recommended path, and why other paths were not selected.
+Success criterion: the user can see the requirement, relevant documents, the document layer, coverage, propagation risk, Path A/B/C definitions, the recommended path, and why other paths were not selected.
 
 ### 5. Phase 1: Planning
 
 1. Load `rules/core-conventions.md`.
-2. Verify directory integrity, especially the `index.mdx` rule for any directory you will create or touch.
-3. Classify the task as one of:
+2. Load `rules/ai-usable-docs.md`.
+3. Verify directory integrity, especially the `index.mdx` rule for any directory you will create or touch.
+4. Classify the task as one of:
    - `modify existing authoritative doc`
    - `add new scenario doc`
    - `restructure doc tree`
-4. Determine whether the repository supports standard Doom/Yarn local preview preparation.
+5. Carry forward the documentation layer classification from Phase 0. Do not mix a public product-doc task with an engineering-truth deliverable unless the user explicitly asks for both.
+6. Determine whether the repository supports standard Doom/Yarn local preview preparation.
    - Confirm repository signals such as a root `package.json`, Yarn usage, a `dev` script, `doom dev`, or `@alauda/doom`.
    - If the standard preview flow applies, plan `yarn up @alauda/doom` and then `yarn install`.
    - If those commands may change dependency files, include `package.json`, `yarn.lock`, or equivalent dependency files under `Files to Modify`.
    - If the standard preview flow does not apply, say that clearly instead of inventing a substitute validation command.
-5. Build the metadata contract from explicit repository rules plus built-in product documentation minimums.
+7. Build the metadata contract from explicit repository rules plus built-in product documentation minimums.
    - Use neighboring pages to determine local `weight` spacing and optional fields only when they do not conflict with explicit repository rules or built-in product documentation standards.
    - Never invent `category` values from template file names.
    - For new English product documentation, require `weight` and English `queries`.
+   - For AI-usable product docs, ensure `queries` cover user intent plus important platform terms, field names, or aliases when they materially improve retrieval.
    - Do not require `author` or `category` unless explicit repository rules require them.
    - If modifying an existing page that lacks `queries`, list a follow-up or planned completion item depending on the edit scope.
-6. Output the execution plan with the exact sections required by the template below.
-7. Use `None` when a section is empty. Do not omit required sections.
-8. Ask: `Should I proceed with generating or modifying the documentation based on this plan?`
-9. Stop until the user confirms.
+8. For user-facing product docs, decide whether the page needs explicit prerequisite inputs, field-value sources, allowed or forbidden combinations, controller-managed fields, workflow boundaries, or troubleshooting handoff to become AI-usable.
+9. If the change introduces or revises a prerequisite, field constraint, lifecycle boundary, or known limitation, include all affected sibling pages under `Files to Modify` or record the explicit follow-up debt. Do not silently localize a cross-workflow constraint to one page.
+10. Output the execution plan with the exact sections required by the template below.
+11. Use `None` when a section is empty. Do not omit required sections.
+12. Ask: `Should I proceed with generating or modifying the documentation based on this plan?`
+13. Stop until the user confirms.
 
 Use this contract for the execution plan:
 
@@ -149,6 +161,7 @@ Use this contract for the execution plan:
 ## Execution Plan
 
 **Action Type**: [modify existing authoritative doc / add new scenario doc / restructure doc tree]
+**Documentation Layer**: [user-facing product doc / engineering fact doc / versioned validation report / known issue tracker / evidence index]
 
 ### Files to Create
 | File | Weight | Queries | Purpose |
@@ -186,12 +199,13 @@ Use this contract for the execution plan:
 [Flat checklist or bullets]
 ```
 
-Success criterion: the plan makes clear what will be created, what will be modified, whether directory structure is sound, whether manual preview handoff is available, and what a successful outcome looks like.
+Success criterion: the plan makes clear what will be created, what will be modified, which document layer it belongs to, whether cross-page propagation is required, whether manual preview handoff is available, and what a successful outcome looks like.
 
 ### 6. Phase 2: Execution
 
 1. If the user chose Path B, perform a specification review on the affected existing documents before restructuring them.
 2. Load these rules before drafting:
+   - `rules/ai-usable-docs.md`
    - `rules/metadata-rules.md`
    - `rules/language-style.md`
    - `rules/content-elements.md`
@@ -222,6 +236,14 @@ Success criterion: the plan makes clear what will be created, what will be modif
 10. For frontmatter, include `weight` and English `queries` for new product documentation. Include other fields only when confirmed by explicit repository rules.
 11. Write all document titles, headings, prose, and examples in English only, even when the assistant-facing output is Chinese.
 12. Do not automatically or by default run `yarn build` or `yarn translate` as part of documentation collaboration. Those commands require an explicit separate user request.
+13. Apply the document-layer rules from `rules/ai-usable-docs.md`:
+   - For `user-facing product doc`, prefer stable operational guidance. State prerequisite inputs, value sources, mappings, controller-managed fields, and supported boundaries when they matter to successful execution.
+   - For `engineering fact doc`, distinguish delivered capability, known gaps, ownership boundaries, and code paths that exist but are not formally accepted.
+   - For `versioned validation report`, bind conclusions to explicit baseline identifiers such as ref, commit SHA, validation date, and promotion status.
+   - For `known issue tracker`, record the symptom, impact scope, current guidance, and fix direction without pretending the issue is already solved.
+   - For `evidence index`, reference external evidence and identifiers instead of inlining long raw logs.
+14. When a field value is user-supplied, admin-supplied, or provider-recognized rather than a UI display value, say so explicitly.
+15. When a change introduces or revises a prerequisite, field constraint, lifecycle boundary, or limitation, update all in-scope sibling workflow pages or record the explicit debt in the summary.
 
 Success criterion: the generated or revised documentation follows the approved plan, matches repository conventions, and does not introduce template-driven fake standards.
 
@@ -239,11 +261,12 @@ When restructuring existing documents:
    - INFO
    - NOTE
 5. Check terminology, links, language, MDX components, and frontmatter against repository-discovered requirements.
-6. Load `templates/spec-review-report.md`.
-7. Output the review report before making the restructuring change.
-8. Wait for confirmation.
+6. Check that the content still fits the intended documentation layer and that engineering-baseline details are not leaking into user-facing product docs without clear user value.
+7. Load `templates/spec-review-report.md`.
+8. Output the review report before making the restructuring change.
+9. Wait for confirmation.
 
-Success criterion: the user sees the current directive count, the observed local directive baseline, any compliance issues, the repository-specific frontmatter contract, and the proposed restructuring changes before execution.
+Success criterion: the user sees the current directive count, the observed local directive baseline, any compliance issues, the document-layer fit, the repository-specific frontmatter contract, and the proposed restructuring changes before execution.
 
 ### 8. Self-Verification
 
@@ -287,8 +310,10 @@ Success criterion: explicit build or translate output is clearly separate from t
 Always include:
 
 - `Requirement`
+- `Documentation Layer`
 - `Related Documents Found`
 - `Source Material Coverage`
+- `Propagation Risk`
 - `All Branching Paths`
 - `Recommended Path`
 - `Reasoning`
@@ -304,6 +329,7 @@ For `review/audit only` requests, use this structure and stop after the report u
 ## Review Findings Report
 
 **Scope**: [documents, directories, or conventions reviewed]
+**Review Lens**: [Doom conventions / AI usability / both]
 **Repository Evidence Used**: [target AGENTS.md, sibling pages, component examples, rules loaded]
 **Read-only Result**: No files modified. No local preview prep commands run.
 
@@ -349,6 +375,7 @@ After generating or revising documentation, use this structure:
 ## Documentation Summary
 
 **Action Type**: [modify existing authoritative doc / add new scenario doc / restructure doc tree]
+**Documentation Layer**: [user-facing product doc / engineering fact doc / versioned validation report / known issue tracker / evidence index]
 **Execution Path**: [A / B / C]
 **Evidence Used**: [Short summary]
 **Repository Overrides**: [Any skill defaults that were overridden, or `None`]
@@ -391,6 +418,7 @@ After generating or revising documentation, use this structure:
 
 - Ask for the assistant-facing output language when it is not explicit
 - Product documentation content is English-only for repository collaboration with this skill
+- Keep document layers explicit: user-facing docs, engineering facts, validation reports, known issues, and evidence indexes are different deliverables
 - CLI-first procedures unless the repository or requirement clearly favors UI-first guidance
 - For Doom/Yarn repos, prepare local preview with `yarn up @alauda/doom` and then `yarn install` before manual acceptance
 - Human reviewers run `yarn dev` locally only after local preview prep completes successfully

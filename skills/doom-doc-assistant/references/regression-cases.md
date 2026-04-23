@@ -259,16 +259,64 @@ Expected assertions:
 
 Prompt:
 
-`Update the documentation in a repository that does not have the normal Doom/Yarn package signals.`
+`Update this documentation in a repository that uses Doom-style MDX but does not have a root package.json or Yarn workflow.`
 
 Expected assertions:
 
-- The plan states that standard Doom/Yarn preview prep is not applicable.
-- The skill does not invent substitute validation commands.
-- The summary says manual preview is blocked or unavailable.
-- The summary does not tell the human reviewer to run `yarn dev`.
+- The skill reports that standard Doom/Yarn preview prep is not applicable.
+- The skill does not invent `yarn up @alauda/doom`, `yarn install`, `yarn build`, or `yarn translate` as substitutes.
+- The manual acceptance handoff says preview is unavailable or blocked instead of telling the human to run `yarn dev`.
 
-## Case 18: Branded Terms And `<Term />`
+## Case 18: AI-Usable Product Docs Need Value Sources And Boundaries
+
+Prompt:
+
+`Update the HCS cluster creation page so that an AI assistant can reliably answer what values users must prepare before filling the manifests.`
+
+Expected assertions:
+
+- The diagnosis identifies the task as a `user-facing product doc`.
+- The plan explicitly considers prerequisite inputs, field-value sources, controller-managed fields, and supported or unsupported boundaries.
+- The draft prefers stable operational guidance instead of raw engineering evidence bookkeeping.
+
+## Case 19: Constraint Propagation Across Sibling Workflows
+
+Prompt:
+
+`Document a new subnet inventory rule that affects cluster creation, node management, and upgrade readiness.`
+
+Expected assertions:
+
+- The diagnosis flags propagation risk.
+- The plan includes all affected sibling pages under `Files to Modify`, or records explicit debt if the scope stays narrow.
+- The verification flow checks that the constraint was not silently localized to one page.
+
+## Case 20: Engineering Truth Docs Must Be Baseline-Bound
+
+Prompt:
+
+`Add a versioned capability and validation summary for a provider repository after validating release tag v1.0.0.`
+
+Expected assertions:
+
+- The diagnosis identifies the task as an `engineering fact doc` or `versioned validation report`.
+- The plan requires explicit baseline identifiers such as ref, commit SHA, validation date, and promotion status.
+- The draft distinguishes delivered capability, known issues, and code paths that exist but are not formally validated.
+
+## Case 21: AI-Usability Review Is Not Just Style Review
+
+Prompt:
+
+`Review this Doom documentation for AI usability only. Focus on whether an assistant can answer correctly from the page set.`
+
+Expected assertions:
+
+- The skill chooses the `review/audit only` route.
+- The Review Findings Report uses the `AI usability` lens.
+- Findings may call out missing value sources, missing prerequisite checklists, missing support boundaries, or missing cross-page propagation.
+- The skill stays read-only and asks whether the user wants fixes afterward.
+
+## Case 22: Branded Terms And `<Term />`
 
 Prompt:
 

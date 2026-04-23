@@ -9,6 +9,8 @@ Use this template when outputting Phase 0 (Intake & Diagnosis) results in `SKILL
 
 **Requirement**: [User's description]
 
+**Documentation Layer**: [user-facing product doc / engineering fact doc / versioned validation report / known issue tracker / evidence index]
+
 **Related Documents Found**:
 | Document | Role | Relevance | Quality Assessment |
 |----------|------|-----------|--------------------|
@@ -18,6 +20,9 @@ Use this template when outputting Phase 0 (Intake & Diagnosis) results in `SKILL
 | Content Area | Evidence Found | Coverage | Gaps And Handling |
 |--------------|----------------|----------|-------------------|
 | ...          | [Page names or examples] | Full / Partial / Missing | [How gaps will be handled] |
+
+**Propagation Risk**:
+- [Constraints, prerequisites, or limitations that may need sibling-page updates, or `None`]
 
 **All Branching Paths**:
 - **Path A**: [Explain the direct-modify or focused-add option in this repository]
@@ -62,5 +67,6 @@ Recommend tracking this for a future iteration.
 
 - When source material is incomplete, explicitly identify gaps and propose how to handle them.
 - The report is incomplete if it only outputs the recommended path. Path A, Path B, and Path C must all be explained.
+- Always classify the intended documentation layer before recommending a path.
 - Path A must be allowed for both "modify authoritative existing doc" and "add focused new doc" scenarios.
 - If explicit repository rules override the skill defaults, say so explicitly in the reasoning.

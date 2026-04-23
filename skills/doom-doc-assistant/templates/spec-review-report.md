@@ -22,6 +22,8 @@ Use this template when performing specification review during Path B restructuri
 - [ ] Language Style: Pass / Fail [Specific issue]
 - [ ] Metadata Contract: Pass / Fail [Check explicit repository rules and built-in product documentation minimums]
 - [ ] MDX Components: Pass / Fail [Specific issue]
+- [ ] Document Layer Fit: Pass / Fail [User-facing vs engineering-truth alignment]
+- [ ] AI Usability: Pass / Fail [Prerequisites, value sources, boundaries, propagation]
 
 ## Recommendations
 [List specific modification suggestions]
