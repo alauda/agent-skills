@@ -113,6 +113,7 @@ Success criterion: review-only work stops with findings only, command-only work 
    - `versioned validation report`
    - `known issue tracker`
    - `evidence index`
+   - When the target layer is `user-facing product doc`, also scan the **source material** (Jira description, internal test report, design doc, PR body, chat transcript) for internal-bookkeeping tokens — issue tracker IDs (`AIT-`, `DBS-`, `DEVOPS-`, `MIDDLEWARE-`, `TC-`, `KI-`, `RUS-`), internal test dates (`Verified YYYY-MM-DD`, `Validated YYYY-MM-DD`, `on hcslab`, `release test`), internal decision rationale (`Path A / B / C`, "Why we did not pick X"), internal repo / build / artifact references (`gitlab-ce`, `build-harbor`, `package-minio`, `MR !N`, `BuildRun <name>`). Produce a short **translation list** for each detected token: customer-facing replacement, or "drop". This is the input contract for `user-facing product doc`. See [`rules/common-pitfalls.md` Pitfall 9a](rules/common-pitfalls.md) for the full pattern set and the bad / good examples.
 4. Assess source material coverage, including whether there is a stronger source of truth such as provider engineering docs, versioned reports, issue trackers, or evidence indexes that should inform the target page.
 5. Decide between these paths:
    - Path A: the current structure is healthy enough to directly modify the authoritative page and/or add a focused new document within the existing structure.
@@ -275,9 +276,10 @@ Success criterion: the user sees the current directive count, the observed local
 3. Verify plan consistency before any style or content checks.
 4. Confirm that metadata matches the approved contract, including explicit repository overrides and built-in minimum product documentation fields.
 5. Confirm that any MDX component usage is backed by real repository examples.
-6. If any discrepancy exists, stop and report it instead of silently continuing.
+6. When the target layer is `user-facing product doc`, grep the modified or newly created files for the internal-bookkeeping pattern set defined in [`rules/common-pitfalls.md` Pitfall 9a](rules/common-pitfalls.md). Suggested regex: `(AIT-|DBS-|DEVOPS-|MIDDLEWARE-|TC-|KI-|RUS-)[0-9]+`, `[0-9]{4}-[0-9]{2}-[0-9]{2}`, and the literal strings `Path A`, `Path B`, `Path C`, `Verified`, `Validated`, `release test`, `hcslab`, `BuildRun`, `gitlab-ce`, `build-harbor`, `package-minio`, `MR !`. Every match needs an explicit justification or removal before the draft is handed to the human reviewer.
+7. If any discrepancy exists, stop and report it instead of silently continuing.
 
-Success criterion: you can explicitly state that the output matches the approved plan, local metadata contract, and repository conventions.
+Success criterion: you can explicitly state that the output matches the approved plan, local metadata contract, and repository conventions, and that the customer-facing pages are free of internal-bookkeeping tokens.
 
 ### 9. Local Preview Prep And Manual Acceptance
 
