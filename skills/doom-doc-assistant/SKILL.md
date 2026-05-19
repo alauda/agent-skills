@@ -277,9 +277,10 @@ Success criterion: the user sees the current directive count, the observed local
 4. Confirm that metadata matches the approved contract, including explicit repository overrides and built-in minimum product documentation fields.
 5. Confirm that any MDX component usage is backed by real repository examples.
 6. When the target layer is `user-facing product doc`, grep the modified or newly created files for the internal-bookkeeping pattern set defined in [`rules/common-pitfalls.md` Pitfall 9a](rules/common-pitfalls.md). Suggested regex: `(AIT-|DBS-|DEVOPS-|MIDDLEWARE-|TC-|KI-|RUS-)[0-9]+`, `[0-9]{4}-[0-9]{2}-[0-9]{2}`, and the literal strings `Path A`, `Path B`, `Path C`, `Verified`, `Validated`, `release test`, `hcslab`, `BuildRun`, `gitlab-ce`, `build-harbor`, `package-minio`, `MR !`. Every match needs an explicit justification or removal before the draft is handed to the human reviewer.
-7. If any discrepancy exists, stop and report it instead of silently continuing.
+7. **Run the repository's lint command before handoff and require zero errors.** For Doom/Yarn repositories the command is `yarn lint` (or `ya lint` if the repository exposes that alias). Lint is the cheap gate that catches unmatched cross-page and same-page anchors, malformed frontmatter, and other rules that the human reviewer would otherwise have to flag manually. Treat lint failure the same as a plan-consistency failure: stop, fix in place, and re-run until clean. Lint is *not* `yarn build` or `yarn translate` — those remain off by default; lint is on by default for any draft change.
+8. If any discrepancy exists, stop and report it instead of silently continuing.
 
-Success criterion: you can explicitly state that the output matches the approved plan, local metadata contract, and repository conventions, and that the customer-facing pages are free of internal-bookkeeping tokens.
+Success criterion: you can explicitly state that the output matches the approved plan, local metadata contract, and repository conventions, that the customer-facing pages are free of internal-bookkeeping tokens, and that `yarn lint` reports zero errors against the changed files.
 
 ### 9. Local Preview Prep And Manual Acceptance
 

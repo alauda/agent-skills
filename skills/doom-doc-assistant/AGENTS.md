@@ -104,6 +104,7 @@ The preferred sequence is:
 - For Doom/Yarn repositories, the post-drafting handoff must run `yarn up @alauda/doom` and then `yarn install` before human acceptance.
 - Manual acceptance must be handed to a human reviewer who runs `yarn dev` locally only after local preview prep completes successfully.
 - `yarn build` and `yarn translate` are never default verification steps. They are separate tasks that require explicit user direction.
+- `yarn lint` (or `ya lint`) is the cheap gate and is a required Self-Verification step for any draft change. Lint must report zero errors before the draft is handed to the human reviewer. Lint failure is a stop-and-fix condition, not a "report to user" condition.
 - Phase 0 must output a fixed diagnosis contract, not a free-form summary.
 - Phase 1 must output a fixed execution-plan contract, not a new-doc-only checklist.
 - Phase 1 and the final documentation summary must include a local preview prep and manual acceptance handoff section.
