@@ -154,6 +154,53 @@ This document catalogs common documentation issues observed in real-world review
 
 ---
 
+### Pitfall 9a: Internal Bookkeeping Strings Copied Into Customer-Facing Docs
+
+**Issue**: When the source material handed to this skill is an internal ticket description, test report, or PR body, that material contains internal-bookkeeping strings that must not appear in customer-facing product docs. The skill must extract the **user-facing outcome** and discard the bookkeeping before drafting.
+
+**Concrete strings to detect and strip** before any text reaches a customer-facing page (`docs/en/...` in product doc repositories such as `immutable-infra-docs`, `acp-docs`, and equivalents):
+
+| Category | Examples | What goes in the customer doc instead |
+|---|---|---|
+| Issue tracker IDs | `AIT-70656`, `DBS-142`, `DEVOPS-12345`, `MIDDLEWARE-30911` | Describe the user-observable behavior; if a fix version matters, name the released version. |
+| Internal test dates | `Verified 2026-05-19 in the release test`, `Validated 2026-05-12 against a live test environment`, any `YYYY-MM-DD` paired with `verified`/`validated`/`on hcslab`/`in the AIT-XXXXX release test` | Describe the steady-state behavior. Customers should not see when QA last ran a check. |
+| Internal decision rationale (Path A/B/C, alternative analysis) | "Pick one of three paths: A — rolling replacement … B — node-level manual fix … C — DaemonSet that mutates the host." | Document only the supported path. Move the rejected paths into engineering decision records, not the customer page. |
+| Internal validation markers | `Verified in release test`, `RUS-T3b 2026-05-19`, `KI-HCS-002`, `TC-HCS-007`, baseline names like `hcslab`, internal commit shas | If a behavior is supported, state it. If it is not supported, state the unsupported behavior without citing the test ID. |
+| Internal repo / branch / build artifact references | `gitlab-ce.alauda.cn`, `build-harbor.alauda.cn`, `package-minio.alauda.cn`, `BuildRun cluster-api-provider-hcs-lbdhc`, `MR !14`, `MR !311` | Reference customer-visible installable units (released plugin version, image tags published in the release notes). |
+
+**Bad** (excerpt from a customer-facing upgrade page):
+
+```
+B — Node-level manual fix … Does not persist on MicroOS / SLE Micro. Verified 2026-05-19 in the AIT-70656 release test on hcslab: the controller's fix sets cloud-init manage_etc_hosts: true …
+```
+
+**Good** (same intent, customer-facing prose):
+
+```
+Manual edits to /etc/hostname and /etc/hosts on an existing MicroOS / SLE Micro node do not persist. Cloud-init re-renders these files on every boot, including reboots triggered by transactional-update, OS patching, or systemctl reboot.
+```
+
+**Bad** (excerpt from a customer-facing troubleshooting page):
+
+```
+This pattern is the failure mode of the AIT-70656 hostname/FQDN bug that is fixed in cluster-api-provider-hcs v1.0.1+.
+```
+
+**Good**:
+
+```
+In cluster-api-provider-hcs releases earlier than v1.0.1, a dotted HCSMachineConfigPool.spec.configs[].hostname is rendered into cloud-init as the full FQDN string in the hostname field …
+```
+
+**Prevention**:
+1. Before drafting, scan the source material (Jira description, internal test report, design doc, PR body) for the categories in the table above and produce a translation list. Each internal token must map to either a customer-facing replacement or "drop".
+2. When the source presents multiple internal options (Path A / B / C, alternative analyses, "Why we did not pick X"), keep only the one the product supports. The customer page documents the supported path, not the decision history.
+3. When the source cites a version, prefer the released customer-visible version label (for example `v1.0.1`) over internal build tags or commit shas.
+4. After drafting, grep the new or modified pages for the pattern set: `(AIT-|DBS-|DEVOPS-|MIDDLEWARE-)[0-9]+`, `[0-9]{4}-[0-9]{2}-[0-9]{2}`, the literal strings `Path A`, `Path B`, `Path C`, `Verified`, `Validated`, `release test`, `hcslab`, `RUS-`, `KI-`, `TC-`, `BuildRun`, `gitlab-ce`, `build-harbor`, `package-minio`, `MR !`. Each match needs an explicit justification or removal.
+5. If the user authored an internal test report or Jira description and asks for "the same content as a product doc", reply with a draft that **strips** these tokens. Do not echo the internal material verbatim. The internal version stays in its engineering home; the product doc is a translation, not a copy.
+
+---
+
 ### Pitfall 10: Code Path Exists Is Misreported As Supported
 **Issue**: The doc states a path is supported simply because code or schema exists, even though it has not been formally validated or is outside the documented workflow.
 
@@ -182,6 +229,7 @@ During the `Self-Verification` workflow step, add these checks:
 - [ ] **Value Sources**: Critical inputs say where the real values come from
 - [ ] **Cross-Workflow Propagation**: Shared constraints are updated beyond a single page when needed
 - [ ] **Support Boundary**: Implemented paths are not overstated as supported or validated
+- [ ] **No Internal Bookkeeping In Customer Docs** (Pitfall 9a): Customer-facing pages contain no issue-tracker IDs (`AIT-`, `DBS-`, `DEVOPS-`, `MIDDLEWARE-`, `TC-`, `KI-`, `RUS-`), no internal test dates (`Verified YYYY-MM-DD`, `Validated YYYY-MM-DD on hcslab`), no internal decision rationale (`Path A / B / C`, alternative analyses, "Why we did not pick X"), and no internal repo / build / artifact references (`gitlab-ce`, `build-harbor`, `package-minio`, `MR !N`, `BuildRun <name>`).
 
 ### Data Check (New Category)
 - [ ] **Table Data Logical**: Version numbers and values in tables follow expected patterns
