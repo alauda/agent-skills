@@ -52,6 +52,10 @@ To ensure documentation is professional, objective, and easy to translate, all c
 - **Bad**: "The platform performs **in-place upgrades**." (loses precision, becomes a generic action)
 - **Principle**: If a term represents a distinct technical strategy, use `[term] + [noun]` structure (e.g., `approach`, `method`, `strategy`) to maintain its status as a technical concept.
 
+### Current, Non-EOL Examples
+- Choose examples that are current and forward-looking, not end-of-life.
+- **Traditional-OS example**: use **Ubuntu** and/or **RHEL**, not CentOS — CentOS 7 / Stream 8 are EOL and Kubernetes 1.35 dropped CentOS support, so it reads as outdated.
+
 ## Maintainability and Compatibility
 
 - **Best Practices**: Include long-term maintenance tips.
