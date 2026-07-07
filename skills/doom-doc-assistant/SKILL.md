@@ -284,7 +284,7 @@ Success criterion: you can explicitly state that the output matches the approved
 ### 9. Local Preview Prep And Manual Acceptance
 
 1. Decide whether standard Doom/Yarn preview preparation applies by checking for a root `package.json`, Yarn usage, a `dev` script, `doom dev`, or `@alauda/doom`.
-2. When it applies, run `yarn up @alauda/doom` and then `yarn install`.
+2. When it applies, run `yarn up @alauda/doom`, then `yarn install`, then `yarn lint <changed-dirs>` and require **0 errors**. `yarn lint` catches mechanical errors (unmatched anchors, malformed frontmatter, bad heading slugs) locally in seconds instead of at CI; if it reports errors, stop and report them before proceeding — do not hand off `yarn dev` or declare the draft ready.
 3. If either command fails, stop and report the blocking error. Do not tell the human to run `yarn dev`.
 4. Do not automatically run `yarn dev`. Manual acceptance belongs to the human reviewer.
 5. Do not automatically or by default run `yarn build` or `yarn translate`. Only do so when the user explicitly requested that exact command as a separate task.
