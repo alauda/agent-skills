@@ -35,44 +35,12 @@ This repository also includes standalone scripts and commands in the `jira/` dir
 - `epic-to-stories-skill.sh`: A shell script demonstrating the automation pattern for creating stories from an epic.
 - `load.sh`: Helper script to load Jira-related functions or environment configurations.
 
-### doom-doc-assistant
-
-Repository-first assistant for Doom documentation work. It turns requirements into repository-aligned diagnosis reports, execution plans, and drafts for existing or new documentation.
-
-**Use when:**
-- Converting PRDs or requirements into user-facing documentation.
-- Modifying authoritative existing pages or adding focused new scenario documents.
-- Analyzing when documentation architecture should stay in place versus be restructured.
-- Querying Doom framework terminology or documentation guidelines.
-
-**Content shapes supported:**
-- Overview or introduction
-- Quick start
-- Concept
-- Feature guide
-- How-to
-- Troubleshooting
-- Installation
-- Upgrade
-- Architecture
-- Release notes
-
-**Key features:**
-- **Product Standards First**: Explicit target repo rules override skill defaults; otherwise built-in product documentation standards govern new docs.
-- **Stable New-Doc Contract**: New product docs use lowercase underscore paths plus `weight` and English `queries`.
-- **English-Only Documentation Content**: The skill may discuss plans in English or Chinese, but drafted or revised repository documentation content stays in English.
-- **Manual Preview Prep**: After documentation work in a Doom/Yarn repo, the skill prepares local preview with `yarn up @alauda/doom` and `yarn install`, then hands `yarn dev` to a human reviewer.
-- **No Default Build Or Translate**: `yarn build` and `yarn translate` are not automatic validation steps.
-- **Fixed Output Contracts**: Diagnosis Report and Execution Plan include required sections instead of free-form summaries.
-- **Example-Driven**: Leverages real codebase search for placement, ordering, component examples, and non-conflicting local style.
-- **Scope Control**: Distinguishes direct modification, focused addition, and true restructure work.
-
 ## Installation
 
-Install only `doom-doc-assistant`:
+Install one skill:
 
 ```bash
-npx skills add alauda/agent-skills --skill doom-doc-assistant
+npx skills add alauda/agent-skills --skill <skill-name>
 ```
 
 Install the full skill bundle only if you want every skill in this repository:
@@ -86,8 +54,8 @@ npx skills add alauda/agent-skills
 Skills are automatically available once installed. The agent will use them when relevant tasks are detected.
 
 **Examples:**
-- "Update the authoritative operator documentation based on this requirement and prepare it for local preview handoff."
-- "Create a new HowTo page under `docs/en/...` with repository-aligned `weight` and English `queries`."
+- "Fix the `doom lint` errors in this branch."
+- "Create child stories from the description of epic `<EPIC-KEY>`."
 
 ## Skill Structure
 

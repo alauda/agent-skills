@@ -12,8 +12,8 @@ This repository contains **Agent Skills** — modular behavioral instruction set
 agent-skills/
 ├── AGENTS.md                   # ← This file. Universal conventions for all skills.
 └── skills/
-    ├── doom-doc-assistant/
-    │   ├── AGENTS.md           # Skill-local conventions (content generation patterns)
+    ├── ui-development-react/
+    │   ├── AGENTS.md           # Skill-local conventions
     │   └── SKILL.md
     └── k8s-yaml-validator/
         ├── AGENTS.md           # Skill-local conventions (tool-invocation patterns)
@@ -69,7 +69,6 @@ The `description` field is the primary trigger mechanism — the AI decides whet
 Skills in this repo fall into two patterns. Each has its own best practices — see the skill-local `AGENTS.md` for details.
 
 ### Content Generation Skills
-*Example: `doom-doc-assistant`*
 
 The AI produces written artifacts (docs, reports, copy). Quality depends on style consistency, context understanding, and iterative refinement. Key patterns: RAG over existing content, modular `rules/` files, iterative drafting.
 
